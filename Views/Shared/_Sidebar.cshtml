@@ -1,13 +1,18 @@
-﻿
-@{
-    Layout = null;
-}
+﻿@using System.Web.Mvc
 
 <nav id="sidebar" class="sidebar">
     <div class="resize-handle"></div>
     <div class="sidebar__nav-top">
-        <a href="#/home" class="sidebar__web-info">
-            <img src="./assets/images/logo-dark.svg" alt="PronaFlow" class="logo">
+        
+        @Html.ActionLink(
+            linkText: "PronaFlow",
+            actionName: "Index",
+            controllerName: "Home",
+            routeValues: null,
+            htmlAttributes: new { @class = "sidebar__web-info"}
+        )
+        <a href="@Url.Action("Index", "Home")" class="sidebar__web-info">
+            <img src="~/wwwroot/images/logo-light.svg" alt="PronaFlow" class="logo">
             <span class="web-name item-hide-collapsed">PronaFlow</span>
         </a>
 
