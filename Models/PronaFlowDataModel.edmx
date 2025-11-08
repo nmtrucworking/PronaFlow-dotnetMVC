@@ -1,0 +1,1546 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="activities">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="bigint" Nullable="false" />
+          <Property Name="action_type" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="target_id" Type="bigint" Nullable="false" />
+          <Property Name="target_type" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="content" Type="nvarchar(max)" />
+          <Property Name="created_at" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="attachments">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="uploaded_by_user_id" Type="bigint" Nullable="false" />
+          <Property Name="attachable_id" Type="bigint" Nullable="false" />
+          <Property Name="attachable_type" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="original_filename" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="storage_path" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="file_type" Type="nvarchar" MaxLength="100" />
+          <Property Name="file_size" Type="bigint" />
+          <Property Name="created_at" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="comments">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="bigint" Nullable="false" />
+          <Property Name="content" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="commentable_id" Type="bigint" Nullable="false" />
+          <Property Name="commentable_type" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="created_at" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="invitations">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="project_id" Type="bigint" Nullable="false" />
+          <Property Name="inviter_id" Type="bigint" Nullable="false" />
+          <Property Name="invitee_email" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="token" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="status" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="expires_at" Type="datetime2" Precision="7" />
+          <Property Name="created_at" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="notification_recipients">
+          <Key>
+            <PropertyRef Name="activity_id" />
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="activity_id" Type="bigint" Nullable="false" />
+          <Property Name="user_id" Type="bigint" Nullable="false" />
+          <Property Name="is_read" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="password_resets">
+          <Key>
+            <PropertyRef Name="token" />
+          </Key>
+          <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="token" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="expires_at" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="created_at" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="project_members">
+          <Key>
+            <PropertyRef Name="project_id" />
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="project_id" Type="bigint" Nullable="false" />
+          <Property Name="user_id" Type="bigint" Nullable="false" />
+          <Property Name="role" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="project_tags">
+          <Key>
+            <PropertyRef Name="project_id" />
+            <PropertyRef Name="tag_id" />
+          </Key>
+          <Property Name="project_id" Type="bigint" Nullable="false" />
+          <Property Name="tag_id" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="projects">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="workspace_id" Type="bigint" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="cover_image_url" Type="nvarchar" MaxLength="255" />
+          <Property Name="status" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="project_type" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="start_date" Type="date" />
+          <Property Name="end_date" Type="date" />
+          <Property Name="is_archived" Type="bit" Nullable="false" />
+          <Property Name="is_deleted" Type="bit" Nullable="false" />
+          <Property Name="deleted_at" Type="datetime2" Precision="7" />
+          <Property Name="created_at" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="subtasks">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="task_id" Type="bigint" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="is_completed" Type="bit" Nullable="false" />
+          <Property Name="position" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tags">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="workspace_id" Type="bigint" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="color_hex" Type="nvarchar" MaxLength="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="task_assignees">
+          <Key>
+            <PropertyRef Name="task_id" />
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="task_id" Type="bigint" Nullable="false" />
+          <Property Name="user_id" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="task_dependencies">
+          <Key>
+            <PropertyRef Name="task_id" />
+            <PropertyRef Name="blocking_task_id" />
+          </Key>
+          <Property Name="task_id" Type="bigint" Nullable="false" />
+          <Property Name="blocking_task_id" Type="bigint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="task_lists">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="project_id" Type="bigint" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="position" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tasks">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="project_id" Type="bigint" Nullable="false" />
+          <Property Name="task_list_id" Type="bigint" Nullable="false" />
+          <Property Name="creator_id" Type="bigint" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="priority" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="status" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="start_date" Type="date" />
+          <Property Name="end_date" Type="datetime2" Precision="7" />
+          <Property Name="is_recurring" Type="bit" Nullable="false" />
+          <Property Name="recurrence_rule" Type="nvarchar" MaxLength="255" />
+          <Property Name="next_recurrence_date" Type="date" />
+          <Property Name="is_deleted" Type="bit" Nullable="false" />
+          <Property Name="deleted_at" Type="datetime2" Precision="7" />
+          <Property Name="created_at" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user_preferences">
+          <Key>
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="setting_key" />
+          </Key>
+          <Property Name="user_id" Type="bigint" Nullable="false" />
+          <Property Name="setting_key" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="setting_value" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="password_hash" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="full_name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="avatar_url" Type="nvarchar" MaxLength="255" />
+          <Property Name="bio" Type="nvarchar(max)" />
+          <Property Name="theme_preference" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="role" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="is_deleted" Type="bit" Nullable="false" />
+          <Property Name="deleted_at" Type="datetime2" Precision="7" />
+          <Property Name="created_at" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <EntityType Name="workspaces">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="owner_id" Type="bigint" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="created_at" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="updated_at" Type="datetime2" Precision="7" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_activities_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="activities" Type="Self.activities" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="activities">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_attachments_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="attachments" Type="Self.attachments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="attachments">
+              <PropertyRef Name="uploaded_by_user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_comments_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="comments" Type="Self.comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comments">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_invitations_projects">
+          <End Role="projects" Type="Self.projects" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="invitations" Type="Self.invitations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="projects">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="invitations">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_invitations_users_inviter">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="invitations" Type="Self.invitations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="invitations">
+              <PropertyRef Name="inviter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_notification_recipients_activities">
+          <End Role="activities" Type="Self.activities" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="notification_recipients" Type="Self.notification_recipients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activities">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notification_recipients">
+              <PropertyRef Name="activity_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_notification_recipients_users">
+          <End Role="users" Type="Self.users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="notification_recipients" Type="Self.notification_recipients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notification_recipients">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_project_members_projects">
+          <End Role="projects" Type="Self.projects" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="project_members" Type="Self.project_members" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="projects">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="project_members">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_project_members_users">
+          <End Role="users" Type="Self.users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="project_members" Type="Self.project_members" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="project_members">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_project_tags_projects">
+          <End Role="projects" Type="Self.projects" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="project_tags" Type="Self.project_tags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="projects">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="project_tags">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_project_tags_tags">
+          <End Role="tags" Type="Self.tags" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="project_tags" Type="Self.project_tags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tags">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="project_tags">
+              <PropertyRef Name="tag_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_projects_workspaces">
+          <End Role="workspaces" Type="Self.workspaces" Multiplicity="1" />
+          <End Role="projects" Type="Self.projects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="workspaces">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="projects">
+              <PropertyRef Name="workspace_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_subtasks_tasks">
+          <End Role="tasks" Type="Self.tasks" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="subtasks" Type="Self.subtasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tasks">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="subtasks">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_tags_workspaces">
+          <End Role="workspaces" Type="Self.workspaces" Multiplicity="1" />
+          <End Role="tags" Type="Self.tags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="workspaces">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tags">
+              <PropertyRef Name="workspace_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_task_assignees_tasks">
+          <End Role="tasks" Type="Self.tasks" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="task_assignees" Type="Self.task_assignees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tasks">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="task_assignees">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_task_assignees_users">
+          <End Role="users" Type="Self.users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="task_assignees" Type="Self.task_assignees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="task_assignees">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_task_dependencies_tasks">
+          <End Role="tasks" Type="Self.tasks" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="task_dependencies" Type="Self.task_dependencies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tasks">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="task_dependencies">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_task_dependencies_tasks_blocking">
+          <End Role="tasks" Type="Self.tasks" Multiplicity="1" />
+          <End Role="task_dependencies" Type="Self.task_dependencies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tasks">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="task_dependencies">
+              <PropertyRef Name="blocking_task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_task_lists_projects">
+          <End Role="projects" Type="Self.projects" Multiplicity="1" />
+          <End Role="task_lists" Type="Self.task_lists" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="projects">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="task_lists">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_tasks_projects">
+          <End Role="projects" Type="Self.projects" Multiplicity="1" />
+          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="projects">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_tasks_task_lists">
+          <End Role="task_lists" Type="Self.task_lists" Multiplicity="1" />
+          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task_lists">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="task_list_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_tasks_users_creator">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="creator_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_user_preferences_users">
+          <End Role="users" Type="Self.users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="user_preferences" Type="Self.user_preferences" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user_preferences">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_workspaces_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="workspaces" Type="Self.workspaces" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="workspaces">
+              <PropertyRef Name="owner_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_GetProjectDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProjectID" Type="bigint" Mode="In" />
+          <Parameter Name="UserID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="sp_MoveTask" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TaskID" Type="bigint" Mode="In" />
+          <Parameter Name="NewTaskListID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="sp_SearchUsersForProject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="WorkspaceID" Type="bigint" Mode="In" />
+          <Parameter Name="ProjectID" Type="bigint" Mode="In" />
+          <Parameter Name="SearchTerm" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="ModelsStoreContainer">
+          <EntitySet Name="activities" EntityType="Self.activities" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="attachments" EntityType="Self.attachments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="comments" EntityType="Self.comments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="invitations" EntityType="Self.invitations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="notification_recipients" EntityType="Self.notification_recipients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="password_resets" EntityType="Self.password_resets" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="project_members" EntityType="Self.project_members" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="project_tags" EntityType="Self.project_tags" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="projects" EntityType="Self.projects" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="subtasks" EntityType="Self.subtasks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tags" EntityType="Self.tags" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="task_assignees" EntityType="Self.task_assignees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="task_dependencies" EntityType="Self.task_dependencies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="task_lists" EntityType="Self.task_lists" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tasks" EntityType="Self.tasks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user_preferences" EntityType="Self.user_preferences" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="workspaces" EntityType="Self.workspaces" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_activities_users" Association="Self.fk_activities_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="activities" EntitySet="activities" />
+          </AssociationSet>
+          <AssociationSet Name="fk_attachments_users" Association="Self.fk_attachments_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="attachments" EntitySet="attachments" />
+          </AssociationSet>
+          <AssociationSet Name="fk_comments_users" Association="Self.fk_comments_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="comments" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="fk_invitations_projects" Association="Self.fk_invitations_projects">
+            <End Role="projects" EntitySet="projects" />
+            <End Role="invitations" EntitySet="invitations" />
+          </AssociationSet>
+          <AssociationSet Name="fk_invitations_users_inviter" Association="Self.fk_invitations_users_inviter">
+            <End Role="users" EntitySet="users" />
+            <End Role="invitations" EntitySet="invitations" />
+          </AssociationSet>
+          <AssociationSet Name="fk_notification_recipients_activities" Association="Self.fk_notification_recipients_activities">
+            <End Role="activities" EntitySet="activities" />
+            <End Role="notification_recipients" EntitySet="notification_recipients" />
+          </AssociationSet>
+          <AssociationSet Name="fk_notification_recipients_users" Association="Self.fk_notification_recipients_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="notification_recipients" EntitySet="notification_recipients" />
+          </AssociationSet>
+          <AssociationSet Name="fk_project_members_projects" Association="Self.fk_project_members_projects">
+            <End Role="projects" EntitySet="projects" />
+            <End Role="project_members" EntitySet="project_members" />
+          </AssociationSet>
+          <AssociationSet Name="fk_project_members_users" Association="Self.fk_project_members_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="project_members" EntitySet="project_members" />
+          </AssociationSet>
+          <AssociationSet Name="fk_project_tags_projects" Association="Self.fk_project_tags_projects">
+            <End Role="projects" EntitySet="projects" />
+            <End Role="project_tags" EntitySet="project_tags" />
+          </AssociationSet>
+          <AssociationSet Name="fk_project_tags_tags" Association="Self.fk_project_tags_tags">
+            <End Role="tags" EntitySet="tags" />
+            <End Role="project_tags" EntitySet="project_tags" />
+          </AssociationSet>
+          <AssociationSet Name="fk_projects_workspaces" Association="Self.fk_projects_workspaces">
+            <End Role="workspaces" EntitySet="workspaces" />
+            <End Role="projects" EntitySet="projects" />
+          </AssociationSet>
+          <AssociationSet Name="fk_subtasks_tasks" Association="Self.fk_subtasks_tasks">
+            <End Role="tasks" EntitySet="tasks" />
+            <End Role="subtasks" EntitySet="subtasks" />
+          </AssociationSet>
+          <AssociationSet Name="fk_tags_workspaces" Association="Self.fk_tags_workspaces">
+            <End Role="workspaces" EntitySet="workspaces" />
+            <End Role="tags" EntitySet="tags" />
+          </AssociationSet>
+          <AssociationSet Name="fk_task_assignees_tasks" Association="Self.fk_task_assignees_tasks">
+            <End Role="tasks" EntitySet="tasks" />
+            <End Role="task_assignees" EntitySet="task_assignees" />
+          </AssociationSet>
+          <AssociationSet Name="fk_task_assignees_users" Association="Self.fk_task_assignees_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="task_assignees" EntitySet="task_assignees" />
+          </AssociationSet>
+          <AssociationSet Name="fk_task_dependencies_tasks" Association="Self.fk_task_dependencies_tasks">
+            <End Role="tasks" EntitySet="tasks" />
+            <End Role="task_dependencies" EntitySet="task_dependencies" />
+          </AssociationSet>
+          <AssociationSet Name="fk_task_dependencies_tasks_blocking" Association="Self.fk_task_dependencies_tasks_blocking">
+            <End Role="tasks" EntitySet="tasks" />
+            <End Role="task_dependencies" EntitySet="task_dependencies" />
+          </AssociationSet>
+          <AssociationSet Name="fk_task_lists_projects" Association="Self.fk_task_lists_projects">
+            <End Role="projects" EntitySet="projects" />
+            <End Role="task_lists" EntitySet="task_lists" />
+          </AssociationSet>
+          <AssociationSet Name="fk_tasks_projects" Association="Self.fk_tasks_projects">
+            <End Role="projects" EntitySet="projects" />
+            <End Role="tasks" EntitySet="tasks" />
+          </AssociationSet>
+          <AssociationSet Name="fk_tasks_task_lists" Association="Self.fk_tasks_task_lists">
+            <End Role="task_lists" EntitySet="task_lists" />
+            <End Role="tasks" EntitySet="tasks" />
+          </AssociationSet>
+          <AssociationSet Name="fk_tasks_users_creator" Association="Self.fk_tasks_users_creator">
+            <End Role="users" EntitySet="users" />
+            <End Role="tasks" EntitySet="tasks" />
+          </AssociationSet>
+          <AssociationSet Name="fk_user_preferences_users" Association="Self.fk_user_preferences_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="user_preferences" EntitySet="user_preferences" />
+          </AssociationSet>
+          <AssociationSet Name="fk_workspaces_users" Association="Self.fk_workspaces_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="workspaces" EntitySet="workspaces" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="activities">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int64" Nullable="false" />
+          <Property Name="action_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="target_id" Type="Int64" Nullable="false" />
+          <Property Name="target_type" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="users" Relationship="Self.fk_activities_users" FromRole="activities" ToRole="users" />
+          <NavigationProperty Name="notification_recipients" Relationship="Self.fk_notification_recipients_activities" FromRole="activities" ToRole="notification_recipients" />
+        </EntityType>
+        <EntityType Name="attachments">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="uploaded_by_user_id" Type="Int64" Nullable="false" />
+          <Property Name="attachable_id" Type="Int64" Nullable="false" />
+          <Property Name="attachable_type" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="original_filename" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="storage_path" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="file_type" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="file_size" Type="Int64" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="users" Relationship="Self.fk_attachments_users" FromRole="attachments" ToRole="users" />
+        </EntityType>
+        <EntityType Name="comments">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int64" Nullable="false" />
+          <Property Name="content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="commentable_id" Type="Int64" Nullable="false" />
+          <Property Name="commentable_type" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="users" Relationship="Self.fk_comments_users" FromRole="comments" ToRole="users" />
+        </EntityType>
+        <EntityType Name="invitations">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="project_id" Type="Int64" Nullable="false" />
+          <Property Name="inviter_id" Type="Int64" Nullable="false" />
+          <Property Name="invitee_email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="token" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="status" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="expires_at" Type="DateTime" Precision="7" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="projects" Relationship="Self.fk_invitations_projects" FromRole="invitations" ToRole="projects" />
+          <NavigationProperty Name="users" Relationship="Self.fk_invitations_users_inviter" FromRole="invitations" ToRole="users" />
+        </EntityType>
+        <EntityType Name="notification_recipients">
+          <Key>
+            <PropertyRef Name="activity_id" />
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="activity_id" Type="Int64" Nullable="false" />
+          <Property Name="user_id" Type="Int64" Nullable="false" />
+          <Property Name="is_read" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="activities" Relationship="Self.fk_notification_recipients_activities" FromRole="notification_recipients" ToRole="activities" />
+          <NavigationProperty Name="users" Relationship="Self.fk_notification_recipients_users" FromRole="notification_recipients" ToRole="users" />
+        </EntityType>
+        <EntityType Name="password_resets">
+          <Key>
+            <PropertyRef Name="token" />
+          </Key>
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="token" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="expires_at" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="7" />
+        </EntityType>
+        <EntityType Name="project_members">
+          <Key>
+            <PropertyRef Name="project_id" />
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="project_id" Type="Int64" Nullable="false" />
+          <Property Name="user_id" Type="Int64" Nullable="false" />
+          <Property Name="role" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="projects" Relationship="Self.fk_project_members_projects" FromRole="project_members" ToRole="projects" />
+          <NavigationProperty Name="users" Relationship="Self.fk_project_members_users" FromRole="project_members" ToRole="users" />
+        </EntityType>
+        <EntityType Name="projects">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="workspace_id" Type="Int64" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="cover_image_url" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="project_type" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="start_date" Type="DateTime" Precision="0" />
+          <Property Name="end_date" Type="DateTime" Precision="0" />
+          <Property Name="is_archived" Type="Boolean" Nullable="false" />
+          <Property Name="is_deleted" Type="Boolean" Nullable="false" />
+          <Property Name="deleted_at" Type="DateTime" Precision="7" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="invitations" Relationship="Self.fk_invitations_projects" FromRole="projects" ToRole="invitations" />
+          <NavigationProperty Name="project_members" Relationship="Self.fk_project_members_projects" FromRole="projects" ToRole="project_members" />
+          <NavigationProperty Name="workspaces" Relationship="Self.fk_projects_workspaces" FromRole="projects" ToRole="workspaces" />
+          <NavigationProperty Name="task_lists" Relationship="Self.fk_task_lists_projects" FromRole="projects" ToRole="task_lists" />
+          <NavigationProperty Name="tasks" Relationship="Self.fk_tasks_projects" FromRole="projects" ToRole="tasks" />
+          <NavigationProperty Name="tags" Relationship="Self.project_tags" FromRole="projects" ToRole="tags" />
+        </EntityType>
+        <EntityType Name="subtasks">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="task_id" Type="Int64" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="is_completed" Type="Boolean" Nullable="false" />
+          <Property Name="position" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tasks" Relationship="Self.fk_subtasks_tasks" FromRole="subtasks" ToRole="tasks" />
+        </EntityType>
+        <EntityType Name="tags">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="workspace_id" Type="Int64" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="color_hex" Type="String" MaxLength="7" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="workspaces" Relationship="Self.fk_tags_workspaces" FromRole="tags" ToRole="workspaces" />
+          <NavigationProperty Name="projects" Relationship="Self.project_tags" FromRole="tags" ToRole="projects" />
+        </EntityType>
+        <EntityType Name="task_lists">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="project_id" Type="Int64" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="position" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="projects" Relationship="Self.fk_task_lists_projects" FromRole="task_lists" ToRole="projects" />
+          <NavigationProperty Name="tasks" Relationship="Self.fk_tasks_task_lists" FromRole="task_lists" ToRole="tasks" />
+        </EntityType>
+        <EntityType Name="tasks">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="project_id" Type="Int64" Nullable="false" />
+          <Property Name="task_list_id" Type="Int64" Nullable="false" />
+          <Property Name="creator_id" Type="Int64" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="priority" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="start_date" Type="DateTime" Precision="0" />
+          <Property Name="end_date" Type="DateTime" Precision="7" />
+          <Property Name="is_recurring" Type="Boolean" Nullable="false" />
+          <Property Name="recurrence_rule" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="next_recurrence_date" Type="DateTime" Precision="0" />
+          <Property Name="is_deleted" Type="Boolean" Nullable="false" />
+          <Property Name="deleted_at" Type="DateTime" Precision="7" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="projects" Relationship="Self.fk_tasks_projects" FromRole="tasks" ToRole="projects" />
+          <NavigationProperty Name="subtasks" Relationship="Self.fk_subtasks_tasks" FromRole="tasks" ToRole="subtasks" />
+          <NavigationProperty Name="task_lists" Relationship="Self.fk_tasks_task_lists" FromRole="tasks" ToRole="task_lists" />
+          <NavigationProperty Name="users" Relationship="Self.fk_tasks_users_creator" FromRole="tasks" ToRole="users" />
+          <NavigationProperty Name="users1" Relationship="Self.task_assignees" FromRole="tasks" ToRole="users" />
+          <NavigationProperty Name="tasks1" Relationship="Self.task_dependencies" FromRole="tasks" ToRole="tasks1" />
+          <NavigationProperty Name="tasks2" Relationship="Self.task_dependencies" FromRole="tasks1" ToRole="tasks" />
+        </EntityType>
+        <EntityType Name="user_preferences">
+          <Key>
+            <PropertyRef Name="user_id" />
+            <PropertyRef Name="setting_key" />
+          </Key>
+          <Property Name="user_id" Type="Int64" Nullable="false" />
+          <Property Name="setting_key" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="setting_value" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="users" Relationship="Self.fk_user_preferences_users" FromRole="user_preferences" ToRole="users" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password_hash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="full_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="avatar_url" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="bio" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="theme_preference" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="role" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="is_deleted" Type="Boolean" Nullable="false" />
+          <Property Name="deleted_at" Type="DateTime" Precision="7" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="activities" Relationship="Self.fk_activities_users" FromRole="users" ToRole="activities" />
+          <NavigationProperty Name="attachments" Relationship="Self.fk_attachments_users" FromRole="users" ToRole="attachments" />
+          <NavigationProperty Name="comments" Relationship="Self.fk_comments_users" FromRole="users" ToRole="comments" />
+          <NavigationProperty Name="invitations" Relationship="Self.fk_invitations_users_inviter" FromRole="users" ToRole="invitations" />
+          <NavigationProperty Name="notification_recipients" Relationship="Self.fk_notification_recipients_users" FromRole="users" ToRole="notification_recipients" />
+          <NavigationProperty Name="project_members" Relationship="Self.fk_project_members_users" FromRole="users" ToRole="project_members" />
+          <NavigationProperty Name="tasks" Relationship="Self.fk_tasks_users_creator" FromRole="users" ToRole="tasks" />
+          <NavigationProperty Name="user_preferences" Relationship="Self.fk_user_preferences_users" FromRole="users" ToRole="user_preferences" />
+          <NavigationProperty Name="workspaces" Relationship="Self.fk_workspaces_users" FromRole="users" ToRole="workspaces" />
+          <NavigationProperty Name="tasks1" Relationship="Self.task_assignees" FromRole="users" ToRole="tasks" />
+        </EntityType>
+        <EntityType Name="workspaces">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="owner_id" Type="Int64" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" Precision="7" />
+          <NavigationProperty Name="projects" Relationship="Self.fk_projects_workspaces" FromRole="workspaces" ToRole="projects" />
+          <NavigationProperty Name="tags" Relationship="Self.fk_tags_workspaces" FromRole="workspaces" ToRole="tags" />
+          <NavigationProperty Name="users" Relationship="Self.fk_workspaces_users" FromRole="workspaces" ToRole="users" />
+        </EntityType>
+        <Association Name="fk_activities_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="activities" Type="Self.activities" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="activities">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_notification_recipients_activities">
+          <End Role="activities" Type="Self.activities" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="notification_recipients" Type="Self.notification_recipients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="activities">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notification_recipients">
+              <PropertyRef Name="activity_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_attachments_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="attachments" Type="Self.attachments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="attachments">
+              <PropertyRef Name="uploaded_by_user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_comments_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="comments" Type="Self.comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comments">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_invitations_projects">
+          <End Role="projects" Type="Self.projects" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="invitations" Type="Self.invitations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="projects">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="invitations">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_invitations_users_inviter">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="invitations" Type="Self.invitations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="invitations">
+              <PropertyRef Name="inviter_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_notification_recipients_users">
+          <End Role="users" Type="Self.users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="notification_recipients" Type="Self.notification_recipients" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notification_recipients">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_project_members_projects">
+          <End Role="projects" Type="Self.projects" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="project_members" Type="Self.project_members" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="projects">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="project_members">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_project_members_users">
+          <End Role="users" Type="Self.users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="project_members" Type="Self.project_members" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="project_members">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_projects_workspaces">
+          <End Role="workspaces" Type="Self.workspaces" Multiplicity="1" />
+          <End Role="projects" Type="Self.projects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="workspaces">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="projects">
+              <PropertyRef Name="workspace_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_task_lists_projects">
+          <End Role="projects" Type="Self.projects" Multiplicity="1" />
+          <End Role="task_lists" Type="Self.task_lists" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="projects">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="task_lists">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_tasks_projects">
+          <End Role="projects" Type="Self.projects" Multiplicity="1" />
+          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="projects">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="project_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_subtasks_tasks">
+          <End Role="tasks" Type="Self.tasks" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="subtasks" Type="Self.subtasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tasks">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="subtasks">
+              <PropertyRef Name="task_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_tags_workspaces">
+          <End Role="workspaces" Type="Self.workspaces" Multiplicity="1" />
+          <End Role="tags" Type="Self.tags" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="workspaces">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tags">
+              <PropertyRef Name="workspace_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_tasks_task_lists">
+          <End Role="task_lists" Type="Self.task_lists" Multiplicity="1" />
+          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task_lists">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="task_list_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_tasks_users_creator">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="creator_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_user_preferences_users">
+          <End Role="users" Type="Self.users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="user_preferences" Type="Self.user_preferences" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user_preferences">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_workspaces_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="workspaces" Type="Self.workspaces" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="workspaces">
+              <PropertyRef Name="owner_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="project_tags">
+          <End Role="projects" Type="Self.projects" Multiplicity="*" />
+          <End Role="tags" Type="Self.tags" Multiplicity="*" />
+        </Association>
+        <Association Name="task_assignees">
+          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
+        </Association>
+        <Association Name="task_dependencies">
+          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
+          <End Role="tasks1" Type="Self.tasks" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="PronaFlow_DBContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="activities" EntityType="Self.activities" />
+          <EntitySet Name="attachments" EntityType="Self.attachments" />
+          <EntitySet Name="comments" EntityType="Self.comments" />
+          <EntitySet Name="invitations" EntityType="Self.invitations" />
+          <EntitySet Name="notification_recipients" EntityType="Self.notification_recipients" />
+          <EntitySet Name="password_resets" EntityType="Self.password_resets" />
+          <EntitySet Name="project_members" EntityType="Self.project_members" />
+          <EntitySet Name="projects" EntityType="Self.projects" />
+          <EntitySet Name="subtasks" EntityType="Self.subtasks" />
+          <EntitySet Name="tags" EntityType="Self.tags" />
+          <EntitySet Name="task_lists" EntityType="Self.task_lists" />
+          <EntitySet Name="tasks" EntityType="Self.tasks" />
+          <EntitySet Name="user_preferences" EntityType="Self.user_preferences" />
+          <EntitySet Name="users" EntityType="Self.users" />
+          <EntitySet Name="workspaces" EntityType="Self.workspaces" />
+          <AssociationSet Name="fk_activities_users" Association="Self.fk_activities_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="activities" EntitySet="activities" />
+          </AssociationSet>
+          <AssociationSet Name="fk_notification_recipients_activities" Association="Self.fk_notification_recipients_activities">
+            <End Role="activities" EntitySet="activities" />
+            <End Role="notification_recipients" EntitySet="notification_recipients" />
+          </AssociationSet>
+          <AssociationSet Name="fk_attachments_users" Association="Self.fk_attachments_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="attachments" EntitySet="attachments" />
+          </AssociationSet>
+          <AssociationSet Name="fk_comments_users" Association="Self.fk_comments_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="comments" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="fk_invitations_projects" Association="Self.fk_invitations_projects">
+            <End Role="projects" EntitySet="projects" />
+            <End Role="invitations" EntitySet="invitations" />
+          </AssociationSet>
+          <AssociationSet Name="fk_invitations_users_inviter" Association="Self.fk_invitations_users_inviter">
+            <End Role="users" EntitySet="users" />
+            <End Role="invitations" EntitySet="invitations" />
+          </AssociationSet>
+          <AssociationSet Name="fk_notification_recipients_users" Association="Self.fk_notification_recipients_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="notification_recipients" EntitySet="notification_recipients" />
+          </AssociationSet>
+          <AssociationSet Name="fk_project_members_projects" Association="Self.fk_project_members_projects">
+            <End Role="projects" EntitySet="projects" />
+            <End Role="project_members" EntitySet="project_members" />
+          </AssociationSet>
+          <AssociationSet Name="fk_project_members_users" Association="Self.fk_project_members_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="project_members" EntitySet="project_members" />
+          </AssociationSet>
+          <AssociationSet Name="fk_projects_workspaces" Association="Self.fk_projects_workspaces">
+            <End Role="workspaces" EntitySet="workspaces" />
+            <End Role="projects" EntitySet="projects" />
+          </AssociationSet>
+          <AssociationSet Name="fk_task_lists_projects" Association="Self.fk_task_lists_projects">
+            <End Role="projects" EntitySet="projects" />
+            <End Role="task_lists" EntitySet="task_lists" />
+          </AssociationSet>
+          <AssociationSet Name="fk_tasks_projects" Association="Self.fk_tasks_projects">
+            <End Role="projects" EntitySet="projects" />
+            <End Role="tasks" EntitySet="tasks" />
+          </AssociationSet>
+          <AssociationSet Name="fk_subtasks_tasks" Association="Self.fk_subtasks_tasks">
+            <End Role="tasks" EntitySet="tasks" />
+            <End Role="subtasks" EntitySet="subtasks" />
+          </AssociationSet>
+          <AssociationSet Name="fk_tags_workspaces" Association="Self.fk_tags_workspaces">
+            <End Role="workspaces" EntitySet="workspaces" />
+            <End Role="tags" EntitySet="tags" />
+          </AssociationSet>
+          <AssociationSet Name="fk_tasks_task_lists" Association="Self.fk_tasks_task_lists">
+            <End Role="task_lists" EntitySet="task_lists" />
+            <End Role="tasks" EntitySet="tasks" />
+          </AssociationSet>
+          <AssociationSet Name="fk_tasks_users_creator" Association="Self.fk_tasks_users_creator">
+            <End Role="users" EntitySet="users" />
+            <End Role="tasks" EntitySet="tasks" />
+          </AssociationSet>
+          <AssociationSet Name="fk_user_preferences_users" Association="Self.fk_user_preferences_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="user_preferences" EntitySet="user_preferences" />
+          </AssociationSet>
+          <AssociationSet Name="fk_workspaces_users" Association="Self.fk_workspaces_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="workspaces" EntitySet="workspaces" />
+          </AssociationSet>
+          <AssociationSet Name="project_tags" Association="Self.project_tags">
+            <End Role="projects" EntitySet="projects" />
+            <End Role="tags" EntitySet="tags" />
+          </AssociationSet>
+          <AssociationSet Name="task_assignees" Association="Self.task_assignees">
+            <End Role="tasks" EntitySet="tasks" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="task_dependencies" Association="Self.task_dependencies">
+            <End Role="tasks" EntitySet="tasks" />
+            <End Role="tasks1" EntitySet="tasks" />
+          </AssociationSet>
+          <FunctionImport Name="sp_GetProjectDetails" ReturnType="Collection(Models.sp_GetProjectDetails_Result)">
+            <Parameter Name="ProjectID" Mode="In" Type="Int64" />
+            <Parameter Name="UserID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="sp_MoveTask">
+            <Parameter Name="TaskID" Mode="In" Type="Int64" />
+            <Parameter Name="NewTaskListID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="sp_SearchUsersForProject" ReturnType="Collection(Models.sp_SearchUsersForProject_Result)">
+            <Parameter Name="WorkspaceID" Mode="In" Type="Int64" />
+            <Parameter Name="ProjectID" Mode="In" Type="Int64" />
+            <Parameter Name="SearchTerm" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <ComplexType Name="sp_GetProjectDetails_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="Int64" Name="workspace_id" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="description" Nullable="true" />
+          <Property Type="String" Name="cover_image_url" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="status" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="project_type" Nullable="false" MaxLength="10" />
+          <Property Type="DateTime" Name="start_date" Nullable="true" />
+          <Property Type="DateTime" Name="end_date" Nullable="true" />
+          <Property Type="Boolean" Name="is_archived" Nullable="false" />
+          <Property Type="Boolean" Name="is_deleted" Nullable="false" />
+          <Property Type="DateTime" Name="deleted_at" Nullable="true" />
+          <Property Type="DateTime" Name="created_at" Nullable="false" />
+          <Property Type="DateTime" Name="updated_at" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_SearchUsersForProject_Result">
+          <Property Type="Int64" Name="id" Nullable="false" />
+          <Property Type="String" Name="full_name" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="email" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="avatar_url" Nullable="true" MaxLength="255" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelsStoreContainer" CdmEntityContainer="PronaFlow_DBContext">
+          <EntitySetMapping Name="activities">
+            <EntityTypeMapping TypeName="Models.activities">
+              <MappingFragment StoreEntitySet="activities">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="action_type" ColumnName="action_type" />
+                <ScalarProperty Name="target_id" ColumnName="target_id" />
+                <ScalarProperty Name="target_type" ColumnName="target_type" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="attachments">
+            <EntityTypeMapping TypeName="Models.attachments">
+              <MappingFragment StoreEntitySet="attachments">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="uploaded_by_user_id" ColumnName="uploaded_by_user_id" />
+                <ScalarProperty Name="attachable_id" ColumnName="attachable_id" />
+                <ScalarProperty Name="attachable_type" ColumnName="attachable_type" />
+                <ScalarProperty Name="original_filename" ColumnName="original_filename" />
+                <ScalarProperty Name="storage_path" ColumnName="storage_path" />
+                <ScalarProperty Name="file_type" ColumnName="file_type" />
+                <ScalarProperty Name="file_size" ColumnName="file_size" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="comments">
+            <EntityTypeMapping TypeName="Models.comments">
+              <MappingFragment StoreEntitySet="comments">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="commentable_id" ColumnName="commentable_id" />
+                <ScalarProperty Name="commentable_type" ColumnName="commentable_type" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="invitations">
+            <EntityTypeMapping TypeName="Models.invitations">
+              <MappingFragment StoreEntitySet="invitations">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="inviter_id" ColumnName="inviter_id" />
+                <ScalarProperty Name="invitee_email" ColumnName="invitee_email" />
+                <ScalarProperty Name="token" ColumnName="token" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="expires_at" ColumnName="expires_at" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="notification_recipients">
+            <EntityTypeMapping TypeName="Models.notification_recipients">
+              <MappingFragment StoreEntitySet="notification_recipients">
+                <ScalarProperty Name="activity_id" ColumnName="activity_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="is_read" ColumnName="is_read" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="password_resets">
+            <EntityTypeMapping TypeName="Models.password_resets">
+              <MappingFragment StoreEntitySet="password_resets">
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="token" ColumnName="token" />
+                <ScalarProperty Name="expires_at" ColumnName="expires_at" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="project_members">
+            <EntityTypeMapping TypeName="Models.project_members">
+              <MappingFragment StoreEntitySet="project_members">
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="role" ColumnName="role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="projects">
+            <EntityTypeMapping TypeName="Models.projects">
+              <MappingFragment StoreEntitySet="projects">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="workspace_id" ColumnName="workspace_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="cover_image_url" ColumnName="cover_image_url" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="project_type" ColumnName="project_type" />
+                <ScalarProperty Name="start_date" ColumnName="start_date" />
+                <ScalarProperty Name="end_date" ColumnName="end_date" />
+                <ScalarProperty Name="is_archived" ColumnName="is_archived" />
+                <ScalarProperty Name="is_deleted" ColumnName="is_deleted" />
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="subtasks">
+            <EntityTypeMapping TypeName="Models.subtasks">
+              <MappingFragment StoreEntitySet="subtasks">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="task_id" ColumnName="task_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="is_completed" ColumnName="is_completed" />
+                <ScalarProperty Name="position" ColumnName="position" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tags">
+            <EntityTypeMapping TypeName="Models.tags">
+              <MappingFragment StoreEntitySet="tags">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="workspace_id" ColumnName="workspace_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="color_hex" ColumnName="color_hex" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="task_lists">
+            <EntityTypeMapping TypeName="Models.task_lists">
+              <MappingFragment StoreEntitySet="task_lists">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="position" ColumnName="position" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tasks">
+            <EntityTypeMapping TypeName="Models.tasks">
+              <MappingFragment StoreEntitySet="tasks">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="task_list_id" ColumnName="task_list_id" />
+                <ScalarProperty Name="creator_id" ColumnName="creator_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="priority" ColumnName="priority" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="start_date" ColumnName="start_date" />
+                <ScalarProperty Name="end_date" ColumnName="end_date" />
+                <ScalarProperty Name="is_recurring" ColumnName="is_recurring" />
+                <ScalarProperty Name="recurrence_rule" ColumnName="recurrence_rule" />
+                <ScalarProperty Name="next_recurrence_date" ColumnName="next_recurrence_date" />
+                <ScalarProperty Name="is_deleted" ColumnName="is_deleted" />
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_preferences">
+            <EntityTypeMapping TypeName="Models.user_preferences">
+              <MappingFragment StoreEntitySet="user_preferences">
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="setting_key" ColumnName="setting_key" />
+                <ScalarProperty Name="setting_value" ColumnName="setting_value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="Models.users">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password_hash" ColumnName="password_hash" />
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="avatar_url" ColumnName="avatar_url" />
+                <ScalarProperty Name="bio" ColumnName="bio" />
+                <ScalarProperty Name="theme_preference" ColumnName="theme_preference" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="is_deleted" ColumnName="is_deleted" />
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="workspaces">
+            <EntityTypeMapping TypeName="Models.workspaces">
+              <MappingFragment StoreEntitySet="workspaces">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="owner_id" ColumnName="owner_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="project_tags" TypeName="Models.project_tags" StoreEntitySet="project_tags">
+            <EndProperty Name="projects">
+              <ScalarProperty Name="id" ColumnName="project_id" />
+            </EndProperty>
+            <EndProperty Name="tags">
+              <ScalarProperty Name="id" ColumnName="tag_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="task_assignees" TypeName="Models.task_assignees" StoreEntitySet="task_assignees">
+            <EndProperty Name="tasks">
+              <ScalarProperty Name="id" ColumnName="task_id" />
+            </EndProperty>
+            <EndProperty Name="users">
+              <ScalarProperty Name="id" ColumnName="user_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="task_dependencies" TypeName="Models.task_dependencies" StoreEntitySet="task_dependencies">
+            <EndProperty Name="tasks">
+              <ScalarProperty Name="id" ColumnName="task_id" />
+            </EndProperty>
+            <EndProperty Name="tasks1">
+              <ScalarProperty Name="id" ColumnName="blocking_task_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <FunctionImportMapping FunctionImportName="sp_GetProjectDetails" FunctionName="Models.Store.sp_GetProjectDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Models.sp_GetProjectDetails_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="workspace_id" ColumnName="workspace_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="cover_image_url" ColumnName="cover_image_url" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="project_type" ColumnName="project_type" />
+                <ScalarProperty Name="start_date" ColumnName="start_date" />
+                <ScalarProperty Name="end_date" ColumnName="end_date" />
+                <ScalarProperty Name="is_archived" ColumnName="is_archived" />
+                <ScalarProperty Name="is_deleted" ColumnName="is_deleted" />
+                <ScalarProperty Name="deleted_at" ColumnName="deleted_at" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_MoveTask" FunctionName="Models.Store.sp_MoveTask" />
+          <FunctionImportMapping FunctionImportName="sp_SearchUsersForProject" FunctionName="Models.Store.sp_SearchUsersForProject">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Models.sp_SearchUsersForProject_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="avatar_url" ColumnName="avatar_url" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2817e34e7e524b5ca472cbb902663fc9" Name="Diagram1" ZoomLevel="15">
+        <EntityTypeShape EntityType="Models.activities" Width="1.5" PointX="17.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.attachments" Width="1.5" PointX="17.75" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.comments" Width="1.5" PointX="17.75" PointY="15.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.invitations" Width="1.5" PointX="33.125" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.notification_recipients" Width="1.5" PointX="20" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.password_resets" Width="1.5" PointX="18" PointY="21.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.project_members" Width="1.5" PointX="36.125" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.projects" Width="1.5" PointX="30.875" PointY="18" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.subtasks" Width="1.5" PointX="40.625" PointY="13.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.tags" Width="1.5" PointX="33.125" PointY="19.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.task_lists" Width="1.5" PointX="33.125" PointY="22.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.tasks" Width="1.5" PointX="38.375" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.user_preferences" Width="1.5" PointX="28.625" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.users" Width="1.5" PointX="15.5" PointY="14.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.workspaces" Width="1.5" PointX="28.625" PointY="19.125" IsExpanded="true" />
+        <AssociationConnector Association="Models.fk_activities_users" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_notification_recipients_activities" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_attachments_users" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_comments_users" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_invitations_projects" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_invitations_users_inviter" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_notification_recipients_users" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_project_members_projects" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_project_members_users" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_projects_workspaces" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_task_lists_projects" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_tasks_projects" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_subtasks_tasks" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_tags_workspaces" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_tasks_task_lists" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_tasks_users_creator" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_user_preferences_users" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.fk_workspaces_users" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.project_tags" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.task_assignees" ManuallyRouted="false" />
+        <AssociationConnector Association="Models.task_dependencies" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
