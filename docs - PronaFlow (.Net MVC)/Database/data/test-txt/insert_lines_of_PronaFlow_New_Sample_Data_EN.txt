@@ -1,0 +1,497 @@
+Tìm thấy 495 lệnh INSERT trong file '<_io.TextIOWrapper name='PronaFlow_New_Sample_Data_EN_split_by_lines.sql' mode='r' encoding='utf-8'>':
+
+Dòng 46: INSERT INTO [dbo].[users] ([username], [email], [password_hash], [full_name], [bio], [role]) VALUES
+Dòng 88: INSERT INTO [dbo].[workspaces] ([owner_id], [name], [description]) VALUES
+Dòng 338: INSERT INTO [dbo].[tags] ([workspace_id], [name], [color_hex]) VALUES
+Dòng 1340: INSERT INTO [dbo].[tags] ([workspace_id], [name], [color_hex]) VALUES
+Dòng 1848: INSERT INTO [dbo].[projects] ([workspace_id], [name], [description], [status], [project_type], [start_date], [end_date], [is_archived]) VALUES
+Dòng 2850: INSERT INTO [dbo].[projects] ([workspace_id], [name], [description], [status], [project_type], [start_date], [end_date], [is_archived]) VALUES
+Dòng 3852: INSERT INTO [dbo].[projects] ([workspace_id], [name], [description], [status], [project_type], [start_date], [end_date], [is_archived]) VALUES
+Dòng 4854: INSERT INTO [dbo].[projects] ([workspace_id], [name], [description], [status], [project_type], [start_date], [end_date], [is_archived]) VALUES
+Dòng 5677: INSERT INTO [dbo].[project_members] ([project_id], [user_id], [role]) VALUES
+Dòng 6679: INSERT INTO [dbo].[project_members] ([project_id], [user_id], [role]) VALUES
+Dòng 7681: INSERT INTO [dbo].[project_members] ([project_id], [user_id], [role]) VALUES
+Dòng 8683: INSERT INTO [dbo].[project_members] ([project_id], [user_id], [role]) VALUES
+Dòng 9685: INSERT INTO [dbo].[project_members] ([project_id], [user_id], [role]) VALUES
+Dòng 10687: INSERT INTO [dbo].[project_members] ([project_id], [user_id], [role]) VALUES
+Dòng 11689: INSERT INTO [dbo].[project_members] ([project_id], [user_id], [role]) VALUES
+Dòng 12691: INSERT INTO [dbo].[project_members] ([project_id], [user_id], [role]) VALUES
+Dòng 13693: INSERT INTO [dbo].[project_members] ([project_id], [user_id], [role]) VALUES
+Dòng 14695: INSERT INTO [dbo].[project_members] ([project_id], [user_id], [role]) VALUES
+Dòng 15697: INSERT INTO [dbo].[project_members] ([project_id], [user_id], [role]) VALUES
+Dòng 16699: INSERT INTO [dbo].[project_members] ([project_id], [user_id], [role]) VALUES
+Dòng 17701: INSERT INTO [dbo].[project_members] ([project_id], [user_id], [role]) VALUES
+Dòng 18703: INSERT INTO [dbo].[project_members] ([project_id], [user_id], [role]) VALUES
+Dòng 18924: INSERT INTO [dbo].[project_tags] ([project_id], [tag_id]) VALUES
+Dòng 19926: INSERT INTO [dbo].[project_tags] ([project_id], [tag_id]) VALUES
+Dòng 20928: INSERT INTO [dbo].[project_tags] ([project_id], [tag_id]) VALUES
+Dòng 21930: INSERT INTO [dbo].[project_tags] ([project_id], [tag_id]) VALUES
+Dòng 22932: INSERT INTO [dbo].[project_tags] ([project_id], [tag_id]) VALUES
+Dòng 23934: INSERT INTO [dbo].[project_tags] ([project_id], [tag_id]) VALUES
+Dòng 24936: INSERT INTO [dbo].[project_tags] ([project_id], [tag_id]) VALUES
+Dòng 24985: INSERT INTO [dbo].[task_lists] ([project_id], [name], [position]) VALUES
+Dòng 25987: INSERT INTO [dbo].[task_lists] ([project_id], [name], [position]) VALUES
+Dòng 26989: INSERT INTO [dbo].[task_lists] ([project_id], [name], [position]) VALUES
+Dòng 27991: INSERT INTO [dbo].[task_lists] ([project_id], [name], [position]) VALUES
+Dòng 28993: INSERT INTO [dbo].[task_lists] ([project_id], [name], [position]) VALUES
+Dòng 29995: INSERT INTO [dbo].[task_lists] ([project_id], [name], [position]) VALUES
+Dòng 30997: INSERT INTO [dbo].[task_lists] ([project_id], [name], [position]) VALUES
+Dòng 31999: INSERT INTO [dbo].[task_lists] ([project_id], [name], [position]) VALUES
+Dòng 33001: INSERT INTO [dbo].[task_lists] ([project_id], [name], [position]) VALUES
+Dòng 34003: INSERT INTO [dbo].[task_lists] ([project_id], [name], [position]) VALUES
+Dòng 34516: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 35518: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 36520: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 37522: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 38524: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 39526: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 40528: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 41530: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 42532: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 43534: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 44536: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 45538: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 46540: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 47542: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 48544: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 49546: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 50548: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 51550: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 52552: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 53554: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 54556: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 55558: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 56560: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 57562: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 58564: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 59566: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 60568: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 61570: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 62572: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 63574: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 64576: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 65578: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 66580: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 67582: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 68584: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 69586: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 70588: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 71590: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 72592: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 73594: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 74596: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 75598: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 76600: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 77602: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 78604: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 79606: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 80608: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 81610: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 82612: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 83614: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 84616: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 85618: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 86620: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 87622: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 88624: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 89626: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 90628: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 91630: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 92632: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 93634: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 94636: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 95638: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 96640: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 97642: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 98644: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 99646: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 100648: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 101650: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 102652: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 103654: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 104656: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 105658: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 106660: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 107662: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 108664: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 109666: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 110668: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 111670: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 112672: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 113674: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 114676: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 115678: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 116680: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 117682: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 118684: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 119686: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 120688: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 121690: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 122692: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 123694: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 124696: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 125698: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 126700: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 127702: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 128704: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 129706: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 130708: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 131710: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 132712: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 133714: INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [end_date]) VALUES
+Dòng 133732: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 134734: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 135736: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 136738: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 137740: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 138742: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 139744: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 140746: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 141748: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 142750: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 143752: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 144754: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 145756: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 146758: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 147760: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 148762: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 149764: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 150766: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 151768: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 152770: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 153772: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 154774: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 155776: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 156778: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 157780: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 158782: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 159784: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 160786: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 161788: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 162790: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 163792: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 164794: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 165796: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 166798: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 167800: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 168802: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 169804: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 170806: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 171808: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 172810: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 173812: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 174814: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 175816: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 176818: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 177820: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 178822: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 179824: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 180826: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 181828: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 182830: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 183832: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 184834: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 185836: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 186838: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 187840: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 188842: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 189844: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 190846: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 191848: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 192850: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 193852: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 194854: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 195856: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 196858: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 197860: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 198862: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 199864: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 200866: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 201868: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 202870: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 203872: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 204874: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 205876: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 206878: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 207880: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 208882: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 209884: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 210886: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 211888: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 212890: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 213892: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 214894: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 215896: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 216898: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 217900: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 218902: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 219904: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 220906: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 221908: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 222910: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 223912: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 224914: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 225916: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 226918: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 227920: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 228922: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 229924: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 230926: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 231928: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 232930: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 233932: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 234934: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 235936: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 236938: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 237940: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 238942: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 239944: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 240946: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 241948: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 242950: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 243952: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 244954: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 245956: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 246958: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 247960: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 248962: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 249964: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 250966: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 251968: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 252970: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 253972: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 254974: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 255976: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 256978: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 257980: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 258982: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 259984: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 260986: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 261988: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 262990: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 263992: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 264994: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 265996: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 266998: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 268000: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 269002: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 270004: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 271006: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 272008: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 273010: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 274012: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 275014: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 276016: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 277018: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 278020: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 279022: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 280024: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 281026: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 282028: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 283030: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 284032: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 285034: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 286036: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 287038: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 288040: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 289042: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 290044: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 291046: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 292048: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 293050: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 294052: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 295054: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 296056: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 297058: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 298060: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 299062: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 300064: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 301066: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 302068: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 303070: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 304072: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 305074: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 306076: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 307078: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 308080: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 309082: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 310084: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 311086: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 312088: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 313090: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 314092: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 315094: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 316096: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 317098: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 318100: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 319102: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 320104: INSERT INTO [dbo].[task_assignees] ([task_id], [user_id]) VALUES
+Dòng 320572: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 321574: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 322576: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 323578: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 324580: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 325582: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 326584: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 327586: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 328588: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 329590: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 330592: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 331594: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 332596: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 333598: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 334600: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 335602: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 336604: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 337606: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 338608: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 339610: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 340612: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 341614: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 342616: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 343618: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 344620: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 345622: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 346624: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 347626: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 348628: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 349630: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 350632: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 351634: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 352636: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 353638: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 354640: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 355642: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 356644: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 357646: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 358648: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 359650: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 360652: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 361654: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 362656: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 363658: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 364660: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 365662: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 366664: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 367666: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 368668: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 369670: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 370672: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 371674: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 372676: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 373678: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 374680: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 375682: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 376684: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 377686: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 378688: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 379690: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 380692: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 381694: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 382696: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 383698: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 384700: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 385702: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 386704: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 387706: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 388708: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 389710: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 390712: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 391714: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 392716: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 393718: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 394720: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 395722: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 396724: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 397726: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 398728: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 399730: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 400732: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 401734: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 402736: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 403738: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 404740: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 405742: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 406744: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 407746: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 408748: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 409750: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 410752: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 411754: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 412756: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 413758: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 414760: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 415762: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 416764: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 417766: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 418768: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 419770: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 420772: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 421774: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 422776: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 423778: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 424780: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 425782: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 426784: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 427786: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 428788: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 429790: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 430792: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 431794: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 432796: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 433798: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 434800: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 435802: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 436804: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 437806: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 438808: INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
+Dòng 439769: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 440771: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 441773: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 442775: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 443777: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 444779: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 445781: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 446783: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 447785: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 448787: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 449789: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 450791: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 451793: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 452795: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 453797: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 454799: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 455801: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 456803: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 457805: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 458807: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 459809: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 460811: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 461813: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 462815: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 463817: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 464819: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 465821: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 466823: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 467825: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 468827: INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
+Dòng 469283: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 470285: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 471287: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 472289: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 473291: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 474293: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 475295: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 476297: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 477299: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 478301: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 479303: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 480305: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 481307: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 482309: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 483311: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 484313: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 485315: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 486317: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 487319: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES
+Dòng 488321: INSERT INTO [dbo].[attachments] ([uploaded_by_user_id], [attachable_id], [attachable_type], [original_filename], [storage_path], [file_type], [file_size]) VALUES

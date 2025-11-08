@@ -1,0 +1,216 @@
+{
+  "main": {
+    "id": "85af29b4e52eef9c",
+    "type": "split",
+    "children": [
+      {
+        "id": "6ae852ea85886f23",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8c783ba0cbc7701a",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "7511a4bc45dcf15f",
+    "type": "split",
+    "children": [
+      {
+        "id": "7af0da10baaf8bf6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b9ca96124e557d67",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "73a199bf48a31c4f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "b74b558e784efc07",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 341.5
+  },
+  "right": {
+    "id": "7ed4e8f5e29b036a",
+    "type": "split",
+    "children": [
+      {
+        "id": "215ae5dd2469c35f",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "286010acfb5bf341",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Case.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Case"
+            }
+          },
+          {
+            "id": "f4e238061a19061e",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Case.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Case"
+            }
+          },
+          {
+            "id": "10a0a21ad7de5a10",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "ec30f3ffb56e0b62",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Case.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Case"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "8c783ba0cbc7701a",
+  "lastOpenFiles": [
+    "Database/Đánh giá Cơ sở Dữ liệu db_PronaFlow.md",
+    "Database/Business Rules Updated for PronaFLow (Ver 2).md",
+    "Database/CreateDBForPronaFlow.md",
+    "Database/User Flow/UserFlow - Users.md",
+    "DIAGRAM/UML Diagrams for PronaFlow.md",
+    "Database/Database - PronaFlow.md",
+    "DIAGRAM/USE CASE DIAGRAM/Use Case Diagram for PronaFlow System.md",
+    "DIAGRAM/Package Diagram for PronaFlow System.md",
+    "DIAGRAM/Component Diagram for PronaFlow System.md",
+    "DIAGRAM/Class Diagram for PronaFlow System.md",
+    "DIAGRAM/Activity Diagram for PronaFlow System.md",
+    "UserFlow - user_preferences.md",
+    "DIAGRAM/State Machine Diagram for PronaFlow System.md",
+    "DIAGRAM/Sequence Diagram for PronaFlow System.md",
+    "DIAGRAM",
+    "DIAGRAM/USE CASE DIAGRAM",
+    "Database/User Flow/UserFlow - Activities.md",
+    "Database/User Flow/UserFlow - Workspace.md",
+    "Database/User Flow/UserFlow - Projects.md",
+    "Database/Overview Database - PronaFlow.md",
+    "Database/database diagram.png",
+    "PronaFlow by using C#-sharp/Plan.md",
+    "Database/UserFlow - PronaFlow.md",
+    "README.md.md",
+    "Database/User Flow/UserFlow - Attachments.md",
+    "Admin/Describe Admin Pages.md",
+    "Admin/Code Organization.md",
+    "Admin/Tree View - Admin - PronaFlow.md",
+    "Admin",
+    "Database/User Flow/UserFlow - Task.md",
+    "Database/data/data2.sql",
+    "Database/data/admin account.sql",
+    "Database/data/inserting-sample-data/yk0mel3x.yx0~",
+    "img",
+    "img/Cấu hình cài đặt project (VS).png",
+    "PronaFlow by using C#-sharp/Step/Phrase2-Detail",
+    "PronaFlow by using C#-sharp/Step/Phrase1-Detail",
+    "PronaFlow by using C#-sharp/Step",
+    "Pasted image 20250926161235.png",
+    "Pasted image 20250926160951.png",
+    "Untitled.canvas",
+    "Code flow - Backend/imgs/root folder - backend.png",
+    "Pasted image 20250926160203.png",
+    "Code flow - Backend/imgs/Code Flow - Backend.png",
+    "Code flow - Backend/Code Flow.canvas"
+  ]
+}

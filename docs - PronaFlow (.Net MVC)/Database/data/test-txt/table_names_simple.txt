@@ -1,0 +1,33 @@
+Thống kê 12 bảng được tìm thấy trong file 'insert_lines_of_PronaFlow_New_Sample_Data_EN.txt':
+
+[dbo].[attachments];
+[dbo].[comments];
+[dbo].[project_members];
+[dbo].[project_tags];
+[dbo].[projects];
+[dbo].[subtasks];
+[dbo].[tags];
+[dbo].[task_assignees];
+[dbo].[task_lists];
+[dbo].[tasks];
+[dbo].[users];
+[dbo].[workspaces];
+
+SELECT * FROM [attachments];    --
+SELECT * FROM [comments];       --
+SELECT * FROM [project_members];--
+SELECT * FROM [project_tags];   --
+SELECT * FROM [projects];       --
+SELECT * FROM [subtasks];       --
+SELECT * FROM [tags];           --
+SELECT * FROM [task_assignees]; --
+SELECT * FROM [task_lists];     --
+SELECT * FROM [tasks];          --
+SELECT * FROM [users];          --
+SELECT * FROM [workspaces];     --
+SELECT * FROM [invitations];
+SELECT * FROM [activities];
+SELECT * FROM [notification_recipients];
+SELECT * FROM [password_resets];
+SELECT * FROM [task_dependencies];
+SELECT * FROM [user_preferences];

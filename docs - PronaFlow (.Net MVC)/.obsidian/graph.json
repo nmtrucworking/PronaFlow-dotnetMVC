@@ -1,0 +1,37 @@
+{
+  "collapse-filter": true,
+  "search": "",
+  "showTags": false,
+  "showAttachments": false,
+  "hideUnresolved": false,
+  "showOrphans": true,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "path:Admin  ",
+      "color": {
+        "a": 1,
+        "rgb": 14701138
+      }
+    },
+    {
+      "query": "path:Database  ",
+      "color": {
+        "a": 1,
+        "rgb": 14725458
+      }
+    }
+  ],
+  "collapse-display": true,
+  "showArrow": false,
+  "textFadeMultiplier": -0.8,
+  "nodeSizeMultiplier": 1,
+  "lineSizeMultiplier": 1.26642411642412,
+  "collapse-forces": true,
+  "centerStrength": 0.475051975051975,
+  "repelStrength": 14.0748440748441,
+  "linkStrength": 1,
+  "linkDistance": 238,
+  "scale": 0.9426662568379497,
+  "close": true
+}
