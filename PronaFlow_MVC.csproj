@@ -196,6 +196,7 @@
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KanbanboardController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\SubtaskController.cs" />
@@ -290,6 +291,8 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Trash\Index.cshtml" />
+    <Content Include="Views\Shared\_Sidebar.cshtml" />
+    <Content Include="Views\Kanbanboard\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

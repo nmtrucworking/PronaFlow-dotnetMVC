@@ -3,5 +3,51 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<main id="main" class="main dashboard no-scrollbar">
+    <div id="greeting-widget-frame" class="greeting-widget">
+        <img src="./assets/images/hello.gif" alt="Hello Icon">
+        <span id="greeting-widget"></span>
+    </div>
 
+    <div class="divider"></div>
+
+    <div class="widget-group">
+        <div class="widget">
+            <h3 class="widget__title">Overview</h3>
+            <div class="widget__content widget__content--overview">
+                <div class="inner-widget-content">
+                    You're managing <span id="total-projects">#</span> projects in total
+                </div>
+            </div>
+        </div>
+        <div class="widget">
+            <h3 class="widget__title">Task in progress</h3>
+            <div class="widget__content widget__content--inprogress">
+                <div class="inner-widget-content">
+                    You're working on <span id="total-tasks-inprogress">#</span> tasks right now
+                </div>
+            </div>
+        </div>
+        <div class="widget">
+            <h3 class="widget__title">Task Overdue</h3>
+            <div class="widget__content widget__content--overdue">
+                <div class="inner-widget-content">
+                    You have <span id="total-tasks-overdue">#</span> overdue tasks to catch up on
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="frames">
+        <div class="frame frame--dashboard">
+            <h3 class="frame__title frame__title--dashboard">Upcoming task</h3>
+            <div class="frame__content hide-scrollbar">
+                <div class="task-list" id="upcoming-tasks">
+                    <!-- JS will render Upcoming Tasks -->
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

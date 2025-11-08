@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
 namespace PronaFlow_MVC.Controllers
 {
-    public class WorkspaceController : Controller
+    public class KanbanboardController : Controller
     {
-        // GET: Workspace
+        // GET: Kanbanboard
         public ActionResult Index()
         {
             return View();
