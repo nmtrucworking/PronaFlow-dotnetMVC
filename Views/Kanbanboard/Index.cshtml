@@ -1,14 +1,96 @@
-﻿
+﻿@model PronaFlow_MVC.Models.ViewModels.KanbanBoardViewModel
 @{
-    ViewBag.Title = "Kanban Board";
+    ViewBag.Title = "Kanban Board | PronaFlow";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@{
+    string GetUiStatus(string dbStatus)
+    {
+        var statusMapping = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+{
+            { "temp", "temp"},
+            { "notstarted", "not-started"},
+            { "inprogress", "in-progress"},
+            { "inreview", "in-review"},
+            { "done", "done"},
+        };
+        return statusMapping.TryGetValue(dbStatus, out var uiStatus) ? uiStatus : "unknown-status";
+    }
+
+    /*
+    // Kanban Column
+    var KanbanColumns = new List<KanbanColumnInfo>
+    {
+    new KanbanColumnInfo { Title = "Temp", DbStatus = "temp" },
+    new KanbanColumnInfo { Title = "Not Started", DbStatus = "not-started" },
+    new KanbanColumnInfo { Title = "In Progress", DbStatus = "in-progress" },
+    new KanbanColumnInfo { Title = "In Review", DbStatus = "in-review" },
+    new KanbanColumnInfo { Title = "Done", DbStatus = "done" }
+    };
+
+    List<KanbanColumnInfo> GetKanbanColumns() => kanbanColumns;
+    */
+}
+
+<!--
+@helper RenderProjectCard(PronaFlow_MVC.ViewModels.KanbanProjectCardViewModel project)
+{
+    // 1. Render Tags
+    var tagsHtml = project.Tags != null && project.Tags.Any()
+        ? $"<div class=\"prj-card-tags-group\">{string.Join("", project.Tags.Select(tag => $"<div class=\"prj-card-tag\" style=\"background-color: {tag.ColorHex};\"></div>"))}</div>"
+        : "";
+
+    // 2. Render TaskStatics
+    var taskProgressHtml = (project.TotalTasks > 0)
+        ? $"<div class=\"prj-card-total-task prj-attribute\"><i data-lucide=\"circle-check-big\" class=\"prj-card-icon\"></i><span>{project.CompletedTasks}</span><span>/</span><span>{project.TotalTasks}</span></div>"
+        : "";
+
+    // Logic tính toán countdown
+    var countdownHtml = "";
+    if (project.EndDate.HasValue && project.RemainingDays >= 0)
+    {
+        countdownHtml = $"<div class=\"prj-card-coutdown prj-attribute\"><i data-lucide=\"hourglass\" class=\"prj-card-icon\"></i><span>{project.RemainingDays}d</span></div>";
+    }
+
+    // Render Members
+    var membersHtml = project.Members != null && project.Members.Any()
+        ? $"<div class=\"prj-card-members\">{string.Join("", project.Members.Select(member => $"<img src=\"{(string.IsNullOrEmpty(member.AvatarUrl) ? Url.Content("~/wwwroot/images/avt-notion_1.png") : member.AvatarUrl)}\" alt=\"Member Avatar\" class=\"prj-member\">"))}</div>"
+        : "";
+
+    <div class="project-card" draggable="true" data-project-id="@project.Id">
+        <div class="prj-card-attributes">
+            @Html.Raw(tagsHtml)
+            <div class="prj-card-project-name prj-attribute">
+                <label class="custom-checkbox">
+                    <input type="checkbox" name="project-status" @(project.IsCompleted ? "checked" : "")>
+                    <span class="custom-checkbox__checkmark round"></span>
+                </label>
+                <span>@project.Name</span>
+            </div>
+            <div class="prj-card-deadline prj-attribute">
+                 <i data-lucide="clock" class="prj-card-icon"></i>
+                 <span>@(project.StartDate.HasValue ? project.StartDate.Value.ToString("MMM dd") : "...")</span>
+                 <span>-</span>
+                 <span>@(project.EndDate.HasValue ? project.EndDate.Value.ToString("MMM dd") : "...")</span>
+            </div>
+            @Html.Raw(countdownHtml)
+            @Html.Raw(taskProgressHtml)
+        </div>
+        @Html.Raw(membersHtml)
+    </div>
+}
+
+-->
 
 <main id="main" class="main kanban-board">
     <div class="kanban-board__header">
         <div class="workspace__title">
-            <span id="workspaceName">Loading...</span>
+            <span id="workspaceName">@Model.WorkspaceName</span>
         </div>
-        <span id="workspaceDescription" class="workspace__description"></span>
+        <span id="workspaceDescription" class="workspace__description">
+            @Model.WorkspaceDescription
+        </span>
     </div>
 
     <div class="divider"></div>
@@ -419,3 +501,7 @@
         </div>
     </div>
 </main>
+
+@section scripts {
+    <script src="~/wwwroot/js/KanbanPageRefactored.js"></script>
+}

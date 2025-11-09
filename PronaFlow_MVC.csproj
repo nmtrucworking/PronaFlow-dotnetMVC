@@ -186,6 +186,7 @@
     <Content Include="wwwroot\images\working-group.jpg" />
     <Content Include="wwwroot\images\working-group1.jpg" />
     <Content Include="Web.config" />
+    <Content Include="wwwroot\js\KanbanPageRefactored.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -271,6 +272,7 @@
     <Compile Include="Models\user_preferences.cs">
       <DependentUpon>PronaFlowDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\KanbanProjectCardViewModel.cs" />
     <Compile Include="Models\workspaces.cs">
       <DependentUpon>PronaFlowDataModel.tt</DependentUpon>
     </Compile>
