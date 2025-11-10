@@ -4,6 +4,7 @@
     @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { role = "form" }))
     {
         @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "form__error form__error--summary" })
 
         <h1 class="form__title">Login</h1>
         <div class="form__input-groups">

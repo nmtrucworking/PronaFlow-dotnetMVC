@@ -76,9 +76,9 @@ namespace PronaFlow_MVC.Controllers
             FormsAuthentication.SetAuthCookie(model.Email, model.RememberMe);
             if (Request.IsAjaxRequest())
             {
-                return Json(new { success = true, message = "Đăng nhập thành công" });
+                return Json(new { success = true, redirectUrl = Url.Action("Index", "Dashboard") });
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Dashboard");
         }
 
         //==========================================
@@ -137,9 +137,9 @@ namespace PronaFlow_MVC.Controllers
             FormsAuthentication.SetAuthCookie(model.Email, false);
             if (Request.IsAjaxRequest())
             {
-                return Json(new { success = true, message = "Đăng ký thành công" });
+                return Json(new { success = true, redirectUrl = Url.Action("Index", "Dashboard") });
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Dashboard");
         }
 
         //===================================== HELPER METHODS
