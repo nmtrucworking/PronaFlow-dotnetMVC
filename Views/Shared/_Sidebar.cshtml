@@ -1,4 +1,16 @@
 ﻿@using System.Web.Mvc
+@{
+    var currentUser = ViewBag.CurrentUser as PronaFlow_MVC.Models.users;
+    var displayName = currentUser != null
+        ? (string.IsNullOrWhiteSpace(currentUser.full_name) ? currentUser.username : currentUser.full_name)
+        : (User?.Identity?.IsAuthenticated == true ? User.Identity.Name : "Guest");
+    var email = currentUser != null
+        ? currentUser.email
+        : (User?.Identity?.IsAuthenticated == true ? User.Identity.Name : "");
+    var avatarUrl = (currentUser != null && !string.IsNullOrEmpty(currentUser.avatar_url))
+        ? Url.Content(currentUser.avatar_url)
+        : Url.Content("~/wwwroot/images/avt-notion_1.png");
+}
 
 <nav id="sidebar" class="sidebar">
     <div class="resize-handle"></div>
@@ -19,10 +31,10 @@
         <button class="sidebar__user-profile" popovertarget="profile-menu" popovertargetaction="toggle"
                 type="button">
             <div id="userAvt">
-                <img class="user__avt" src="./assets/images/avt-notion_1.png" alt="User Avatar">
+                <img class="user__avt" src="@avatarUrl" alt="@displayName">
             </div>
             <span class="user__name item-hide-collapsed" id="user-name">
-                <!---->
+                @displayName
             </span>
         </button>
 
@@ -35,8 +47,8 @@
             </div>
 
             <div class="user-info popover-item">
-                <span id="user-name">${userName}</span>
-                <span id="user-email">${userEmail}</span>
+                <span id="user-name">@displayName</span>
+                <span id="user-email">@email</span>
             </div>
             <div class="divider"></div>
             <ul class="popover-action-list">
@@ -49,10 +61,10 @@
                     </button>
                 </li>
                 <li>
-                    <button id="sign-out-btn" type="button" class="popover-item btn-danger">
+                    <a href="@Url.Action("Logout", "Account")" class="popover-item btn-danger">
                         <i data-lucide="log-out" class="icon-md"></i>
                         <span>Sign out</span>
-                    </button>
+                    </a>
                 </li>
             </ul>
         </div>

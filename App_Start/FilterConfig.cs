@@ -1,4 +1,5 @@
 using System.Web.Mvc;
+using PronaFlow_MVC.App_Start;
 
 namespace PronaFlow_MVC
 {
@@ -8,6 +9,7 @@ namespace PronaFlow_MVC
         {
             filters.Add(new AuthorizeAttribute());
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new CurrentUserFilter());
         }
     }
 }

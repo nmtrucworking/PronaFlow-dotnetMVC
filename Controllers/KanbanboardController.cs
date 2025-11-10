@@ -23,10 +23,35 @@ namespace PronaFlow_MVC.Controllers
         [HttpGet]
         public ActionResult Index(int? workspaceId)
         {
-            long currentWorkspaceId = workspaceId ?? _context.workspaces.FirstOrDefault()?.id ?? 0;
+            // Lấy user hiện tại theo email
+            var email = User?.Identity?.Name;
+            var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
+            if (currentUser == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
-            var viewModel = GetKanbanBoardData((int)currentWorkspaceId);
+            // Chọn workspace mặc định theo owner; hoặc kiểm tra workspaceId truyền vào
+            long targetWorkspaceId = workspaceId.HasValue
+                ? (long)workspaceId.Value
+                : _context.workspaces
+                          .Where(w => w.owner_id == currentUser.id)
+                          .Select(w => w.id)
+                          .FirstOrDefault();
 
+            if (targetWorkspaceId == 0)
+            {
+                return HttpNotFound("Không tìm thấy workspace cho người dùng hiện tại.");
+            }
+
+            // Chỉ cho phép vào workspace thuộc user
+            var belongsToUser = _context.workspaces.Any(w => w.id == targetWorkspaceId && w.owner_id == currentUser.id);
+            if (!belongsToUser)
+            {
+                return HttpNotFound($"Workspace ID {targetWorkspaceId} không thuộc quyền của người dùng hiện tại.");
+            }
+
+            var viewModel = GetKanbanBoardData((int)targetWorkspaceId);
             return View(viewModel);
         }
 
@@ -39,35 +64,37 @@ namespace PronaFlow_MVC.Controllers
         [HttpPost]
         public ActionResult UpdateProjectStatus(int projectId, string newStatus)
         {
+            var email = User?.Identity?.Name;
+            var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
+            if (currentUser == null)
+            {
+                return Json(new { success = false, message = "Bạn cần đăng nhập." });
+            }
+
             var normalizedStatus = NormalizeStatusForDb(newStatus);
             try
             {
                 var project = _context.projects.SingleOrDefault(p => p.id == projectId);
                 if (project == null)
                 {
-                    return Json(new
-                    {
-                        success = false,
-                        message = "Project not found."
-                    });
+                    return Json(new { success = false, message = "Project không tồn tại." });
                 }
+
+                // Kiểm tra quyền: project phải thuộc workspace của user
+                var ownsWorkspace = _context.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id);
+                if (!ownsWorkspace)
+                {
+                    return Json(new { success = false, message = "Không có quyền cập nhật project ở workspace này." });
+                }
+
                 project.status = normalizedStatus;
                 _context.SaveChanges();
 
-                return Json(new
-                {
-                    success = true,
-                    message = $"Status updated to {newStatus}"
-                });
-
+                return Json(new { success = true, message = $"Status updated to {newStatus}" });
             }
             catch (Exception ex)
             {
-                return Json(new
-                {
-                    success = false,
-                    message = "Update failed: " + ex.Message
-                });
+                return Json(new { success = false, message = "Update failed: " + ex.Message });
             }
         }
 
@@ -82,8 +109,21 @@ namespace PronaFlow_MVC.Controllers
         [HttpPost]
         public ActionResult CreateProject(int workspaceId, string projectName, string initialStatus)
         {
-            var normalizedStatus = NormalizeStatusForDb(initialStatus);
+            var email = User?.Identity?.Name;
+            var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
+            if (currentUser == null)
+            {
+                return Json(new { success = false, message = "Bạn cần đăng nhập." });
+            }
 
+            // Chỉ cho phép tạo project trong workspace thuộc user
+            var ownsWorkspace = _context.workspaces.Any(w => w.id == workspaceId && w.owner_id == currentUser.id);
+            if (!ownsWorkspace)
+            {
+                return Json(new { success = false, message = "Không có quyền tạo project trong workspace này." });
+            }
+
+            var normalizedStatus = NormalizeStatusForDb(initialStatus);
             try
             {
                 var newProject = new projects
@@ -104,19 +144,11 @@ namespace PronaFlow_MVC.Controllers
 
                 var projectViewModel = MapToKanbanCardViewModel(newProject);
 
-                return Json(new
-                {
-                    success = true,
-                    project = projectViewModel
-                });
+                return Json(new { success = true, project = projectViewModel });
             }
             catch (Exception ex)
             {
-                return Json(new
-                {
-                    success = false,
-                    message = "Create failed: " + ex.Message
-                });
+                return Json(new { success = false, message = "Create failed: " + ex.Message });
             }
         }
 

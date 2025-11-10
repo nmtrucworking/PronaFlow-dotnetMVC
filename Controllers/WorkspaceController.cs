@@ -18,29 +18,35 @@ namespace PronaFlow_MVC.Controllers
         /// </summary>
         /// <param name="workspaceId"></param>
         /// <returns>View Model</returns>
+        [HttpGet]
         public ActionResult Index(int? workspaceId)
         {
-            int currentWorkspaceId = (int)(workspaceId ?? _context.workspaces.FirstOrDefault()?.id ?? 0);
+            var email = User?.Identity?.Name;
+            var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
+            if (currentUser == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
-            //var viewModel = GetKanbanBoardData(currentWorkspaceId);
+            long currentWorkspaceId = workspaceId.HasValue
+                ? (long)workspaceId.Value
+                : _context.workspaces
+                          .Where(w => w.owner_id == currentUser.id)
+                          .Select(w => w.id)
+                          .FirstOrDefault();
 
             if (currentWorkspaceId == 0)
             {
-                return Json(new
-                {
-                    succes = false,
-                    message = "No Workspace Choosen"
-                });
+                return HttpNotFound("Không có workspace nào cho người dùng hiện tại.");
             }
 
-            var workspace = _context.workspaces.SingleOrDefault(w => w.id == currentWorkspaceId);
-
+            var workspace = _context.workspaces
+                                    .SingleOrDefault(w => w.id == currentWorkspaceId && w.owner_id == currentUser.id);
             if (workspace == null)
             {
-                return HttpNotFound($"Workspace with ID {currentWorkspaceId} not found.");
+                return HttpNotFound($"Workspace ID {currentWorkspaceId} không thuộc quyền của người dùng hiện tại.");
             }
 
-            // Initialize View Model
             var viewModel = new WorkspaceDetailViewModel
             {
                 Id = (int)workspace.id,
@@ -52,46 +58,56 @@ namespace PronaFlow_MVC.Controllers
         }
 
         /// <summary>
-        /// List of Workspace
+        /// List of Workspace theo user hiện tại
         /// </summary>
-        /// <returns>JSON: list of workspaces</returns>
         public ActionResult GetWorkspaces()
         {
-            var workspaces = _context.workspaces
-                .Select(w => new ListOfWorkspaces{ 
-                    Id = (int)w.id, 
-                    Name = w.name
-                })
-                // Authentication
-                .ToList();
+            var email = User?.Identity?.Name;
+            var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
+            var workspaces = (currentUser == null)
+                ? new List<ListOfWorkspaces>()
+                : _context.workspaces
+                    .Where(w => w.owner_id == currentUser.id)
+                    .Select(w => new ListOfWorkspaces
+                    {
+                        Id = (int)w.id,
+                        Name = w.name
+                    })
+                    .ToList();
+
             return PartialView("_WorkspaceList", workspaces);
         }
 
         /// <summary>
-        /// Creates a new workspace
+        /// Creates a new workspace gán owner là user hiện tại
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="description"></param>
-        /// <returns>JSON: workspace information</returns>
         public ActionResult CreateWorkspace(string name, string description)
         {
-            if(string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return Json(new
                 {
                     success = false,
-                    message = "Workspace name must not empty!"
+                    message = "Tên workspace không được để trống."
                 });
             }
+
+            var email = User?.Identity?.Name;
+            var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
+            if (currentUser == null)
+            {
+                return Json(new { success = false, message = "Bạn phải đăng nhập để tạo workspace." });
+            }
+
             try
             {
                 var newWorkspace = new workspaces
                 {
                     name = name,
                     description = description ?? "",
+                    owner_id = currentUser.id,
                     created_at = DateTime.Now,
                     updated_at = DateTime.Now
-                    //owner_id
                 };
 
                 _context.workspaces.Add(newWorkspace);
@@ -101,12 +117,11 @@ namespace PronaFlow_MVC.Controllers
                 {
                     success = true,
                     id = newWorkspace.id,
-                    message = "Create workspace successful."
+                    message = "Tạo workspace thành công."
                 });
             }
             catch (Exception ex)
             {
-                // Ghi log ngoại lệ (Logging is essential for professional applications)
                 return Json(new
                 {
                     success = false,
