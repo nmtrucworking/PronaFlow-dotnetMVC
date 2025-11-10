@@ -1,0 +1,626 @@
+﻿<div class="modal-container modal-container--centered modal-component" id="projectDetailModal">
+    <!-- Phần .modal__content và nội dung bên trong giữ nguyên -->
+    <div class="modal__content no-scrollbar">
+
+        <!-- =============================================================== -->
+        <!--                  LOADING STATE                                  -->
+        <!-- =============================================================== -->
+        <div class="skeleton-loader">
+            <div class="skeleton-line skeleton-header"></div>
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line skeleton-short"></div>
+            <div class="skeleton-line skeleton-short"></div>
+            <div class="skeleton-line skeleton-header"></div>
+            <div class="skeleton-line"></div>
+        </div>
+
+        <!-- =============================================================== -->
+        <!--                     MODAL CONTENT                               -->
+        <!-- =============================================================== -->
+        <div class="modal__body-wrapper">
+            <!-- Project cover image (hidden by default) -->
+            <div class="project__cover"></div>
+
+            <!-- ========== HEADER ========== -->
+            <div class="modal__header">
+                <div class="inner__header">
+                    <div class="modal-header__top">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" name="project-status-checkbox" id="project-status-checkbox">
+                            <span class="custom-checkbox__checkmark round"></span>
+                        </label>
+                        <div id="project-title-container" class="project-detail__title inline-editable"
+                             data-placeholder="Project Title">
+                            <div class="inline-editable__display" id="project-title-display">Dashboard UI Restructure</div>
+                            <div class="inline-editable__edit">
+                                <input type="text"
+                                       class="inline-edit-input"
+                                       value="Dashboard UI Restructure"
+                                       id="project-title-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-header__bot">
+                        <span>Project status: </span>
+                        <!-- Custom Select Wrapper -->
+                        <div class="custom-select-wrapper">
+                            <select id="prj-mdl-status" class="project-status-selecter">
+                                <option value="temp" style="background-color: var(--color-status-temp);">
+                                    On Hold
+                                </option>
+                                <option value="not-started">Not Started</option>
+                                <option value="in-progress" selected>In Progress</option>
+                                <option value="in-review">In Review</option>
+                                <option value="done">Completed</option>
+                            </select>
+                            <i data-lucide="chevron-down" class="custom-select-arrow"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main close button -->
+                <button class="btn-exit" id="closeProjectDetailModal">
+                    <i class="nav-icon icon-lg" data-lucide="x"></i>
+                </button>
+
+            </div>
+
+            <!-- ========== BODY ========== -->
+            <div class="modal__body">
+                <!-- ===== MAIN CONTENT COLUMN ===== -->
+                <div class="modal__main">
+                    <!-- Attributes section -->
+                    <div class="modal-project__attributes">
+                        <!-- Attribute: Members -->
+                        <div class="attribute-box">
+                            <div class="attribute__name">Members</div>
+                            <div class="attribute__content">
+                                <ul class="list_attributes">
+                                    <!-- JS will render data for project members -->
+                                    <img src="../assets/images/avt-notion_1.png" alt="Member 1" title="User 1"
+                                         class="project-member__avt">
+
+                                    <div class="project-member__avt-plus">+2</div>
+                                </ul>
+                                <button class="add-member btn-hover" id="addMemberBtn" popovertarget="addMemberPopover"
+                                        popovertargetaction="toggle">
+                                    <i data-lucide="user-plus"></i>
+                                </button>
+
+                                <!-- Add Member Popover (hidden by default, no inline style) -->
+                                <div popover="" id="addMemberPopover" class="popover project-attribute-popover">
+                                    <div class="popover__header">
+                                        <span class="popover__title">Manage Members</span>
+                                    </div>
+                                    <div class="popover__body" style="padding: 10px;">
+                                        <input type="text" class="form-input" placeholder="Search by name or email...">
+                                        <ul class="user-list no-scrollbar"
+                                            style="margin-top: 10px; max-height: 150px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px;">
+                                            <li class="user-list-item"
+                                                style="display: flex; align-items: center; justify-content: space-between;">
+                                                <div style="display: flex; align-items: center; gap: 8px;">
+                                                    <img src="../assets/images/avt-notion_1.png" class="user__avt"
+                                                         style="width: 24px; height: 24px;">
+                                                    <span>Nguyễn Minh Trúc</span>
+                                                </div>
+                                                <button class="btn btn--secondary btn--small">Remove</button>
+                                            </li>
+                                            <li class="user-list-item"
+                                                style="display: flex; align-items: center; justify-content: space-between;">
+                                                <div style="display: flex; align-items: center; gap: 8px;">
+                                                    <img src="../assets/images/avt-notion_4.png" class="user__avt"
+                                                         style="width: 24px; height: 24px;">
+                                                    <span>Lê Thị Bích</span>
+                                                </div>
+                                                <button class="btn btn--primary btn--small">Add</button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Attribute: Tags -->
+                        <div class="attribute-box">
+                            <div class="attribute__name">Tags</div>
+                            <div class="attribute__content">
+                                <ul class="list_attributes--tags">
+                                    <div class="tag-card" style="background-color: var(--cl-tag-blue);">
+                                        <span class="tag__name">UI/UX</span>
+                                    </div>
+                                    <div class="tag-card" style="background-color: var(--cl-tag-red);">
+                                        <span class="tag__name">Bug</span>
+                                    </div>
+                                </ul>
+                                <button class="add-member btn-hover" id="addTagBtn" popovertarget="manageTagsPopover"
+                                        popovertargetaction="toggle">
+                                    <i data-lucide="tags"></i>
+                                </button>
+                                <!-- Popover for managing tags -->
+                                <div popover="" id="manageTagsPopover" class="popover project-attribute-popover">
+                                    <div class="popover__header">
+                                        <span class="popover__title">Manage Tags</span>
+                                    </div>
+                                    <div class="popover__body">
+                                        <input type="text" class="form-input form-input--small"
+                                               placeholder="Find tags...">
+
+                                        <div class="tag-list-in-popover no-scrollbar">
+                                            <label class="tag-list-item">
+                                                <input type="checkbox" checked>
+                                                <span class="tag-card"
+                                                      style="background-color: var(--cl-tag-blue);">UI/UX</span>
+                                            </label>
+                                            <label class="tag-list-item">
+                                                <input type="checkbox" checked>
+                                                <span class="tag-card"
+                                                      style="background-color: var(--cl-tag-red);">Bug</span>
+                                            </label>
+                                            <label class="tag-list-item">
+                                                <input type="checkbox">
+                                                <span class="tag-card"
+                                                      style="background-color: var(--cl-tag-green);">Feature</span>
+                                            </label>
+                                        </div>
+
+                                        <div class="divider"></div>
+
+                                        <div class="add-new-tag-form">
+                                            <input type="text" class="form-input form-input--small"
+                                                   placeholder="New tag name">
+                                            <input type="color" class="new-tag-color-input" value="#80c8ff">
+                                            <button class="btn btn--primary btn--small">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- Attribute: Deadline -->
+                        <div class="attribute-box">
+                            <div class="attribute__name">Deadline</div>
+                            <div class="attribute__content">
+                                <div class="deadline" id="project_deadline">
+                                    <span class="start-date due-date">08/01/2025</span>
+                                    <span>-</span>
+                                    <span class="end-date due-date">08/31/2025</span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- Popover: Set Project Deadline -->
+                        <div id="project-deadline-popover" popover class="popover project-attribute-popover">
+                            <div class="popover__header">
+                                <span class="popover__title">Set Deadline</span>
+                                <button class="btn-exit" popovertarget="project-deadline-popover" popovertargetaction="hide">
+                                    <i data-lucide="x"></i>
+                                </button>
+                            </div>
+                            <div class="popover__body">
+                                <div class="form-box">
+                                    <label for="project-start-date" class="form-label">Start date</label>
+                                    <input type="date" id="project-start-date" class="form-input form-input--small" />
+                                </div>
+                                <div class="form-box" style="margin-top: 10px;">
+                                    <label for="project-end-date" class="form-label">End date</label>
+                                    <input type="date" id="project-end-date" class="form-input form-input--small" />
+                                </div>
+                                <div class="btn-group" style="margin-top: 12px; display: flex; gap: 8px;">
+                                    <button class="btn btn--primary btn-save-deadline" type="button">Save</button>
+                                    <button class="btn btn-cancel-deadline" type="button">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Attribute: Countdown -->
+                        <div class="attribute-box">
+                            <div class="attribute__name">Countdown</div>
+                            <div class="attribute__content">
+                                <div class="countdown-tag" style="margin-left: 8px;">
+                                    <i data-lucide="hourglass" class="icon--minium"></i>
+                                    <span id="projectCountdown">2d</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section: Description -->
+                    <div class="project-modal-section">
+                        <div class="project-modal-section__title">
+                            <div class="left-col"><i data-lucide="text"></i></div>
+                            <div class="project-modal-section__inner-title">Description</div>
+                        </div>
+                        <textarea class="project__description" id="project_description"
+                                  placeholder="Add a detailed description for your project...">The goal is to improve user experience on the Dashboard page, optimize workflows, and update the design system for consistency.</textarea>
+                    </div>
+
+                    <div id="project-tasklists">
+                        <!-- Section: Task list (EXAMPLE 1: EMPTY LIST) -->
+                        <div class="project-modal-section">
+                            <div class="project-modal-section__title task-list-title">
+                                <div class="left-col"><i data-lucide="square-check-big"></i></div>
+                                <div class="inline-editable" data-placeholder="Phase Title">
+                                    <div class="inline-editable__display">Phase 1: Research</div>
+                                    <div class="inline-editable__edit">
+                                        <input type="text" class="inline-edit-input" value="Phase 1: Research">
+                                    </div>
+                                </div>
+                                <button class="btn-delete-section btn-hover"><i data-lucide="trash-2"></i></button>
+                            </div>
+                            <!-- Empty state -->
+                            <div class="task-list task-list--empty">
+                                <div class="empty-state-compact">
+                                    <i data-lucide="check-square"></i>
+                                    <span>No tasks yet.</span>
+                                    <span>Add a new task below!</span>
+                                </div>
+                            </div>
+                            <!-- END Empty state -->
+                            <div class="add-new-task-input" style="margin-left: 35px; margin-top: 10px;">
+                                <input type="text" class="add-new-task" placeholder="+ Add new task">
+                            </div>
+                        </div>
+
+                        <!-- Section: Task list (EXAMPLE 2: WITH DATA) -->
+                        <div class="project-modal-section">
+                            <div class="project-modal-section__title task-list-title">
+                                <div class="left-col"><i data-lucide="square-check-big"></i></div>
+                                <div class="inline-editable" data-placeholder="Phase Title">
+                                    <div class="inline-editable__display">Phase 2: Design & Implementation</div>
+                                    <div class="inline-editable__edit">
+                                        <input type="text" class="inline-edit-input"
+                                               value="Phase 2: Design & Implementation">
+                                    </div>
+                                </div>
+                                <button class="btn-delete-section btn-hover"><i data-lucide="trash-2"></i></button>
+                            </div>
+                            <div class="task-list">
+                                <!-- Task 1: Normal -->
+                                <div class="task-item">
+                                    <!-- Checkbox -->
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox"><span class="custom-checkbox__checkmark"></span>
+                                    </label>
+                                    <!-- inner -->
+                                    <div class="project__task-card" data-task-id="task_001">
+                                        <input type="text" class="task__name" value="Design wireframe for Dashboard">
+                                        <div class="task-card__action-btns">
+                                            <button class="task-card__opt-icon btn-hover" id="openTaskDetailBtn">
+                                                <i data-lucide="external-link" class="icon-md"></i>
+                                            </button>
+                                            <button class="task-card__opt-icon btn-hover js-task-actions-btn"
+                                                    id="taskActionsBtn" popovertarget="taskActionsPopover"
+                                                    popovertargetaction="toggle">
+                                                <i data-lucide="ellipsis-vertical" class="icon-md"></i>
+                                            </button>
+
+                                            <!-- Task actions popover (hidden by default) -->
+                                            <div popover class="popover popover--task-actions" id="taskActionsPopover">
+                                                <ul class="popover-action-list"
+                                                    style="list-style: none; padding: 5px; margin: 0;">
+                                                    <li>
+                                                        <button class="popover-item">
+                                                            <i data-lucide="copy"></i>
+                                                            Copy
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button class="popover-item">
+                                                            <i data-lucide="move"></i>
+                                                            Move
+                                                        </button>
+                                                    </li>
+                                                    <div class="divider"></div>
+                                                    <li>
+                                                        <button class="popover-item btn--danger">
+                                                            <i data-lucide="trash-2"></i> Delete
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Task 2: Completed -->
+                                <div class="task-item is-completed">
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" checked><span class="custom-checkbox__checkmark"></span>
+                                    </label>
+                                    <div class="project__task-card" data-task-id="task_002">
+                                        <input type="text" class="task__name" value="Create basic component set"
+                                               style="text-decoration: line-through; opacity: 0.6;">
+                                        <div class="task-card__action-btns">
+                                            <button class="task-card__opt-icon btn-hover" id="openTaskDetailBtn">
+                                                <i data-lucide="external-link" class="icon-md"></i>
+                                            </button>
+                                            <button class="task-card__opt-icon btn-hover js-task-actions-btn"
+                                                    id="taskActionsBtn" popovertarget="taskActionsPopover"
+                                                    popovertargetaction="toggle">
+                                                <i data-lucide="ellipsis-vertical" class="icon-md"></i>
+                                            </button>
+
+                                            <!-- Task actions popover (hidden by default) -->
+                                            <div popover class="popover popover--task-actions" id="taskActionsPopover">
+                                                <ul class="popover-action-list"
+                                                    style="list-style: none; padding: 5px; margin: 0;">
+                                                    <li>
+                                                        <button class="popover-item">
+                                                            <i data-lucide="copy"></i>
+                                                            Copy
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button class="popover-item">
+                                                            <i data-lucide="move"></i>
+                                                            Move
+                                                        </button>
+                                                    </li>
+                                                    <div class="divider"></div>
+                                                    <li>
+                                                        <button class="popover-item btn--danger">
+                                                            <i data-lucide="trash-2"></i> Delete
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="add-new-task-input" style="margin-left: 35px; margin-top: 10px;">
+                                <input type="text" class="add-new-task" placeholder="+ Add new task">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section: Recent Activity -->
+                    <div class="project-modal-section">
+                        <div class="project-modal-section__title">
+                            <div class="left-col"><i data-lucide="activity"></i></div>
+                            <div class="project-modal-section__inner-title">Activity</div>
+                        </div>
+                        <div class="list-col" style="margin-left: 20px;">
+                            <div class="attribute-box__item">
+                                <img src="../assets/images/avt-notion_1.png" alt="" class="project-member__avt">
+                                <div class="activity">
+                                    <span id="user" style="font-weight: 600;">Nguyễn Minh Trúc</span>
+                                    <span id="activity-content">
+                                        moved this card from <b>Not Started</b> to <b>
+                                            In
+                                            Progress
+                                        </b>
+                                    </span>
+                                    <div style="font-size: 12px; color: var(--color-text-secondary);">
+                                        2 hours ago
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="attribute-box__item">
+                                <img src="../assets/images/avt-notion_2.png" alt="" class="project-member__avt">
+                                <div class="activity">
+                                    <span id="user" style="font-weight: 600;">Trần Văn An</span>
+                                    <span id="activity-content">added task "Design wireframe for Dashboard"</span>
+                                    <div style="font-size: 12px; color: var(--color-text-secondary);">
+                                        Yesterday, at
+                                        3:30 PM
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Added: Comment input for Activity -->
+                        <div class="activity-comment-box"
+                             style="margin-left: 20px; margin-top: 10px; display: flex; gap: 8px; align-items: flex-start;">
+                            <textarea class="form-input form-input--small activity-comment-input"
+                                      placeholder="Viết bình luận..."></textarea>
+                            <button class="btn btn--primary btn--small post-activity-comment-btn">Đăng</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ===== SIDEBAR ACTIONS ===== -->
+                <div class="modal__sidebar">
+                    <div class="modal-sidebar__section">
+                        <div class="modal-sidebar__title">Add to card</div>
+                        <div class="list-col">
+                            <!-- Nút Attachment -->
+                            <button id="btn-attachment" class="sidebar-action-btn btn-hover" type="button"
+                                    popovertarget="attachment-popover">
+                                <i data-lucide="paperclip"></i><span>Attachment</span>
+                            </button>
+
+                            <!-- Nút Cover Image -->
+                            <button id="btn-cover-image" class="sidebar-action-btn btn-hover" type="button"
+                                    popovertarget="cover-image-popover">
+                                <i data-lucide="image"></i><span>Cover Image</span>
+                            </button>
+                        </div>
+
+                        <!-- === POP-OVER CONTENT for "Add to card" === -->
+                        <!-- Popover cho Attachment -->
+                        <div id="attachment-popover" popover class="popover sidebar-popover">
+                            <div class="popover__header">
+                                <h4 class="popover__title">Attach file</h4>
+                                <button class="btn-exit" popovertarget="attachment-popover"
+                                        popovertargetaction="hide">
+                                    <i data-lucide="x"></i>
+                                </button>
+                            </div>
+                            <div class="popover__body">
+                                <p style="font-size: var(--font-size-xs); color: var(--color-text-secondary); margin-bottom: 10px;">
+                                    Upload a file from your computer.
+                                </p>
+                                <input type="file" class="form-input">
+                                <button class="btn btn--primary" style="width: 100%; margin-top: 10px;">Upload</button>
+                            </div>
+                        </div>
+
+                        <!-- Popover cho Cover Image -->
+                        <div id="cover-image-popover" popover class="popover sidebar-popover">
+                            <div class="popover__header">
+                                <h4 class="popover__title">Cover Image</h4>
+                                <button class="btn-exit" popovertarget="cover-image-popover"
+                                        popovertargetaction="hide">
+                                    <i data-lucide="x"></i>
+                                </button>
+                            </div>
+                            <div class="popover__body">
+                                <p style="font-size: var(--font-size-xs); color: var(--color-text-secondary); margin-bottom: 10px;">
+                                    Choose an image for the card cover.
+                                </p>
+                                <button class="btn" style="width: 100%;">Upload Image</button>
+                                <button class="btn" style="width: 100%; margin-top: 5px;">Choose from Unsplash</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-sidebar__section">
+                        <div class="modal-sidebar__title">Actions</div>
+                        <div class="list-col">
+                            <!-- Nút Move -->
+                            <button id="btn-move" class="sidebar-action-btn btn-hover" type="button"
+                                    popovertarget="move-popover">
+                                <i data-lucide="move"></i><span>Move</span>
+                            </button>
+
+                            <!-- Nút Duplicate -->
+                            <button id="btn-duplicate" class="sidebar-action-btn btn-hover" type="button"
+                                    popovertarget="duplicate-popover">
+                                <i data-lucide="copy"></i><span>Duplicate</span>
+                            </button>
+
+                            <!-- Added: Add TaskList button -->
+                            <button id="btn-add-tasklist" class="sidebar-action-btn btn-hover" type="button"
+                                    popovertarget="add-tasklist-popover">
+                                <i data-lucide="list-plus"></i><span>Add TaskList</span>
+                            </button>
+
+                            <!-- Nút Archive -->
+                            <button id="btn-archive" class="sidebar-action-btn btn-hover" type="button"
+                                    popovertarget="archive-popover">
+                                <i data-lucide="archive"></i><span>Archive</span>
+                            </button>
+                        </div>
+
+                        <!-- === POP-OVER CONTENT for "Actions" === -->
+                        <!-- Popover cho Move -->
+                        <div id="move-popover" popover class="popover sidebar-popover">
+                            <div class="popover__header">
+                                <h4 class="popover__title">Move card</h4>
+                                <button class="btn-exit" popovertarget="move-popover" popovertargetaction="hide">
+                                    <i data-lucide="x"></i>
+                                </button>
+                            </div>
+                            <div class="popover__body">
+                                <div class="form-box">
+                                    <label for="move-target-list" class="form-label">Select destination</label>
+                                    <select id="move-target-list" class="form-input">
+                                        <option value="list1">To-Do</option>
+                                        <option value="list2">In Progress</option>
+                                        <option value="list3">Done</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn--primary" style="width: 100%; margin-top: 10px;">Move</button>
+                            </div>
+                        </div>
+
+                        <!-- Popover cho Duplicate -->
+                        <div id="duplicate-popover" popover class="popover sidebar-popover">
+                            <div class="popover__header">
+                                <h4 class="popover__title">Duplicate card</h4>
+                                <button class="btn-exit" popovertarget="duplicate-popover" popovertargetaction="hide">
+                                    <i data-lucide="x"></i>
+                                </button>
+                            </div>
+                            <div class="popover__body">
+                                <p>This will create an exact copy of this card.</p>
+                            </div>
+                            <div class="popover__footer">
+                                <button class="btn btn--tertiary" popovertarget="duplicate-popover"
+                                        popovertargetaction="hide">
+                                    Cancel
+                                </button>
+                                <button class="btn btn--primary">Confirm</button>
+                            </div>
+                        </div>
+
+                        <!-- Added: Popover for Add TaskList -->
+                        <div id="add-tasklist-popover" popover class="popover sidebar-popover">
+                            <div class="popover__header">
+                                <h4 class="popover__title">Add TaskList</h4>
+                                <button class="btn-exit" popovertarget="add-tasklist-popover"
+                                        popovertargetaction="hide">
+                                    <i data-lucide="x"></i>
+                                </button>
+                            </div>
+                            <div class="popover__body">
+                                <input type="text" class="form-input form-input--small add-tasklist-input"
+                                       placeholder="Tên TaskList">
+                            </div>
+                            <div class="popover__footer">
+                                <button class="btn btn--tertiary btn--small" popovertarget="add-tasklist-popover"
+                                        popovertargetaction="hide">
+                                    Cancel
+                                </button>
+                                <button class="btn btn--primary btn--small create-tasklist-btn">Create</button>
+                            </div>
+                        </div>
+
+                        <!-- Popover cho Archive -->
+                        <div id="archive-popover" popover class="popover sidebar-popover popover--danger">
+                            <div class="popover__header">
+                                <h4 class="popover__title">Archive Card?</h4>
+                                <button class="btn-exit" popovertarget="archive-popover" popovertargetaction="hide">
+                                    <i data-lucide="x"></i>
+                                </button>
+                            </div>
+                            <div class="popover__body">
+                                <p>Archived cards can be restored from the project's archive page.</p>
+                            </div>
+                            <div class="popover__footer">
+                                <button class="btn btn--tertiary" popovertarget="archive-popover"
+                                        popovertargetaction="hide">
+                                    Cancel
+                                </button>
+                                <button class="btn btn-delete">Archive</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-sidebar__section modal-sidebar__section--danger-zone">
+                        <button class="sidebar-action-btn btn-delete" id="deleteProjectBtn"
+                                popovertarget="confirmDeletePopover" type="button">
+                            <i data-lucide="trash-2"></i>
+                            <span class="sidebar-action__name">Delete project</span>
+                        </button>
+
+                        <div popover id="confirmDeletePopover" class="popover sidebar-popover popover--danger">
+                            <div class="popover__header">
+                                <h5 class="popover__title">Confirm Deletion</h5>
+                                <!-- Nút đóng popover -->
+                                <button class="btn-exit" popovertarget="confirmDeletePopover"
+                                        popovertargetaction="hide">
+                                    <i data-lucide="x" class="icon-sm"></i>
+                                </button>
+                            </div>
+                            <div class="popover__body">
+                                <p class="modal-description" style="font-size: var(--font-size-xs);">
+                                    This action is permanent. To confirm, enter the project name
+                                    <strong id="projectNameToDelete" style="color: var(--color-danger);">
+                                        Dashboard
+                                        UI Restructure
+                                    </strong> below.
+                                </p>
+                                <input type="text" id="deleteConfirmationInput" class="form-input form-input--small"
+                                       placeholder="Enter project name...">
+                            </div>
+                            <div class="popover__footer">
+                                <button class="btn btn--secondary btn--small" id="cancelDeleteBtn"
+                                        onclick="this.closest('.popover').hidePopover();">
+                                    Cancel
+                                </button>
+                                <button class="btn btn-delete btn--small" id="confirmDeleteBtn" disabled>Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

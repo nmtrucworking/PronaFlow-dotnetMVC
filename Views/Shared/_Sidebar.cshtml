@@ -33,59 +33,57 @@
                     <i data-lucide="x"></i>
                 </button>
             </div>
-            <div class="popover__body">
-                <div class="user-info popover-item">
-                    <span id="user-name">${userName}</span>
-                    <span id="user-email">${userEmail}</span>
-                </div>
-                <div class="divider"></div>
-                <ul class="popover-action-list">
-                    <li>
-                        <button type="button" class="popover-item">
-                            <a href="#/setting" class="popover-item">
-                                <i data-lucide="settings-2" class="icon-md"></i>
-                                <span>Manage Account</span>
-                            </a>
-                        </button>
-                    </li>
-                    <li>
-                        <button id="sign-out-btn" type="button" class="popover-item btn-danger">
-                            <i data-lucide="log-out" class="icon-md"></i>
-                            <span>Sign out</span>
-                        </button>
-                    </li>
-                </ul>
+
+            <div class="user-info popover-item">
+                <span id="user-name">${userName}</span>
+                <span id="user-email">${userEmail}</span>
             </div>
+            <div class="divider"></div>
+            <ul class="popover-action-list">
+                <li>
+                    <button type="button" class="popover-item">
+                        <a href="@Url.Action("Index", "Settings")" class="popover-item">
+                            <i data-lucide="settings-2" class="icon-md"></i>
+                            <span>Manage Account</span>
+                        </a>
+                    </button>
+                </li>
+                <li>
+                    <button id="sign-out-btn" type="button" class="popover-item btn-danger">
+                        <i data-lucide="log-out" class="icon-md"></i>
+                        <span>Sign out</span>
+                    </button>
+                </li>
+            </ul>
         </div>
     </div>
 
     <div class="sidebar__nav-mid">
         <div class="nav-group sidebar-dashboard">
-            <a class="sidebar__nav-item" href="#/dashboard">
+            <a class="sidebar__nav-item" href="@Url.Action("Index", "Dashboard")">
                 <i class="nav-icon icon-lg" data-lucide="tv-minimal"></i>
                 <span class="item-hide-collapsed">Dashboard</span>
             </a>
         </div>
 
         <div class="nav-group group-1">
-            <!---->
             @Html.Action("GetWorkspaces", "Workspace")
 
             <ul class="sidebar__workspace-tools">
                 <li>
-                    <a class="sidebar__nav-item" href="#/kanban-board" ">
+                    <a class="sidebar__nav-item" href="@Url.Action("Index", "Kanbanboard")">
                         <i class=" nav-icon icon-lg" data-lucide="square-kanban"></i>
                         <span class="item-hide-collapsed">Kanban Board</span>
                     </a>
                 </li>
                 <li>
-                    <a class="sidebar__nav-item" href="#/my-task">
+                    <a class="sidebar__nav-item" href="@Url.Action("Index", "Task")">
                         <i class="nav-icon icon-lg" data-lucide="list-todo"></i>
                         <span class="item-hide-collapsed">My Tasks</span>
                     </a>
                 </li>
                 <li>
-                    <a class="sidebar__nav-item" href="#/my-calendar">
+                    <a class="sidebar__nav-item" href="@Url.Action("Index", "Calendar")">
                         <i class="nav-icon icon-lg" data-lucide="calendar"></i>
                         <span class="item-hide-collapsed">My Calendar</span>
                     </a>
@@ -95,13 +93,13 @@
 
         <ul class="nav-group group-2">
             <li>
-                <a class="sidebar__nav-item" href="#/trash">
+                <a class="sidebar__nav-item" href="@Url.Action("Index", "Trash")">
                     <i class="nav-icon icon-lg" data-lucide="trash-2"></i>
                     <span class="item-hide-collapsed">Trash</span>
                 </a>
             </li>
             <li>
-                <a class="sidebar__nav-item" href="#/archive">
+                <a class="sidebar__nav-item" href="@Url.Action("Index", "Archive")">
                     <i class="nav-icon icon-lg" data-lucide="archive"></i>
                     <span class="item-hide-collapsed">Archive</span>
                 </a>
@@ -114,33 +112,28 @@
             </button>
             <ul class="mobile-group__list">
                 <li>
-                    <a class="sidebar__nav-item" href="#/kanban-board">
-                        <i class="nav-icon icon-lg"
-                           data-lucide="square-kanban"></i>
+                    <a class="sidebar__nav-item" href="@Url.Action("Index", "Kanbanboard")">
+                        <i class="nav-icon icon-lg" data-lucide="square-kanban"></i>
                     </a>
                 </li>
                 <li>
-                    <a class="sidebar__nav-item" href="#/my-task">
-                        <i class="nav-icon icon-lg"
-                           data-lucide="list-todo"></i>
+                    <a class="sidebar__nav-item" href="@Url.Action("Index", "Task")">
+                        <i class="nav-icon icon-lg" data-lucide="list-todo"></i>
                     </a>
                 </li>
                 <li>
-                    <a class="sidebar__nav-item" href="#/my-calendar">
-                        <i class="nav-icon icon-lg"
-                           data-lucide="calendar"></i>
+                    <a class="sidebar__nav-item" href="@Url.Action("Index", "Calendar")">
+                        <i class="nav-icon icon-lg" data-lucide="calendar"></i>
                     </a>
                 </li>
                 <li>
-                    <a class="sidebar__nav-item" href="#/trash">
-                        <i class="nav-icon icon-lg"
-                           data-lucide="trash-2"></i>
+                    <a class="sidebar__nav-item" href="@Url.Action("Index", "Trash")">
+                        <i class="nav-icon icon-lg" data-lucide="trash-2"></i>
                     </a>
                 </li>
                 <li>
-                    <a class="sidebar__nav-item" href="#/archive">
-                        <i class="nav-icon icon-lg"
-                           data-lucide="archive"></i>
+                    <a class="sidebar__nav-item" href="@Url.Action("Index", "Archive")">
+                        <i class="nav-icon icon-lg" data-lucide="archive"></i>
                     </a>
                 </li>
             </ul>
@@ -150,8 +143,8 @@
     <div class="sidebar__nav-bot">
         <div class="divider"></div>
         <div class="nav-bot__inner">
-            <a href="#/setting" title="Settings" class="sidebar-bot-btn icon-lg"><i data-lucide="settings"></i></a>
-            <a href="#/notification" title="Notifications" class="sidebar-bot-btn icon-lg">
+            <a href="@Url.Action("Index", "Settings")" title="Settings" class="sidebar-bot-btn icon-lg"><i data-lucide="settings"></i></a>
+            <a href="@Url.Action("Index", "Notification")" title="Notifications" class="sidebar-bot-btn icon-lg">
                 <i data-lucide="bell"></i>
             </a>
         </div>

@@ -1,0 +1,56 @@
+@model PronaFlow_MVC.Models.ViewModels.KanbanProjectCardViewModel
+@{
+    var defaultAvatarUrl = Url.Content("~/wwwroot/images/avt-notion_1.png");
+}
+<div class="project-card" draggable="true" data-project-id="@Model.Id">
+    <div class="prj-card-attributes">
+        @if (Model.Tags != null && Model.Tags.Any())
+        {
+            <div class="prj-card-tags-group">
+                @foreach (var tag in Model.Tags)
+                {
+                    <div class="prj-card-tag" style="background-color: @tag.ColorHex;"></div>
+                }
+            </div>
+        }
+        <div class="prj-card-project-name prj-attribute">
+            <label class="custom-checkbox">
+                <input type="checkbox" name="project-status" @(Model.IsCompleted ? "checked" : "")>
+                <span class="custom-checkbox__checkmark round"></span>
+            </label>
+            <span>@Model.Name</span>
+        </div>
+        <div class="prj-card-deadline prj-attribute">
+             <i data-lucide="clock" class="prj-card-icon"></i>
+             <span>@(Model.StartDate.HasValue ? Model.StartDate.Value.ToString("MMM dd") : "...")</span>
+             <span>-</span>
+             <span>@(Model.EndDate.HasValue ? Model.EndDate.Value.ToString("MMM dd") : "...")</span>
+        </div>
+        @if (Model.EndDate.HasValue && Model.RemainingDays >= 0)
+        {
+            <div class="prj-card-coutdown prj-attribute">
+                <i data-lucide="hourglass" class="prj-card-icon"></i>
+                <span>@Model.RemainingDays d</span>
+            </div>
+        }
+        @if (Model.TotalTasks > 0)
+        {
+            <div class="prj-card-total-task prj-attribute">
+                <i data-lucide="circle-check-big" class="prj-card-icon"></i>
+                <span>@Model.CompletedTasks</span>
+                <span>/</span>
+                <span>@Model.TotalTasks</span>
+            </div>
+        }
+    </div>
+    @if (Model.Members != null && Model.Members.Any())
+    {
+        <div class="prj-card-members">
+            @foreach (var member in Model.Members)
+            {
+                var avatar = string.IsNullOrEmpty(member.AvatarUrl) ? defaultAvatarUrl : member.AvatarUrl;
+                <img src="@avatar" alt="Member Avatar" class="prj-member">
+            }
+        </div>
+    }
+</div>

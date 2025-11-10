@@ -194,8 +194,11 @@
     <Content Include="wwwroot\images\working-group1.jpg" />
     <Content Include="Web.config" />
     <Content Include="wwwroot\js\KanbanPageRefactored.js" />
+    <Content Include="wwwroot\js\MyCalendarPage.js" />
+    <Content Include="wwwroot\js\SettingPage.js" />
     <Content Include="wwwroot\js\sidebar.dom.js" />
     <Content Include="wwwroot\js\Sidebar.js" />
+    <Content Include="wwwroot\js\TaskPage.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -203,6 +206,7 @@
     <Compile Include="Controllers\ActivityController.cs" />
     <Compile Include="Controllers\ArchiveController.cs" />
     <Compile Include="Controllers\AttachmentController.cs" />
+    <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -287,6 +291,7 @@
     <Compile Include="Models\ViewModels\LoginViewModel.cs" />
     <Compile Include="Models\ViewModels\RegisterViewModel.cs" />
     <Compile Include="Models\ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Models\ViewModels\TaskItemViewModel.cs" />
     <Compile Include="Models\ViewModels\WorkspaceDetailViewModel.cs" />
     <Compile Include="Models\workspaces.cs">
       <DependentUpon>PronaFlowDataModel.tt</DependentUpon>
@@ -321,6 +326,12 @@
     <Content Include="Views\Notification\Index.cshtml" />
     <Content Include="Views\Task\GetTasks.cshtml" />
     <Content Include="Views\Task\Index.cshtml" />
+    <Content Include="Views\Calendar\Index.cshtml" />
+    <Content Include="Views\Kanbanboard\_ProjectCard.cshtml" />
+    <Content Include="Views\Kanbanboard\_KanbanColumn.cshtml" />
+    <Content Include="Views\Project\_ProjectDetails.cshtml" />
+    <Content Include="Views\Task\_TaskDetails.cshtml" />
+    <Content Include="Views\Task\_TaskCard.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -333,7 +344,6 @@
     <Folder Include="Views\Activity\" />
     <Folder Include="Views\Attachment\" />
     <Folder Include="Views\Comment\" />
-    <Folder Include="Views\Project\" />
     <Folder Include="Views\Subtask\" />
     <Folder Include="Views\TaskList\" />
   </ItemGroup>

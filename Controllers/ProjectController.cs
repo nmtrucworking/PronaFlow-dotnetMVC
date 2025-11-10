@@ -32,6 +32,7 @@ namespace PronaFlow_MVC.Controllers
         //    }
         //}
 
+        
         public ActionResult Details()
         {
             return View();

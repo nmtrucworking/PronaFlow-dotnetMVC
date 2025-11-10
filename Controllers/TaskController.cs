@@ -12,9 +12,48 @@ namespace PronaFlow_MVC.Controllers
         private readonly PronaFlow_DBContext _db = new PronaFlow_DBContext();
 
         // GET: Task
-        public ActionResult Index()
+        [HttpGet]
+        public ActionResult Index(int? workspaceId)
         {
-            return View();
+            long currentWorkspaceId = workspaceId.HasValue 
+                ? (long)workspaceId.Value 
+                : (_db.workspaces.FirstOrDefault()?.id ?? 0);
+
+            if (currentWorkspaceId == 0)
+            {
+                return HttpNotFound("No workspace selected or no workspace exists.");
+            }
+
+            var workspace = _db.workspaces.SingleOrDefault(w => w.id == currentWorkspaceId);
+            if (workspace == null)
+            {
+                return HttpNotFound($"Workspace with ID {currentWorkspaceId} not found.");
+            }
+
+            var tasksQuery = _db.tasks
+                .Where(t => !t.is_deleted && t.projects.workspace_id == currentWorkspaceId);
+
+            var taskItems = tasksQuery.Select(t => new PronaFlow_MVC.Models.ViewModels.TaskItemViewModel
+            {
+                Id = t.id,
+                Name = t.name,
+                Status = t.status,
+                Priority = t.priority,
+                DueDate = t.end_date,
+                ProjectName = t.projects != null ? t.projects.name : null,
+                TaskListName = t.task_lists != null ? t.task_lists.name : null
+            }).ToList();
+
+            var viewModel = new PronaFlow_MVC.Models.ViewModels.MyTasksViewModel
+            {
+                WorkspaceId = currentWorkspaceId,
+                WorkspaceName = workspace.name,
+                Tasks = taskItems
+            };
+
+            ViewBag.Title = "My Task | PronaFlow";
+
+            return View(viewModel);
         }
 
         [HttpGet]

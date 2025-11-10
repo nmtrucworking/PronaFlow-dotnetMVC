@@ -1,0 +1,141 @@
+﻿
+@{
+    ViewBag.Title = "Calendar | PronaFlow";
+}
+
+<main id="main" class="main my-calendar">
+    <div class="my-calendar-layout">
+        <!-- main-calendar -->
+        <div id="calendar-main-wrap" class="calendar-main-wrap">
+            <div id="calendar" class="calendar">
+                <!-- JS'll fill -->
+            </div>
+        </div>
+        <!-- Sidebar bên phải chứa lịch nhỏ và bộ lọc -->
+        <aside id="calendar-sidebar" class="calendar-sidebar">
+            <div class="right-sidebar-content">
+                <!-- mini-calendar -->
+                <div id="mini-calendar" class="mini-calendar">
+                    <!-- js will load data here -->
+                </div>
+                <div class="divider"></div>
+                <!-- filter -->
+                <div class="filter-section">
+                    <!-- NEW: Search bar -->
+                    <div class="search-bar filter-search-bar">
+                        <i class="search-bar__icon" data-lucide="search"></i>
+                        <input type="text" class="search-bar__input" placeholder="Search projects...">
+                    </div>
+
+                    <div class="filter-card">
+                        <!-- Workspace-1 -->
+                        <div class="card-header" id="filler__wsp_1">
+                            <button type="button" class="toggle-workspace-list-btn" data-target="prjs-wsp-1"
+                                    aria-controls="prjs-wsp-1" aria-expanded="false">
+                                <i class="icon-toggle btn-hover" data-open="false" data-lucide="app-window"></i>
+                                <span class="item-filter-name">Workspace 1</span>
+                            </button>
+                            <input type="checkbox" class="" id="show-all-projects-btn"
+                                   aria-label="Show all projects" checked>
+                        </div>
+                        <ul id="prjs-wsp-1" class="card-body" aria-labelledby="filler__wsp_1">
+                            <li class="project-filter-options">
+                                <input type="checkbox" name="" id="prj-1" class="project-displayed" checked>
+                                <span class="project-color-dot" style="background-color: #2D5B9A;"></span>
+                                <label for="prj-1" class="item-filter-name">Project-1</label>
+                            </li>
+                            <li class="project-filter-options">
+                                <input type="checkbox" name="" id="prj-2" class="project-displayed" checked>
+                                <span class="project-color-dot" style="background-color: #1fcf34;"></span>
+                                <label for="prj-2" class="item-filter-name">Project-2</label>
+                            </li>
+                            <li class="project-filter-options">
+                                <input type="checkbox" name="" id="prj-3" class="project-displayed">
+                                <span class="project-color-dot" style="background-color: #ffca37;"></span>
+                                <label for="prj-3" class="item-filter-name">Project-3</label>
+                            </li>
+                        </ul>
+
+                        <!-- Workspace-2-->
+                        <div class="card-header" id="filler__wsp_2">
+                            <button type="button" class="toggle-workspace-list-btn" data-target="prjs-wsp-2"
+                                    aria-controls="prjs-wsp-2" aria-expanded="false">
+                                <i class="icon-toggle btn-hover" data-open="false" data-lucide="app-window"></i>
+                                <span class="item-filter-name">Workspace 2</span>
+                            </button>
+                            <input type="checkbox" class="" id="show-all-projects-btn-2"
+                                   aria-label="Show all projects" checked>
+                        </div>
+                        <ul id="prjs-wsp-2" class="card-body" aria-labelledby="filler__wsp_2">
+                            <li class="project-filter-options">
+                                <input type="checkbox" name="" id="prj-4" class="project-displayed" checked>
+                                <span class="project-color-dot" style="background-color: #a145ec;"></span>
+                                <label for="prj-4" class="item-filter-name">Project-4</label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+</main>
+
+<!-- =============================================================== -->
+<!--                  NEW: POPOVER COMPONENTS                        -->
+<!-- =============================================================== -->
+<!-- Popover for Event Details -->
+<div id="eventDetailPopover" class="popover" popover>
+    <div class="popover__header">
+        <h3 class="popover__title">Event Details</h3>
+        <button class="btn-exit" popovertarget="eventDetailPopover" popovertargetaction="hide"><i data-lucide="x"></i></button>
+    </div>
+    <div class="popover__body event-popover__body">
+        <p class="event-popover__title"><strong>Finalize Q3 Report</strong></p>
+        <div class="event-popover__meta">
+            <i data-lucide="clock"></i>
+            <span>September 5, 2025, 10:00 AM - 11:00 AM</span>
+        </div>
+        <div class="event-popover__meta">
+            <span class="project-color-dot" style="background-color: #1fcf34;"></span>
+            <span>Project-2</span>
+        </div>
+    </div>
+    <div class="popover__footer">
+        <button class="btn btn--secondary btn--small">Edit</button>
+    </div>
+</div>
+
+<!-- Popover for Creating a New Event -->
+<div id="createEventPopover" class="popover" popover>
+    <div class="popover__header">
+        <h3 class="popover__title">Create New Event</h3>
+        <button class="btn-exit" popovertarget="createEventPopover" popovertargetaction="hide"><i data-lucide="x"></i></button>
+    </div>
+    <form class="popover__body">
+        <div class="form-box">
+            <label for="newEventTitle" class="form-label">Title</label>
+            <input type="text" id="newEventTitle" class="form-input" placeholder="e.g., Marketing sync-up">
+        </div>
+        <div class="form-box">
+            <label for="newEventProject" class="form-label">Project</label>
+            <select id="newEventProject" class="form-input">
+                <option value="prj1">Project-1</option>
+                <option value="prj2">Project-2</option>
+                <option value="prj3">Project-3</option>
+                <option value="prj4">Project-4</option>
+            </select>
+        </div>
+    </form>
+    <div class="popover__footer">
+        <button class="btn btn--tertiary" popovertarget="createEventPopover" popovertargetaction="hide">Cancel</button>
+        <button class="btn btn--primary">Save</button>
+    </div>
+</div>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/lucide.min.js"></script>

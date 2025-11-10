@@ -1,0 +1,50 @@
+@model dynamic
+@{
+    string title = Model.Title;
+    string uiStatus = Model.UiStatus;
+    var projects = (IEnumerable<PronaFlow_MVC.Models.ViewModels.KanbanProjectCardViewModel>)Model.Projects;
+    var popoverId = $"kanban-col-options-{uiStatus}";
+}
+<div class="kanban__col hide-scrollbar" data-status="@uiStatus">
+    <div class="kanban-column__header">
+        <button class="btn icon-btn add-project-btn">
+            <i data-lucide="plus" class="btn-icon"></i>
+        </button>
+        <h3>@title</h3>
+        <button class="btn icon-btn btn-kanban-col-options-@uiStatus" popovertarget="@popoverId">
+            <i data-lucide="ellipsis-vertical" class="btn-icon"></i>
+        </button>
+    </div>
+    <div class="divider"></div>
+    <div class="list-card hide-scrollbar">
+        @foreach (var project in projects)
+        {
+            @Html.Partial("_ProjectCard", project)
+        }
+    </div>
+
+    <div popover class="popover kanban-col-options-@uiStatus" id="@popoverId">
+        <div class="popover__header">
+            <span class="popover__title">Column Options</span>
+            <button type="button">
+                <i data-lucide="x" class="icon-sm"></i>
+            </button>
+        </div>
+        <div class="popover__body">
+            <button type="button" class="popover-item add-card-in-popover">Add card</button>
+            <button type="button" class="popover-item">Move all cards in this state</button>
+            <button type="button" class="popover-item">
+                <span>Set all cards of State to </span>
+                <select>
+                    <option value="temp">Temp</option>
+                    <option value="not-started">Not Started</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="in-review">In Review</option>
+                    <option value="done">Done</option>
+                </select>
+            </button>
+            <button type="button" class="popover-item btn-danger">Remove all cards of this [state]</button>
+            <button type="button" class="popover-item">Archive all cards of this [state]</button>
+        </div>
+    </div>
+</div>

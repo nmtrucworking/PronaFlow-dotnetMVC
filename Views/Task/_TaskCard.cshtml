@@ -1,0 +1,23 @@
+@model PronaFlow_MVC.Models.ViewModels.TaskItemViewModel
+
+<div class="task-card" data-task-id="@Model.Id" style="background: var(--color-background-@Model.Status);">
+    <label class="custom-checkbox">
+        <input type="checkbox" @(Model.Status == "done" ? "checked" : "") />
+        <span class="custom-checkbox__checkmark round"></span>
+    </label>
+    <div class="task-card__content">
+        <span class="task__name">@Model.Name</span>
+        <div class="task-card__detail">
+            <div class="task__address">
+                <span id="taskAddress__prjId">@(!string.IsNullOrEmpty(Model.ProjectName) ? Model.ProjectName : "Uncategorized")</span>
+                <span> / </span>
+                <span id="taskAddress__tasklistId">@(!string.IsNullOrEmpty(Model.TaskListName) ? Model.TaskListName : "-")</span>
+            </div>
+            <div class="task__deadline">
+                <i data-lucide="calendar-fold" class="icon--minium"></i>
+                <span>@(Model.DueDate.HasValue ? Model.DueDate.Value.ToShortDateString() : "Not set")</span>
+            </div>
+        </div>
+    </div>
+    <button class="btn priority-@Model.Priority"><i data-lucide="star"></i></button>
+</div>

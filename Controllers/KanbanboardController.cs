@@ -19,16 +19,15 @@ namespace PronaFlow_MVC.Controllers
         /// <summary>
         /// Displayed Kanban Board | Get: `/Kanbanboard`
         /// </summary>
-        /// <returns>View Indext.cshtml</returns>
+        /// <returns>View Index.cshtml</returns>
         [HttpGet]
-        [ChildActionOnly]
         public ActionResult Index(int? workspaceId)
         {
             long currentWorkspaceId = workspaceId ?? _context.workspaces.FirstOrDefault()?.id ?? 0;
 
             var viewModel = GetKanbanBoardData((int)currentWorkspaceId);
 
-            return PartialView(viewModel);
+            return View(viewModel);
         }
 
         /// <summary>
@@ -40,7 +39,7 @@ namespace PronaFlow_MVC.Controllers
         [HttpPost]
         public ActionResult UpdateProjectStatus(int projectId, string newStatus)
         {
-            var normalizedStatus = newStatus.ToLower().Trim();
+            var normalizedStatus = NormalizeStatusForDb(newStatus);
             try
             {
                 var project = _context.projects.SingleOrDefault(p => p.id == projectId);
@@ -53,7 +52,6 @@ namespace PronaFlow_MVC.Controllers
                     });
                 }
                 project.status = normalizedStatus;
-                //project.updatedAt = DateTime.Now;
                 _context.SaveChanges();
 
                 return Json(new
@@ -68,7 +66,7 @@ namespace PronaFlow_MVC.Controllers
                 return Json(new
                 {
                     success = false,
-                    massage = "Update failed: " + ex.Message
+                    message = "Update failed: " + ex.Message
                 });
             }
         }
@@ -84,7 +82,7 @@ namespace PronaFlow_MVC.Controllers
         [HttpPost]
         public ActionResult CreateProject(int workspaceId, string projectName, string initialStatus)
         {
-            var normalizedStatus = initialStatus.ToLower().Trim();
+            var normalizedStatus = NormalizeStatusForDb(initialStatus);
 
             try
             {
@@ -108,7 +106,7 @@ namespace PronaFlow_MVC.Controllers
 
                 return Json(new
                 {
-                    succes = true,
+                    success = true,
                     project = projectViewModel
                 });
             }
@@ -121,9 +119,6 @@ namespace PronaFlow_MVC.Controllers
                 });
             }
         }
-
-
-
 
         //========================== HELPER METHODS //==========================
 
@@ -210,5 +205,14 @@ namespace PronaFlow_MVC.Controllers
                 RemainingDays = remainingDays
             };
         }
+
+        private string NormalizeStatusForDb(string status)
+        {
+            if (string.IsNullOrWhiteSpace(status)) return "unknown";
+            var s = status.ToLower().Trim();
+            return s.Replace("-", "");
+        }
     }
 }
+
+

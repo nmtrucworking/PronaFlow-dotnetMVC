@@ -1,0 +1,165 @@
+﻿<!-- === TASK DETAIL MODAL === -->
+<div class="modal-container modal-container--sidebar modal-component" id="taskDetailModal">
+    <div class="modal__content no-scrollbar">
+        <!-- Nút đóng modal -->
+        <button class="btn-close-modal" id="closeTaskDetailModal">
+            <i data-lucide="x"></i>
+        </button>
+        <div class="task-detail-panel">
+            <header class="page-header">
+                <h2 class="page__title">
+                    Task Details
+                </h2>
+            </header>
+            <!-- divider -->
+            <div class="divider"></div>
+
+            <!-- Body - Hiển thị khi có task được chọn -->
+            <div class="task-detail-content">
+                <div class="task-detail-body">
+                    <form>
+                        <!-- task-id -->
+                        <input type="hidden" name="task-id">
+
+                        <div class="task__address">
+                            <span id="detail-taskAddress__prjId">Project</span>
+                            <span> / </span>
+                            <span id="detail-taskAddress__tasklistId">Task-list</span>
+                        </div>
+                        <!-- Task Name -->
+                        <header class="task-details__top">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" name="" id="detail-taskStatusCheckbox">
+                                <span class="custom-checkbox__checkmark round"></span>
+                            </label>
+                            <input type="text" id="detail-taskName" class="task__name" placeholder="Enter task name">
+                        </header>
+                        <!-- subtask -->
+                        <div class="subtasks-section">
+                            <div class="subtask-list list-col" id="subtask-list-container">
+                                <!-- Subtask items will be added here by JavaScript -->
+                                <div class="subtask-list list-col" id="subtask-list-container">
+                                    <div class="subtask-item completed">
+                                        <label class="custom-checkbox">
+                                            <input type="checkbox" checked>
+                                            <span class="custom-checkbox__checkmark round"></span>
+                                        </label>
+                                        <input type="text" class="subtask__name" value="Phân tích cấu trúc HTML">
+                                        <button class="btn-delete">
+                                            <i data-lucide="x"></i>
+                                        </button>
+                                    </div>
+                                    <div class="subtask-item">
+                                        <label class="custom-checkbox">
+                                            <input type="checkbox">
+                                            <span class="custom-checkbox__checkmark round"></span>
+                                        </label>
+                                        <input type="text" class="subtask__name"
+                                               value="Viết CSS cho trạng thái đóng/mở">
+                                        <button class="btn-delete">
+                                            <i data-lucide="x"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="add-subtask-form">
+                                <i data-lucide="plus"></i>
+                                <input type="text" id="add-subtask-input" class="subtask__name"
+                                       placeholder="Add a step">
+                            </div>
+                        </div>
+
+                        <!-- Task Attributes -->
+                        <div class="task-attributes">
+                            <!-- Cải tiến: Start date & End date với Popover -->
+                            <div class="form-group">
+                                <label class="task-attribute-name">Dates</label>
+                                <div class="task-attribute" id="detail-task-dates-container">
+                                    <button type="button"
+                                            class="date-range-display task-attribute__popover-btn"
+                                            popovertarget="dateRangePopover_sidebar"
+                                            popovertargetaction="toggle">
+                                        <span id="detail-task-start-date-display">No start date</span>
+                                        <span>→</span>
+                                        <span id="detail-task-end-date-display">No end date</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Popover for Date Range Picker (Sidebar version) -->
+                            <div popover
+                                 id="dateRangePopover_sidebar"
+                                 class="popover task-attribute__popover">
+                                <div class="popover__body" style="padding: 15px;">
+                                    <div class="form-group-popover">
+                                        <label for="detail-task-start-date">Start date</label>
+                                        <input type="date" class="form-input" id="detail-task-start-date">
+                                    </div>
+                                    <div class="form-group-popover" style="margin-top: 10px;">
+                                        <label for="detail-task-end-date">End date</label>
+                                        <input type="date" class="form-input" id="detail-task-end-date">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Priority -->
+                            <div class="form-group">
+                                <label for="detail-task-priority" class="task-attribute-name">Priority</label>
+                                <select id="detail-task-priority" class="task-attribute">
+                                    <option value="high">High</option>
+                                    <option value="normal" selected>Normal</option>
+                                    <option value="low">Low</option>
+                                </select>
+                            </div>
+
+                            <!-- Status -->
+                            <div class="form-group">
+                                <label for="detail-task-status" class="task-attribute-name">Status</label>
+                                <select id="detail-task-status" class="task-attribute">
+                                    <option value="not-started" selected>Not Started</option>
+                                    <option value="in-progress">In Progress</option>
+                                    <option value="in-review">In Review</option>
+                                    <option value="done">Done</option>
+                                </select>
+                            </div>
+
+                            <!-- Assignee -->
+                            <div class="form-group">
+                                <label class="task-attribute-name">Assignee</label>
+                                <div id="detail-task-assignees-container" class="attr-content list-row">
+                                    <!-- Existing assignees' avatars will be added here -->
+                                    <button class="add-member btn-hover" type="button"
+                                            popovertarget="addMemberPopover_sidebar" popovertargetaction="toggle">
+                                        <i data-lucide="user-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Add Member Popover (Sidebar version) -->
+                            <div popover id="addMemberPopover_sidebar" class="popover">
+                                <div class="popover__header">
+                                    <span class="popover__title">Manage Members</span>
+                                </div>
+                                <div class="popover__body" style="padding: 10px;">
+                                    <input type="text" class="form-input" placeholder="Search by name or email...">
+                                    <ul class="user-list no-scrollbar"
+                                        style="margin-top: 10px; max-height: 150px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px;">
+                                        <!-- User list items -->
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                    <div class="divider"></div>
+                    <textarea name="" id="detail-task-description" class="task-description"
+                              placeholder="Enter the description for this task..."></textarea>
+                </div>
+
+                <div class="task-detail-footer">
+                    <button type="button" class="btn-delete glass-card" id="delete-task-btn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
