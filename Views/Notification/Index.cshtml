@@ -1,0 +1,61 @@
+@{
+    ViewBag.Title = "Notifications | PronaFlow";
+}
+
+<main id="main" class="main">
+  <header class="page-header--sticky">
+    <div class="page-header__left">
+      <h3 class="page__title"><i data-lucide="bell"></i><span>Notifications</span></h3>
+    </div>
+    <div class="page-header__right">
+      <div class="search-bar">
+        <i data-lucide="search" class="search-bar__icon"></i>
+        <input type="text" placeholder="Search notifications..." class="search-bar__input">
+      </div>
+      <button id="filter-btn" class="btn btn--tertiary" popovertarget="filter-popover">
+        <i data-lucide="filter"></i><span>Filter</span>
+      </button>
+      <button class="mark-all-read btn btn-hover" id="mark-all-read-btn">
+        <i data-lucide="check-check"></i><span>Mark All as Read</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="page__content page__content--notifications">
+    <section class="notification-timeline-group">
+      <div class="timeline-group__header"><h4 class="timeline-group__title">Today</h4></div>
+      <div class="list-col notification-group"></div>
+    </section>
+    <section class="empty-state-container" id="no-notifications-message" style="display: none;">
+      <div class="empty-state">
+        <i data-lucide="bell-off" class="empty-state__icon"></i>
+        <h4 class="empty-state__text">All caught up!</h4>
+        <p class="empty-state__subtext">You have no new notifications.</p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="contextual-action-bar">
+  <div class="action-bar__left"><span class="action-bar__selection-count"></span></div>
+  <div class="action-bar__right">
+    <button class="btn btn--tertiary"><i data-lucide="check-check"></i> Mark as read</button>
+    <button class="btn btn--tertiary"><i data-lucide="archive"></i> Archive</button>
+    <div class="action-bar__divider"></div>
+    <button class="btn btn--tertiary btn--danger"><i data-lucide="trash-2"></i> Delete</button>
+  </div>
+</div>
+
+<div id="filter-popover" class="popover filter-popover" popover></div>
+<div class="shared-backdrop" id="sharedBackdrop"></div>
+<div class="simple-modal" id="confirmation-modal">
+  <div class="modal-header">
+    <h5 class="modal-title">Mark all as read?</h5>
+    <button class="btn-exit" title="Close"><i data-lucide="x"></i></button>
+  </div>
+  <div class="modal-body"><p>Are you sure you want to mark all notifications as read?</p></div>
+  <div class="modal-footer">
+    <button class="btn btn--tertiary">Cancel</button>
+    <button class="btn btn--primary">Confirm</button>
+  </div>
+</div>

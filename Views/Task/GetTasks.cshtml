@@ -1,0 +1,23 @@
+﻿
+
+<div class="task-card" data-task-id="${task.id}" style="background: var(--color-background-${task.status});">
+    <label class="custom-checkbox">
+        <input type="checkbox" ${task.status= = ='done' ? 'checked' : '' }>
+        <span class="custom-checkbox__checkmark round"></span>
+    </label>
+    <div class="task-card__content">
+        <span class="task__name">${task.name}</span>
+        <div class="task-card__detail">
+            <div class="task__address">
+                <span id="taskAddress__prjId">${task.projectName || 'Uncategorized'}</span>
+                <span> / </span>
+                <span id="taskAddress__tasklistId">${task.taskListName || '-'}</span>
+            </div>
+            <div class="task__deadline">
+                <i data-lucide="calendar-fold" class="icon--minium"></i>
+                <span>${task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'Not set'}</span>
+            </div>
+        </div>
+    </div>
+    <button class="btn priority-${task.priority}"><i data-lucide="star"></i></button>
+</div>

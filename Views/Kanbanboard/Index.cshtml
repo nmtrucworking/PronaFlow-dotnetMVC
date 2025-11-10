@@ -1,7 +1,8 @@
-﻿@model PronaFlow_MVC.Models.ViewModels.KanbanBoardViewModel
+﻿@*Kanbanboard.Index*@
+
+@model PronaFlow_MVC.Models.ViewModels.KanbanBoardViewModel
 @{
     ViewBag.Title = "Kanban Board | PronaFlow";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @{
@@ -83,424 +84,249 @@
 
 -->
 
-<main id="main" class="main kanban-board">
-    <div class="kanban-board__header">
-        <div class="workspace__title">
-            <span id="workspaceName">@Model.WorkspaceName</span>
+<div id="kanban-view" class="kanban-view">
+    <!--------------------------------------- Col: Temp  --------------------------------------->
+    <div class="kanban__col" data-status="temp">
+        <div class="kanban-column__header">
+            <button class="btn icon-btn">
+                <i data-lucide="plus" class="btn-icon"></i>
+            </button>
+            <h3 class="kanban-column__title">Temp</h3>
+            <button class="btn icon-btn btn-kanban-col-options-temp" popovertarget="kanban-col-options-temp">
+                <i data-lucide="ellipsis-vertical" class="btn-icon"></i>
+            </button>
         </div>
-        <span id="workspaceDescription" class="workspace__description">
-            @Model.WorkspaceDescription
-        </span>
-    </div>
+        <div class="divider"></div>
+        <div class="list-card hide-scrollbar">
+            <!-- project-card -->
+        </div>
 
-    <div class="divider"></div>
-
-    <div class="frames frames--grid-2col">
-        <!--  CALENDAR FRAME (PRONAFLOW AGENDA) - START  -->
-        <div class="frame frame--kanban">
-            <h3 class="frame__title">My Agenda</h3>
-            <div class="frame__content hide-scrollbar">
-                <div class="agenda">
-                    <!-- ========== Agenda Group: August 30 ========== -->
-                    <div class="agenda__group">
-                        <div class="agenda__date agenda__date--today">
-                            Today
-                            <span>August 30</span>
-                        </div>
-                        <div class="agenda__events">
-                            <!-- EVENT: PROJECT -->
-                            <div class="event-item event-item--project">
-                                <div class="event-item__icon-wrapper">
-                                    <i data-lucide="briefcase" class="event-item__icon"></i>
-                                </div>
-                                <div class="event-item__content">
-                                    <div class="event-item__header">
-                                        <span class="event-item__title">Website Redesign</span>
-                                    </div>
-                                    <div class="event-item__meta">
-                                        <div class="event-item__meta-group">
-                                            <i data-lucide="check-circle-2"></i>
-                                            <span>5/12 Tasks</span>
-                                        </div>
-                                        <div class="event-item__meta-group">
-                                            <i data-lucide="flag"></i>
-                                            <span>Deadline: Sep 15</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- EVENT: TASK (HIGH PRIORITY) -->
-                            <div class="event-item event-item--task">
-                                <div class="event-item__icon-wrapper">
-                                    <label class="custom-checkbox">
-                                        <input type="checkbox" />
-                                        <span class="custom-checkbox__checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="event-item__content">
-                                    <div class="event-item__header">
-                                        <span class="event-item__title">Finalize Homepage Mockup</span>
-                                    </div>
-                                    <div class="event-item__meta">
-                                        <div class="event-item__meta-group">
-                                            <i data-lucide="folder-open"></i>
-                                            <span>In: Website Redesign</span>
-                                        </div>
-                                        <div class="event-item__meta-group event-item__meta-group--priority-high">
-                                            <i data-lucide="star"></i>
-                                            <span>High Priority</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ========== Agenda Group: August 31 ========== -->
-                    <div class="agenda__group">
-                        <div class="agenda__date">
-                            Sunday
-                            <span>August 31</span>
-                        </div>
-                        <div class="agenda__events">
-                            <!-- EVENT: TASK (COMPLETED) -->
-                            <div class="event-item event-item--task event-item--completed">
-                                <div class="event-item__icon-wrapper">
-                                    <label class="custom-checkbox">
-                                        <input type="checkbox" checked />
-                                        <span class="custom-checkbox__checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="event-item__content">
-                                    <div class="event-item__header">
-                                        <span class="event-item__title">Review competitor analysis</span>
-                                    </div>
-                                    <div class="event-item__meta">
-                                        <div class="event-item__meta-group">
-                                            <i data-lucide="folder-open"></i>
-                                            <span>In: Marketing Q4</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- EVENT: TASK (MEDIUM PRIORITY) -->
-                            <div class="event-item event-item--task">
-                                <div class="event-item__icon-wrapper">
-                                    <label class="custom-checkbox">
-                                        <input type="checkbox" />
-                                        <span class="custom-checkbox__checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="event-item__content">
-                                    <div class="event-item__header">
-                                        <span class="event-item__title">Prepare slides for client meeting</span>
-                                    </div>
-                                    <div class="event-item__meta">
-                                        <div class="event-item__meta-group">
-                                            <i data-lucide="folder-open"></i>
-                                            <span>In: Project Alpha</span>
-                                        </div>
-                                        <div class="event-item__meta-group event-item__meta-group--priority-medium">
-                                            <i data-lucide="star"></i>
-                                            <span>Medium Priority</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ========== Agenda Group: September 01 ========== -->
-                    <div class="agenda__group">
-                        <div class="agenda__date">
-                            Monday
-                            <span>September 01</span>
-                        </div>
-                        <div class="agenda__events">
-                            <!-- EVENT: PROJECT -->
-                            <div class="event-item event-item--project">
-                                <div class="event-item__icon-wrapper">
-                                    <i data-lucide="briefcase" class="event-item__icon"></i>
-                                </div>
-                                <div class="event-item__content">
-                                    <div class="event-item__header">
-                                        <span class="event-item__title">API Integration Testing</span>
-                                    </div>
-                                    <div class="event-item__meta">
-                                        <div class="event-item__meta-group">
-                                            <i data-lucide="check-circle-2"></i>
-                                            <span>0/8 Tasks</span>
-                                        </div>
-                                        <div class="event-item__meta-group">
-                                            <i data-lucide="flag"></i>
-                                            <span>Deadline: Sep 20</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- Popover for Kanban Column Options -->
+        <div popover class="popover kanban-col-options-temp" id="kanban-col-options-temp">
+            <div class="popover__header">
+                <span class="popover__title">Column Options</span>
+                <button type="button">
+                    <i data-lucide="x" class="icon-sm"></i>
+                </button>
             </div>
-        </div>
-        <div class="frame frame--kanban">
-            <h3 class="frame__title">My Tasks</h3>
-            <div class="frame__content hide-scrollbar">
-                <div class="task-list">
-                    <!-- sample task-card -->
-                </div>
+            <div class="popover__body">
+                <button type="button" class="popover-item">Add card</button>
+                <button type="button" class="popover-item">
+                    Move all cards in this state
+                </button>
+                <button type="button" class="popover-item">
+                    <span>Set all cards of State to </span>
+                    <select name="" id="">
+                        <option value="temp">Temp</option>
+                        <option value="notstarted">Not Started</option>
+                        <option value="inprogress">In Progress</option>
+                        <option value="inreview">In Review</option>
+                        <option value="done">Done</option>
+                    </select>
+                </button>
+                <button type="button" class="popover-item btn-danger">
+                    Remove all cards of this [state]
+                </button>
+                <button type="button" class="popover-item">
+                    Archive all cards of this [state]
+                </button>
             </div>
         </div>
     </div>
-    .
-
-    <div class="divider"></div>
-
-    <div id="kanban-view" class="kanban-view">
-        <!--------------------------------------- Col: Temp  --------------------------------------->
-        <div class="kanban__col" data-status="temp">
-            <div class="kanban-column__header">
-                <button class="btn icon-btn">
-                    <i data-lucide="plus" class="btn-icon"></i>
-                </button>
-                <h3 class="kanban-column__title">Temp</h3>
-                <button class="btn icon-btn btn-kanban-col-options-temp" popovertarget="kanban-col-options-temp">
-                    <i data-lucide="ellipsis-vertical" class="btn-icon"></i>
-                </button>
-            </div>
-            <div class="divider"></div>
-            <div class="list-card hide-scrollbar">
-                <!-- project-card -->
-            </div>
-
-            <!-- Popover for Kanban Column Options -->
-            <div popover class="popover kanban-col-options-temp" id="kanban-col-options-temp">
-                <div class="popover__header">
-                    <span class="popover__title">Column Options</span>
-                    <button type="button">
-                        <i data-lucide="x" class="icon-sm"></i>
-                    </button>
-                </div>
-                <div class="popover__body">
-                    <button type="button" class="popover-item">Add card</button>
-                    <button type="button" class="popover-item">
-                        Move all cards in this state
-                    </button>
-                    <button type="button" class="popover-item">
-                        <span>Set all cards of State to </span>
-                        <select name="" id="">
-                            <option value="temp">Temp</option>
-                            <option value="notstarted">Not Started</option>
-                            <option value="inprogress">In Progress</option>
-                            <option value="inreview">In Review</option>
-                            <option value="done">Done</option>
-                        </select>
-                    </button>
-                    <button type="button" class="popover-item btn-danger">
-                        Remove all cards of this [state]
-                    </button>
-                    <button type="button" class="popover-item">
-                        Archive all cards of this [state]
-                    </button>
-                </div>
-            </div>
+    <!----- Col: Not Started ------->
+    <div class="kanban__col" data-status="not-started">
+        <div class="kanban-column__header">
+            <button class="btn icon-btn add-project-btn">
+                <i data-lucide="plus" class="btn-icon"></i>
+            </button>
+            <h3>Not Started</h3>
+            <button class="btn icon-btn btn-kanban-col-options-not-started" popovertarget="kanban-col-options-not-started">
+                <i data-lucide="ellipsis-vertical" class="btn-icon"></i>
+            </button>
         </div>
-        <!----- Col: Not Started ------->
-        <div class="kanban__col" data-status="not-started">
-            <div class="kanban-column__header">
-                <button class="btn icon-btn add-project-btn">
-                    <i data-lucide="plus" class="btn-icon"></i>
-                </button>
-                <h3>Not Started</h3>
-                <button class="btn icon-btn btn-kanban-col-options-not-started" popovertarget="kanban-col-options-not-started">
-                    <i data-lucide="ellipsis-vertical" class="btn-icon"></i>
-                </button>
-            </div>
-            <div class="divider"></div>
-            <div class="list-card hide-scrollbar">
-                <!--Project card-->
-            </div>
-
-            <!-- Popover for Kanban Column Options -->
-            <div popover class="popover kanban-col-options-not-started" id="kanban-col-options-not-started">
-                <div class="popover__header">
-                    <span class="popover__title">Column Options</span>
-                    <button type="button">
-                        <i data-lucide="x" class="icon-sm"></i>
-                    </button>
-                </div>
-                <div class="popover__body">
-                    <button type="button" class="popover-item">Add card</button>
-                    <button type="button" class="popover-item">
-                        Move all cards in this state
-                    </button>
-                    <button type="button" class="popover-item">
-                        <span>Set all cards of State to </span>
-                        <select name="" id="">
-                            <option value="temp">Temp</option>
-                            <option value="notstarted">Not Started</option>
-                            <option value="inprogress">In Progress</option>
-                            <option value="inreview">In Review</option>
-                            <option value="done">Done</option>
-                        </select>
-                    </button>
-                    <button type="button" class="popover-item btn-danger">
-                        Remove all cards of this [state]
-                    </button>
-                    <button type="button" class="popover-item">
-                        Archive all cards of this [state]
-                    </button>
-                </div>
-            </div>
+        <div class="divider"></div>
+        <div class="list-card hide-scrollbar">
+            <!--Project card-->
         </div>
-        <!------- Col: In Progress --------->
-        <div class="kanban__col hide-scrollbar" data-status="in-progress">
-            <div class="kanban-column__header">
-                <button class="btn icon-btn add-project-btn">
-                    <i data-lucide="plus" class="btn-icon"></i>
-                </button>
-                <h3>In Progress</h3>
-                <button class="btn icon-btn btn-kanban-col-options-in-progress" popovertarget="kanban-col-options-in-progress">
-                    <i data-lucide="ellipsis-vertical" class="btn-icon"></i>
-                </button>
-            </div>
-            <div class="divider"></div>
-            <div class="list-card hide-scrollbar">
-                <!--  -->
-            </div>
 
-            <!-- Popover for Kanban Column Options -->
-            <div popover class="popover kanban-col-options-in-progress" id="kanban-col-options-in-progress">
-                <div class="popover__header">
-                    <span class="popover__title">Column Options</span>
-                    <button type="button">
-                        <i data-lucide="x" class="icon-sm"></i>
-                    </button>
-                </div>
-                <div class="popover__body">
-                    <button type="button" class="popover-item">Add card</button>
-                    <button type="button" class="popover-item">
-                        Move all cards in this state
-                    </button>
-                    <button type="button" class="popover-item">
-                        <span>Set all cards of State to </span>
-                        <select name="" id="">
-                            <option value="temp">Temp</option>
-                            <option value="notstarted">Not Started</option>
-                            <option value="inprogress">In Progress</option>
-                            <option value="inreview">In Review</option>
-                            <option value="done">Done</option>
-                        </select>
-                    </button>
-                    <button type="button" class="popover-item btn-danger">
-                        Remove all cards of this [state]
-                    </button>
-                    <button type="button" class="popover-item">
-                        Archive all cards of this [state]
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!--------------------------------------- Col: In Review --------------------------------------->
-        <div class="kanban__col hide-scrollbar" data-status="in-review">
-            <div class="kanban-column__header">
-                <button class="btn icon-btn add-project-btn">
-                    <i data-lucide="plus" class="btn-icon"></i>
-                </button>
-                <h3>In Review</h3>
-                <button class="btn icon-btn btn-kanban-col-options-in-review" popovertarget="kanban-col-options-in-review">
-                    <i data-lucide="ellipsis-vertical" class="btn-icon"></i>
+        <!-- Popover for Kanban Column Options -->
+        <div popover class="popover kanban-col-options-not-started" id="kanban-col-options-not-started">
+            <div class="popover__header">
+                <span class="popover__title">Column Options</span>
+                <button type="button">
+                    <i data-lucide="x" class="icon-sm"></i>
                 </button>
             </div>
-            <div class="divider"></div>
-            <div class="list-card hide-scrollbar">
-                <!-- Project card -->
-            </div>
-
-            <!-- Popover for Kanban Column Options -->
-            <div popover class="popover kanban-col-options-in-review" id="kanban-col-options-in-review">
-                <div class="popover__header">
-                    <span class="popover__title">Column Options</span>
-                    <button type="button">
-                        <i data-lucide="x" class="icon-sm"></i>
-                    </button>
-                </div>
-                <div class="popover__body">
-                    <button type="button" class="popover-item">Add card</button>
-                    <button type="button" class="popover-item">
-                        Move all cards in this state
-                    </button>
-                    <button type="button" class="popover-item">
-                        <span>Set all cards of State to </span>
-                        <select name="" id="">
-                            <option value="temp">Temp</option>
-                            <option value="notstarted">Not Started</option>
-                            <option value="inprogress">In Progress</option>
-                            <option value="inreview">In Review</option>
-                            <option value="done">Done</option>
-                        </select>
-                    </button>
-                    <button type="button" class="popover-item btn-danger">
-                        Remove all cards of this [state]
-                    </button>
-                    <button type="button" class="popover-item">
-                        Archive all cards of this [state]
-                    </button>
-                </div>
-            </div>
-        </div>
-        <!--------------------------------------- Col: Done --------------------------------------->
-        <div class="kanban__col hide-scrollbar" data-status="done">
-            <div class="kanban-column__header">
-                <button class="btn icon-btn add-project-btn">
-                    <i data-lucide="plus" class="btn-icon"></i>
+            <div class="popover__body">
+                <button type="button" class="popover-item">Add card</button>
+                <button type="button" class="popover-item">
+                    Move all cards in this state
                 </button>
-                <h3>Done</h3>
-                <button class="btn icon-btn btn-kanban-col-options-done" popovertarget="kanban-col-options-done">
-                    <i data-lucide="ellipsis-vertical" class="btn-icon"></i>
+                <button type="button" class="popover-item">
+                    <span>Set all cards of State to </span>
+                    <select name="" id="">
+                        <option value="temp">Temp</option>
+                        <option value="notstarted">Not Started</option>
+                        <option value="inprogress">In Progress</option>
+                        <option value="inreview">In Review</option>
+                        <option value="done">Done</option>
+                    </select>
                 </button>
-            </div>
-            <div class="divider"></div>
-            <div class="list-card hide-scrollbar">
-                <!-- Project card -->
-            </div>
-
-            <!-- Popover for Kanban Column Options -->
-            <div popover class="popover kanban-col-options-done" id="kanban-col-options-done">
-                <div class="popover__header">
-                    <span class="popover__title">Column Options</span>
-                    <button type="button">
-                        <i data-lucide="x" class="icon-sm"></i>
-                    </button>
-                </div>
-                <div class="popover__body">
-                    <button type="button" class="popover-item">Add card</button>
-                    <button type="button" class="popover-item">
-                        Move all cards in this state
-                    </button>
-                    <button type="button" class="popover-item">
-                        <span>Set all cards of State to </span>
-                        <select name="" id="">
-                            <option value="temp">Temp</option>
-                            <option value="notstarted">Not Started</option>
-                            <option value="inprogress">In Progress</option>
-                            <option value="inreview">In Review</option>
-                            <option value="done">Done</option>
-                        </select>
-                    </button>
-                    <button type="button" class="popover-item btn-danger">
-                        Remove all cards of this [state]
-                    </button>
-                    <button type="button" class="popover-item">
-                        Archive all cards of this [state]
-                    </button>
-                </div>
+                <button type="button" class="popover-item btn-danger">
+                    Remove all cards of this [state]
+                </button>
+                <button type="button" class="popover-item">
+                    Archive all cards of this [state]
+                </button>
             </div>
         </div>
     </div>
-</main>
+    <!------- Col: In Progress --------->
+    <div class="kanban__col hide-scrollbar" data-status="in-progress">
+        <div class="kanban-column__header">
+            <button class="btn icon-btn add-project-btn">
+                <i data-lucide="plus" class="btn-icon"></i>
+            </button>
+            <h3>In Progress</h3>
+            <button class="btn icon-btn btn-kanban-col-options-in-progress" popovertarget="kanban-col-options-in-progress">
+                <i data-lucide="ellipsis-vertical" class="btn-icon"></i>
+            </button>
+        </div>
+        <div class="divider"></div>
+        <div class="list-card hide-scrollbar">
+            <!--  -->
+        </div>
+
+        <!-- Popover for Kanban Column Options -->
+        <div popover class="popover kanban-col-options-in-progress" id="kanban-col-options-in-progress">
+            <div class="popover__header">
+                <span class="popover__title">Column Options</span>
+                <button type="button">
+                    <i data-lucide="x" class="icon-sm"></i>
+                </button>
+            </div>
+            <div class="popover__body">
+                <button type="button" class="popover-item">Add card</button>
+                <button type="button" class="popover-item">
+                    Move all cards in this state
+                </button>
+                <button type="button" class="popover-item">
+                    <span>Set all cards of State to </span>
+                    <select name="" id="">
+                        <option value="temp">Temp</option>
+                        <option value="notstarted">Not Started</option>
+                        <option value="inprogress">In Progress</option>
+                        <option value="inreview">In Review</option>
+                        <option value="done">Done</option>
+                    </select>
+                </button>
+                <button type="button" class="popover-item btn-danger">
+                    Remove all cards of this [state]
+                </button>
+                <button type="button" class="popover-item">
+                    Archive all cards of this [state]
+                </button>
+            </div>
+        </div>
+    </div>
+    <!--------------------------------------- Col: In Review --------------------------------------->
+    <div class="kanban__col hide-scrollbar" data-status="in-review">
+        <div class="kanban-column__header">
+            <button class="btn icon-btn add-project-btn">
+                <i data-lucide="plus" class="btn-icon"></i>
+            </button>
+            <h3>In Review</h3>
+            <button class="btn icon-btn btn-kanban-col-options-in-review" popovertarget="kanban-col-options-in-review">
+                <i data-lucide="ellipsis-vertical" class="btn-icon"></i>
+            </button>
+        </div>
+        <div class="divider"></div>
+        <div class="list-card hide-scrollbar">
+            <!-- Project card -->
+        </div>
+
+        <!-- Popover for Kanban Column Options -->
+        <div popover class="popover kanban-col-options-in-review" id="kanban-col-options-in-review">
+            <div class="popover__header">
+                <span class="popover__title">Column Options</span>
+                <button type="button">
+                    <i data-lucide="x" class="icon-sm"></i>
+                </button>
+            </div>
+            <div class="popover__body">
+                <button type="button" class="popover-item">Add card</button>
+                <button type="button" class="popover-item">
+                    Move all cards in this state
+                </button>
+                <button type="button" class="popover-item">
+                    <span>Set all cards of State to </span>
+                    <select name="" id="">
+                        <option value="temp">Temp</option>
+                        <option value="notstarted">Not Started</option>
+                        <option value="inprogress">In Progress</option>
+                        <option value="inreview">In Review</option>
+                        <option value="done">Done</option>
+                    </select>
+                </button>
+                <button type="button" class="popover-item btn-danger">
+                    Remove all cards of this [state]
+                </button>
+                <button type="button" class="popover-item">
+                    Archive all cards of this [state]
+                </button>
+            </div>
+        </div>
+    </div>
+    <!--------------------------------------- Col: Done --------------------------------------->
+    <div class="kanban__col hide-scrollbar" data-status="done">
+        <div class="kanban-column__header">
+            <button class="btn icon-btn add-project-btn">
+                <i data-lucide="plus" class="btn-icon"></i>
+            </button>
+            <h3>Done</h3>
+            <button class="btn icon-btn btn-kanban-col-options-done" popovertarget="kanban-col-options-done">
+                <i data-lucide="ellipsis-vertical" class="btn-icon"></i>
+            </button>
+        </div>
+        <div class="divider"></div>
+        <div class="list-card hide-scrollbar">
+            <!-- Project card -->
+        </div>
+
+        <!-- Popover for Kanban Column Options -->
+        <div popover class="popover kanban-col-options-done" id="kanban-col-options-done">
+            <div class="popover__header">
+                <span class="popover__title">Column Options</span>
+                <button type="button">
+                    <i data-lucide="x" class="icon-sm"></i>
+                </button>
+            </div>
+            <div class="popover__body">
+                <button type="button" class="popover-item">Add card</button>
+                <button type="button" class="popover-item">
+                    Move all cards in this state
+                </button>
+                <button type="button" class="popover-item">
+                    <span>Set all cards of State to </span>
+                    <select name="" id="">
+                        <option value="temp">Temp</option>
+                        <option value="notstarted">Not Started</option>
+                        <option value="inprogress">In Progress</option>
+                        <option value="inreview">In Review</option>
+                        <option value="done">Done</option>
+                    </select>
+                </button>
+                <button type="button" class="popover-item btn-danger">
+                    Remove all cards of this [state]
+                </button>
+                <button type="button" class="popover-item">
+                    Archive all cards of this [state]
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section scripts {
     <script src="~/wwwroot/js/KanbanPageRefactored.js"></script>

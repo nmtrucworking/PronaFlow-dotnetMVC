@@ -1,0 +1,15 @@
+﻿@model IEnumerable<PronaFlow_MVC.Models.ViewModels.ListOfWorkspaces>
+
+<select name="" id="workspace-selector" class="sidebar__workspace-selector">
+    <option value="" disabled selected hidden>Choose Workspace</option>
+    @foreach (var workspace in Model)
+    {
+        <option value="@workspace.Id">
+            <a href="@Url.Action("Index", "Kanbanboard", new {workspaceId = workspace.Id})"
+               data-workspace-id="@workspace.Id">
+                <span>@workspace.Name</span>
+            </a>
+        </option>
+    }
+</select>
+

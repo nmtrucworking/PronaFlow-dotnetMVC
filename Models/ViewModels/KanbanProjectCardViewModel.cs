@@ -45,9 +45,7 @@ namespace PronaFlow_MVC.Models.ViewModels
 
     /// <summary>
     /// Information of the Kanban Board:
-    /// - Current Workspace
-    ///  + Name;
-    ///  + Description
+    /// - Current Workspace { Name; Description}
     /// - List of Projects in the Workspace
     /// </summary>
     public class KanbanBoardViewModel

@@ -13,5 +13,10 @@ namespace PronaFlow_MVC.Controllers
         {
             return View();
         }
+
+        public ActionResult GetTagsByWorkspace(string workspaceId)
+        {
+            return PartialView();
+        }
     }
 }

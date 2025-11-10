@@ -21,7 +21,9 @@
             <div id="userAvt">
                 <img class="user__avt" src="./assets/images/avt-notion_1.png" alt="User Avatar">
             </div>
-            <span class="user__name item-hide-collapsed" id="user-name">${userName}</span>
+            <span class="user__name item-hide-collapsed" id="user-name">
+                <!---->
+            </span>
         </button>
 
         <div id="profile-menu" popover class="popover profile-menu" aria-labelledby="profile-menu-title">
@@ -66,9 +68,8 @@
         </div>
 
         <div class="nav-group group-1">
-            <select name="" id="workspace-selector" class="sidebar__workspace-selector">
-                <option value="" disabled selected hidden>Choose Workspace</option>
-            </select>
+            <!---->
+            @Html.Action("GetWorkspaces", "Workspace")
 
             <ul class="sidebar__workspace-tools">
                 <li>

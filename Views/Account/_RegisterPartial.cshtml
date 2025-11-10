@@ -1,0 +1,49 @@
+﻿<div class="login-card__form-wrapper login-card__form-wrapper--register">
+    <form action="#" class="form" id="registerForm" name="registerForm" novalidate>
+        <h1 class="form__title">Registration</h1>
+        <div class="form__input-groups">
+            <div class="form__input-group">
+                <input id="signupName" name="signupName" type="text" class="form__input"
+                       title="Username must be 4-20 characters" required placeholder="Username"
+                       autocomplete="username" minlength="4" maxlength="20" />
+                <i data-lucide="user" class="form__icon"></i>
+                <span class="form__error" id="registerUsernameError"></span>
+            </div>
+            <div class="form__input-group">
+                <input id="signupEmail" name="signupEmail" type="email" class="form__input"
+                       title="Please enter a valid email" required placeholder="Email" autocomplete="email" />
+                <i data-lucide="mail" class="form__icon"></i>
+                <span class="form__error" id="registerEmailError"></span>
+            </div>
+            <div class="form__input-group">
+                <input id="signupPassword" name="signupPassword" type="password" class="form__input"
+                       title="Password must be at least 8 characters" required placeholder="Password"
+                       autocomplete="new-password" minlength="8" />
+                <i data-lucide="lock" class="form__icon"></i>
+                <span class="form__error" id="registerPasswordError"></span>
+            </div>
+            <div class="form__input-group">
+                <input id="registerConfirmPassword" name="registerConfirmPassword" type="password"
+                       class="form__input" title="Please confirm your password" required
+                       placeholder="Confirm Password" autocomplete="new-password" />
+                <i data-lucide="lock" class="form__icon"></i>
+                <span class="form__error" id="registerConfirmPasswordError"></span>
+            </div>
+        </div>
+        <button id="signUpBtn" type="submit" class="form__submit-btn">Register</button>
+    </form>
+    <p class="form__text">or register with social platforms</p>
+    <div class="form_socials">
+        <a href="#" class="form__social-link"><i class="bx bxl-google"></i></a>
+        <a href="#" class="form__social-link"><i class="bx bxl-facebook"></i></a>
+        <a href="#" class="form__social-link"><i class="bx bxl-github"></i></a>
+        <a href="#" class="form__social-link"><i class="bx bxl-linkedin"></i></a>
+    </div>
+</div>
+@*<div class="toggle-box">
+    <div class="toggle-panel toggle-right">
+        <h1 class="toggle-panel__title">Welcome Back!</h1>
+        <p class="toggle-panel__text">Already have an account?</p>
+        <button class="form__submit-btn login-btn">Login</button>
+    </div>
+</div>*@

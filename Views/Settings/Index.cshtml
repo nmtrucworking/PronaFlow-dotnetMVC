@@ -1,0 +1,351 @@
+﻿
+@{
+    ViewBag.Title = "Settings | PronaFlow";
+}
+@model PronaFlow_MVC.Models.ViewModels.SettingsViewModel
+
+<main id="main" class="main settings-page">
+    <div class="page__title">Settings</div>
+    <div class="settings-page__main-wrap">
+        <nav class="settings-nav">
+            <ul class="settings-nav__list">
+                <li>
+                    <a href="#profile-settings" class="settings-nav__link active">
+                        <i data-lucide="user-circle"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#account-settings" class="settings-nav__link">
+                        <i data-lucide="key-round"></i>
+                        <span>Account</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#appearance-settings" class="settings-nav__link">
+                        <i data-lucide="palette"></i>
+                        <span>Appearance</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#tags-management-settings" class="settings-nav__link">
+                        <i data-lucide="tags"></i>
+                        <span>Tags</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#danger-zone" class="settings-nav__link settings-nav__link--danger">
+                        <i data-lucide="alert-triangle"></i> <span>Danger Zone</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="settings-content">
+            <section class="settings-section" id="profile-settings">
+                <div class="card-style-box">
+                    <div class="card-header">
+                        <h2 class="section__title">Profile</h2>
+                        <span class="description">Update your personal details and avatar.</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-box form-box--avatar">
+                            <label class="form-label">Your Avatar</label>
+                            <div class="avatar-preview">
+                                <img src="@(string.IsNullOrEmpty(Model?.AvatarUrl) ? Url.Content("~/wwwroot/images/avt-notion_1.png") : Model.AvatarUrl)" class="user__avt" alt="Current Avatar">
+                                <div class="avatar-actions">
+                                    <label for="new-avt-user" class="btn btn--secondary btn--small">
+                                        <i data-lucide="upload" class="icon-sm"></i> <span>Upload</span>
+                                    </label>
+                                    <button class="btn btn--tertiary btn--small">Remove</button>
+                                    <input type="file" id="new-avt-user" class="visually-hidden">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-box">
+                            <label for="display-name" class="form-label">Full Name</label>
+                            <input type="text" class="form-input" id="display-name" value="@Model?.FullName">
+                        </div>
+                        <div class="form-box" style="margin-top: 15px;">
+                            <label for="bio" class="form-label">Short Bio</label>
+                            <textarea class="form-input user__bio" id="bio"
+                                      placeholder="Ex: Full-stack Developer, UI/UX Enthusiast">@Model?.Bio</textarea>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button id="save-profile-btn" class="btn btn--primary">Save Profile</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="settings-section" id="account-settings">
+                <div class="card-style-box">
+                    <div class="card-header">
+                        <h2 class="section__title">Account</h2>
+                        <span class="description">Manage your login information and security settings.</span>
+                    </div>
+                    <div class="card-body">
+                        <form class="account-setting-form">
+                            <div class="form-box">
+                                <label for="change-email" class="form-label">Username</label>
+                                <input type="email" id="change-email" class="form-input" value="@Model?.Email">
+                            </div>
+                            <hr class="card-divider">
+                            <div class="form-box password-box">
+                                <label for="current-password" class="form-label">Current Password</label>
+                                <div class="input-with-icon">
+                                    <input type="password" id="current-password" class="form-input"
+                                           placeholder="Enter your current password">
+                                    <i data-lucide="eye" class="input-icon"></i>
+                                </div>
+                            </div>
+                            <div class="form-box password-box">
+                                <label for="user-password" class="form-label">New Password</label>
+                                <div class="input-with-icon">
+                                    <input type="password" id="user-password" class="form-input" placeholder="Enter your new password">
+                                    <i data-lucide="eye-off" class="input-icon"></i>
+                                </div>
+                                <p class="helper-text">Must be at least 8 characters long.</p>
+                            </div>
+                            <div class="form-box password-box">
+                                <label for="confirm-password" class="form-label">Confirm New Password</label>
+                                <div class="input-with-icon">
+                                    <input type="password" id="confirm-password" class="form-input"
+                                           placeholder="Confirm your new password">
+                                    <i data-lucide="eye" class="input-icon"></i>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn--secondary" disabled>Cancel</button>
+                        <button class="btn btn--primary" disabled>Update Password</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="settings-section" id="appearance-settings">
+                <div class="card-style-box">
+                    <div class="card-header">
+                        <h2 class="section__title">Appearance</h2>
+                        <span class="description">Customize the look and feel of your workspace.</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="appearance-box">
+                            <div class="settings-col--align-center">
+                                <!-- Decorative SVG omitted -->
+                            </div>
+                            <div class="theme-description">
+                                <h4>Theme Mode</h4>
+                                <span class="description">
+                                    Switch between light and dark themes. Easy on the eyes and great for nighttime
+                                    focus.
+                                </span>
+                                <div style="margin-top: 10px;">
+                                    <button class="btn btn--secondary" data-theme="light">Light</button>
+                                    <button class="btn btn--secondary" data-theme="dark">Dark</button>
+                                    <span style="margin-left: 10px;">Current: <strong id="current-theme">@Model?.ThemePreference</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="settings-section" id="tags-management-settings">
+                <div class="card-style-box">
+                    <div class="card-header">
+                        <h2 class="section__title">Tags Management</h2>
+                        <span class="description">Add, edit, or delete tags for the selected workspace.</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="workspace-selector-group">
+                            <label for="current-workspace" class="form-label">Select Workspace</label>
+                            <select id="current-workspace" class="current-workspace"></select>
+                        </div>
+                        <div class="tags-management">
+                            <div class="list-col tags-list" id="tags-list-container"></div>
+                            <div class="tags-list--empty" id="tags-list-empty">
+                                <i data-lucide="tag" class="empty-state__icon"></i>
+                                <p class="empty-state__text">No tags yet.</p>
+                            </div>
+                            <div class="add-tag-form">
+                                <input type="text" id="new-tag-name" class="form-input new-tag__name" placeholder="New tag name">
+                                <label class="color-picker-wrapper">
+                                    <input type="color" class="color-input" id="new-tag-color" value="#80c8ff">
+                                    <div class="color-picker-circle" style="background-color: #80c8ff;"></div>
+                                </label>
+                                <button id="add-new-tag-btn" class="btn btn--primary">Add Tag</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Danger Zone -->
+            <section class="settings-section" id="danger-zone">
+                <div class="card-style-box card-style-box--danger">
+                    <div class="card-header">
+                        <h2 class="section__title section__title--danger">Danger Zone</h2>
+                        <span class="description">These actions are irreversible. Please be certain.</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="danger-zone__actions">
+                            <div class="action-item">
+                                <div class="action-item__description">
+                                    <strong>Log Out</strong>
+                                    <p>End your current session on this device.</p>
+                                </div>
+                                <button id="logout-btn" class="btn btn-delete">Log Out</button>
+                            </div>
+                            <div class="action-item">
+                                <div class="action-item__description">
+                                    <strong>Delete Account</strong>
+                                    <p>This will permanently delete your account and all associated data.</p>
+                                </div>
+                                <div class="action-item__confirmation">
+                                    <label for="delete-confirm" class="form-label">
+                                        To confirm, please type <strong>DELETE</strong>
+                                        below:
+                                    </label>
+                                    <input type="text" id="delete-confirm" class="form-input" placeholder="DELETE">
+                                    <button id="delete-account-btn" class="btn btn-delete" disabled>Delete My Account</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<script>
+    (function () {
+        const saveBtn = document.getElementById('save-profile-btn');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', async function () {
+                const fullName = document.getElementById('display-name')?.value || '';
+                const bio = document.getElementById('bio')?.value || '';
+                try {
+                    const res = await fetch('@Url.Action("UpdateProfile", "Settings")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                        },
+                        body: new URLSearchParams({ fullName, bio })
+                    });
+                    const data = await res.json();
+                    if (data?.success) {
+                        alert('Profile updated successfully');
+                    } else {
+                        alert(data?.message || 'Update failed');
+                    }
+                } catch (e) {
+                    alert('Network error while updating profile');
+                }
+            });
+        }
+
+        const themeButtons = document.querySelectorAll('[data-theme]');
+        const currentThemeEl = document.getElementById('current-theme');
+        themeButtons.forEach(btn => {
+            btn.addEventListener('click', async function () {
+                const theme = this.getAttribute('data-theme');
+                try {
+                    const res = await fetch('@Url.Action("UpdateTheme", "Settings")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                        },
+                        body: new URLSearchParams({ theme })
+                    });
+                    const data = await res.json();
+                    if (data?.success) {
+                        currentThemeEl && (currentThemeEl.textContent = data.data.theme);
+                        alert('Theme updated: ' + data.data.theme);
+                    } else {
+                        alert(data?.message || 'Update failed');
+                    }
+                } catch (e) {
+                    alert('Network error while updating theme');
+                }
+            });
+        });
+    })();
+</script>
+
+<!-- Style svg-light | inner settings.html-->
+<style>
+    :root {
+        --on: 0;
+        --bg: hsl(calc(200 - (var(--on) * 160)), calc((20 + (var(--on) * 50)) * 1%), calc((20 + (var(--on) * 60)) * 1%));
+        --cord: hsl(0, 0%, calc((60 - (var(--on) * 50)) * 1%));
+        --stroke: hsl(0, 0%, calc((60 - (var(--on) * 50)) * 1%));
+        --shine: hsla(0, 0%, 100%, calc(0.75 - (var(--on) * 0.5)));
+        --cap: hsl(0, 0%, calc((40 + (var(--on) * 30)) * 1%));
+        --filament: hsl(45, calc(var(--on) * 80%), calc((25 + (var(--on) * 75)) * 1%));
+    }
+
+    .toggle-scene {
+        overflow: visible !important;
+        /* position: absolute; */
+        height: 200px;
+    }
+
+    .toggle-scene__cord {
+        stroke: var(--cord);
+        cursor: move;
+    }
+
+        .toggle-scene__cord:nth-of-type(1) {
+            display: none;
+        }
+
+        .toggle-scene__cord:nth-of-type(2),
+        .toggle-scene__cord:nth-of-type(3),
+        .toggle-scene__cord:nth-of-type(4),
+        .toggle-scene__cord:nth-of-type(5) {
+            display: none;
+        }
+
+    .toggle-scene__cord-end {
+        stroke: var(--cord);
+        fill: var(--cord);
+    }
+
+    .toggle-scene__dummy-cord {
+        stroke-width: 6;
+        stroke: var(--cord);
+    }
+
+    .bulb__filament {
+        stroke: var(--filament);
+    }
+
+    .bulb__shine {
+        stroke: var(--shine);
+    }
+
+    .bulb__flash {
+        stroke: #f5e0a3;
+        display: none;
+    }
+
+    .bulb__bulb {
+        stroke: var(--stroke);
+        fill: hsla(calc(180 - (95 * var(--on))), 80%, 80%, calc(0.1 + (0.4 * var(--on))));
+    }
+
+    .bulb__cap {
+        fill: var(--cap);
+    }
+
+    .bulb__cap-shine {
+        fill: var(--shine);
+    }
+
+    .bulb__cap-outline {
+        stroke: var(--stroke);
+    }
+</style>

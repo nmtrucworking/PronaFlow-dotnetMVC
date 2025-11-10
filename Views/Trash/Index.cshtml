@@ -1,7 +1,58 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Trash | PronaFlow";
 }
 
-<h2>Index</h2>
+<main id="main" class="main">
+    <header>
+        <h3 class="page__title"><i data-lucide="trash-2"></i><span>Trash</span></h3>
+        <div class="description--second description--trash" role="alert">
+            Items in the trash will be <strong>permanently deleted</strong> after 30 days.
+        </div>
+    </header>
+    <div class="page__content">
+        <section class="section-container">
+            <div class="section-title">Deleted Projects</div>
+            <div class="section__inner-content">
+                <div class="list-row group-folder" id="deleted-projects-container"></div>
+            </div>
+        </section>
+        <section class="section-container">
+            <div class="section-title">Deleted Tasks</div>
+            <div class="section__inner-content">
+                <div class="list-col" id="deleted-tasks-container"></div>
+            </div>
+        </section>
+        <div id="empty-trash-message" class="empty-state-container"
+            style="display: none; border: none; margin-top: 20px;">
+            <i data-lucide="trash" class="empty-state__icon"></i>
+            <h3 class="empty-state__text">Trash is empty</h3>
+            <p class="empty-state__subtext">Deleted items will appear here.</p>
+        </div>
+    </div>
+</main>
 
+<div class="simple-modal" id="trash-item-modal">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-item-type"></h4>
+        <button class="btn-exit"><i data-lucide="x"></i></button>
+    </div>
+    <div class="modal-body">
+        <p class="modal-project-name" id="modal-item-name"></p>
+        <p class="modal-description">This item can be restored or permanently deleted. Permanent deletion cannot be
+            undone.
+        </p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-delete" id="modal-delete-btn">
+            <i data-lucide="trash-2" class="icon-sm"></i>
+            <span>Permanently Delete</span>
+        </button>
+        <button class="btn btn--primary" id="modal-restore-btn">
+            <i data-lucide="undo-2" class="icon-sm"></i>
+            <span>Restore</span>
+        </button>
+    </div>
+</div>
+
+<div id="sharedBackdrop" class="shared-backdrop"></div>

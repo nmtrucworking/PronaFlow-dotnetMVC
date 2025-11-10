@@ -1324,8 +1324,10 @@ input:focus::placeholder {
 }
 
 /* ==================== BLOCK: login-card ==================== */
-.login-card {
-    position: relative;
+.register-card, .login-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
     width: 850px;
     height: 550px;
     background-color: var(--color-background);
@@ -1333,6 +1335,13 @@ input:focus::placeholder {
     border-radius: 30px;
     box-shadow: 0 0 30px rbga(0, 0, 0, 0.2);
     overflow: hidden;
+
+    opacity: 0;
+}
+
+.register-card.is-open, .login-card.is-open {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
 }
 
 /* ELEMENT: form-wrapper */

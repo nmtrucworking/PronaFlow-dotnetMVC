@@ -14,20 +14,21 @@ namespace PronaFlow_MVC.Controllers
     //[Authentication
     public class KanbanboardController : Controller
     {
-        private readonly PronaFlow_DBContext db = new PronaFlow_DBContext();
+        private readonly PronaFlow_DBContext _context = new PronaFlow_DBContext();
 
         /// <summary>
         /// Displayed Kanban Board | Get: `/Kanbanboard`
         /// </summary>
         /// <returns>View Indext.cshtml</returns>
         [HttpGet]
+        [ChildActionOnly]
         public ActionResult Index(int? workspaceId)
         {
-            int currentWorkspaceId = workspaceId ?? (db.workspaces.FirstOrDefault()?.id ?? 0);
+            long currentWorkspaceId = workspaceId ?? _context.workspaces.FirstOrDefault()?.id ?? 0;
 
-            var viewModel = GetKanbanBoardData(currentWorkspaceId);
+            var viewModel = GetKanbanBoardData((int)currentWorkspaceId);
 
-            return View(viewModel);
+            return PartialView(viewModel);
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace PronaFlow_MVC.Controllers
             var normalizedStatus = newStatus.ToLower().Trim();
             try
             {
-                var project = db.projects.SingleOrDefault(p => p.id == projectId);
+                var project = _context.projects.SingleOrDefault(p => p.id == projectId);
                 if (project == null)
                 {
                     return Json(new
@@ -50,18 +51,17 @@ namespace PronaFlow_MVC.Controllers
                         success = false,
                         message = "Project not found."
                     });
-
-                    project.status = normalizedStatus;
-                    project.updatedAt = DateTime.Now;
-                    db.SaveChanges();
-
-                    return Json(new
-                    {
-                        success = true,
-                        message = $"Status updated to {newStatus}"
-                    });
                 }
-                
+                project.status = normalizedStatus;
+                //project.updatedAt = DateTime.Now;
+                _context.SaveChanges();
+
+                return Json(new
+                {
+                    success = true,
+                    message = $"Status updated to {newStatus}"
+                });
+
             }
             catch (Exception ex)
             {
@@ -101,8 +101,8 @@ namespace PronaFlow_MVC.Controllers
                     cover_image_url = ""
                 };
 
-                db.projects.Add(newProject);
-                db.SaveChanges();
+                _context.projects.Add(newProject);
+                _context.SaveChanges();
 
                 var projectViewModel = MapToKanbanCardViewModel(newProject);
 
@@ -134,7 +134,7 @@ namespace PronaFlow_MVC.Controllers
         /// <returns></returns>
         private KanbanBoardViewModel GetKanbanBoardData(int workspaceId)
         {
-            var workspace = db.workspaces.SingleOrDefault(w => w.id == workspaceId);
+            var workspace = _context.workspaces.SingleOrDefault(w => w.id == workspaceId);
 
             if (workspace == null)
             {
@@ -146,12 +146,12 @@ namespace PronaFlow_MVC.Controllers
                 };
             }
 
-            var projectsInWorkspace = db.projects
+            var projectsInWorkspace = _context.projects
                 .Include("tags")
                 .Include("project_members.user")
                 .Include("tasks")
                 .Where(p => p.workspace_id == workspaceId &&
-                             (p.is_deleted = null))
+                             (p.is_deleted == false))
                 .ToList();
 
             var projectViewModels = projectsInWorkspace
@@ -160,7 +160,7 @@ namespace PronaFlow_MVC.Controllers
             // Map projects to KanbanProjectCardViewModel
             return new KanbanBoardViewModel
             {
-                CurrentWorkspaceId = workspace.id,
+                CurrentWorkspaceId = (int)workspace.id,
                 WorkspaceName = workspace.name,
                 WorkspaceDescription = workspace.description,
                 Projects = projectViewModels
@@ -184,20 +184,20 @@ namespace PronaFlow_MVC.Controllers
 
             var tags = project.tags?.Select(t => new ProjectTagViewModel
             {
-                Id = t.id,
-                ColorHex = t.color,
+                Id = (int)t.id,
+                ColorHex = t.color_hex,
                 Name = t.name
             }).ToList() ?? new List<ProjectTagViewModel>();
 
             var members = project.project_members?.Select(pm => new ProjectMemberViewModel
             {
-                UserId = pm.user_id,
+                UserId = (int)pm.user_id,
                 AvatarUrl = pm.users.avatar_url // Giả định project_members có navigation property users
             }).ToList() ?? new List<ProjectMemberViewModel>();
 
             return new KanbanProjectCardViewModel
             {
-                Id = project.id,
+                Id = (int)project.id,
                 Name = project.name,
                 Status = project.status,
                 StartDate = project.start_date,

@@ -90,7 +90,8 @@ BEGIN TRY
     ('susanmoore', 'susan.moore41@pronaflow.dev', '$2a$11$jeplLITyVchMWWNSBCz6zOT64TJ5kyxm187vmR.UhmrKC4OurWx.q', 'Susan Moore', 'https://i.pravatar.cc/150?u=susanmoore', 'QA Engineer', 'dark', 'user');
 
     -- Lấy ID của các user vừa tạo
-    SELECT @UserID_DavidJones = id FROM [dbo].[users] WHERE username = 'davidjones';
+    DECLARE @@UserID_DavidJones BIGINT;
+	SELECT @UserID_DavidJones = id FROM [dbo].[users] WHERE username = 'davidjones';
     SELECT @UserID_RichardBrown = id FROM [dbo].[users] WHERE username = 'richardbrown';
     SELECT @UserID_CharlesTaylor = id FROM [dbo].[users] WHERE username = 'charlestaylor';
     SELECT @UserID_LindaWilliams = id FROM [dbo].[users] WHERE username = 'lindawilliams';

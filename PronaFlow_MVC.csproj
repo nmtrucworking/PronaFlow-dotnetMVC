@@ -1,4 +1,5 @@
 ﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
   <Import Project="packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -43,6 +44,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -187,6 +194,8 @@
     <Content Include="wwwroot\images\working-group1.jpg" />
     <Content Include="Web.config" />
     <Content Include="wwwroot\js\KanbanPageRefactored.js" />
+    <Content Include="wwwroot\js\sidebar.dom.js" />
+    <Content Include="wwwroot\js\Sidebar.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -200,6 +209,7 @@
     <Compile Include="Controllers\KanbanboardController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\SubtaskController.cs" />
     <Compile Include="Controllers\TagController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
@@ -273,10 +283,16 @@
       <DependentUpon>PronaFlowDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\KanbanProjectCardViewModel.cs" />
+    <Compile Include="Models\ViewModels\ListOfWorkspaces.cs" />
+    <Compile Include="Models\ViewModels\LoginViewModel.cs" />
+    <Compile Include="Models\ViewModels\RegisterViewModel.cs" />
+    <Compile Include="Models\ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Models\ViewModels\WorkspaceDetailViewModel.cs" />
     <Compile Include="Models\workspaces.cs">
       <DependentUpon>PronaFlowDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Content Include="wwwroot\js\main.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -295,6 +311,16 @@
     <Content Include="Views\Trash\Index.cshtml" />
     <Content Include="Views\Shared\_Sidebar.cshtml" />
     <Content Include="Views\Kanbanboard\Index.cshtml" />
+    <Content Include="Views\Workspace\Index.cshtml" />
+    <Content Include="Views\Workspace\_WorkspaceList.cshtml" />
+    <Content Include="Views\Account\_RegisterPartial.cshtml" />
+    <Content Include="Views\Account\_LoginPartial.cshtml" />
+    <Content Include="Views\Settings\Index.cshtml" />
+    <Content Include="Views\Tag\GetTagsByWorkspace.cshtml" />
+    <Content Include="Views\Archive\Index.cshtml" />
+    <Content Include="Views\Notification\Index.cshtml" />
+    <Content Include="Views\Task\GetTasks.cshtml" />
+    <Content Include="Views\Task\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -304,18 +330,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Account\" />
     <Folder Include="Views\Activity\" />
-    <Folder Include="Views\Archive\" />
     <Folder Include="Views\Attachment\" />
     <Folder Include="Views\Comment\" />
-    <Folder Include="Views\Notification\" />
     <Folder Include="Views\Project\" />
     <Folder Include="Views\Subtask\" />
-    <Folder Include="Views\Tag\" />
     <Folder Include="Views\TaskList\" />
-    <Folder Include="Views\Task\" />
-    <Folder Include="Views\Workspace\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -350,7 +370,10 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
   </Target>
+  <Import Project="packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

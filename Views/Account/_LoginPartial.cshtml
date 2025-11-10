@@ -1,0 +1,62 @@
+﻿@model PronaFlow_MVC.Models.ViewModels.LoginViewModel
+
+<div class="login-card__form-wrapper login-card__form-wrapper--login">
+    @using (Html.BeginForm(
+        "Login", "Account",
+        FormMethod.Post,
+        new { role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <h1 class="form__title">Login</h1>
+        <div class="form__input-groups">
+            <div class="form__input-group">
+                @Html.LabelFor(m => m.Email)
+                @Html.TextBoxFor(m => m.Email, new { @class = "form__input", placeholder = "Email" })
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "form__error" })
+
+                @*<input id="loginEmail" name="loginEmail" type="email" class="form__input"*@
+                       @*title="Please enter your email" required placeholder="Email" autocomplete="email" />*@
+                <i data-lucide="mail" class="form__icon"></i>
+                @*<span class="form__error" id="loginEmailError"></span>*@
+            </div>
+            <div class="form__input-group">
+
+                @Html.LabelFor(m => m.Password)
+                @Html.PasswordFor(m => m.Password, new { @class = "form__input", placeholder = "Password" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "form__error" })
+                
+                @*<input id="loginPassword" name="loginPassword" type="password" class="form__input"*@
+                @*title="Please enter your password" placeholder="Password" required*@
+                @*autocomplete="current-password" />*@
+                <i data-lucide="lock" class="form__icon"></i>
+                @*<span class="form__error" id="loginPasswordError"></span>*@
+            </div>
+        </div>
+
+        <div class="checkbox">
+            @Html.CheckBoxFor(m => m.RememberMe)
+            @Html.LabelFor(m => m.RememberMe)
+        </div>
+
+        <a href="#" class="form__link">Forgot Password?</a>
+        <button id="signInBtn" type="submit" class="form__submit-btn">Login</button>
+    }
+    <form action="" class="form" id="loginForm" name="loginForm" novalidate>
+    </form>
+
+    <p class="form__text">or login with social platforms</p>
+    <div class="form_socials">
+        <a href="#" class="form__social-link"><i class="bx bxl-google"></i></a>
+        <a href="#" class="form__social-link"><i class="bx bxl-facebook"></i></a>
+        <a href="#" class="form__social-link"><i class="bx bxl-github"></i></a>
+        <a href="#" class="form__social-link"><i class="bx bxl-linkedin"></i></a>
+    </div>
+</div>
+@*<div class="toggle-box">
+    <div class="toggle-panel toggle-left">
+        <h1 class="toggle-panel__title">Hello, Welcome!</h1>
+        <p class="toggle-panel__text">Don't have an account?</p>
+        <button class="form__submit-btn register-btn">Register</button>
+    </div>
+</div>*@
