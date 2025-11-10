@@ -1,26 +1,7 @@
-import { isAuthenticated, logout } from '../auth/authService.js';
-import { loadSidebarAndSetActiveLink } from '../components/Sidebar.js';
-import apiService from '../api/apiService.js';
-import store from '../store/store.js';
-import { showToast } from '../utils/ui.js';
+import { showToast } from './ui.js';
 
 const SettingPage = {
-    render: async () => {
-        if (!isAuthenticated()) {
-            window.location.hash = '#/setting'; 
-            return ''; 
-        }
-        const response = await fetch('./src/pages/settings.html');
-        const html = await response.text();
-        return html;
-    },
-    
-    after_render: async () => {
-        if (!isAuthenticated()) return;
-        await loadSidebarAndSetActiveLink();
-        if (window.lucide && window.lucide.createIcons) {
-            window.lucide.createIcons();
-        }
+        //await loadSidebarAndSetActiveLink();
         initializeSettingsPage();
     }
 };
@@ -302,4 +283,3 @@ function initializePlugin() {
             }
         });
 }
-export default SettingPage;

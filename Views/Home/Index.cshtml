@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = null;
 }
 
@@ -9,11 +8,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="~/wwwroot/css/reset.min.css" />
-    <link rel="stylesheet" href="~/wwwroot/css/base.css" />
-    <link rel="stylesheet" href="~/wwwroot/css/style.css" />
+    <link rel="stylesheet" href="/wwwroot/css/reset.min.css" />
+    <link rel="stylesheet" href="/wwwroot/css/base.css" />
+    <link rel="stylesheet" href="/wwwroot/css/style.css" />
     <title>PronaFlow</title>
-    <link rel="icon" type="image/svg" href="~/wwwroot/images/logo-dark.svg" />
+    <link rel="icon" type="image/svg" href="/wwwroot/images/logo-dark.svg" />
 
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script>
@@ -33,18 +32,18 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" />
-    <script type="module" src="./assets/js/HomePage.js"></script>
+    <script src="/wwwroot/js/HomePage.js"></script>
 </head>
 
 <body>
     <!-- This is Home Page (Landing Page) -->
-    <div class="shared-backdrop"></div>
+    <div id="backdrop" class="shared-backdrop"></div>
 
     <div class="home-page" id="home-page">
         <header class="header" id="header">
             <div class="header__container">
                 <div title="PronaFlow">
-                    <img src="~/wwwroot/images/logo-light.svg" alt="PronaFlow's logo'" class="logo" />
+                    <img src="/wwwroot/images/logo-light.svg" alt="PronaFlow's logo'" class="logo" />
                     <a class="web-name" href="#/">PronaFlow</a>
                 </div>
                 <nav class="main-nav" id="main-nav">
@@ -61,8 +60,8 @@
                     </ul>
                 </nav>
                 <div class="header-cta-group">
-                    <button class="btn--base login-btn" >Login</button>
-                    <button class="btn--base sigup-btn" >Sign Up</button>
+                    <button id="login-btn" class="btn--base login-btn">Login</button>
+                    <button id="sigup-btn" class="btn--base sigup-btn">Sign Up</button>
                 </div>
                 <div class="menu-toggle" id="menu-toggle">
                     <div class="bar"></div>
@@ -73,11 +72,11 @@
         </header>
 
         <div>
-            <div class="login-card">
+            <div id="login-card" class="login-card">
                 @Html.Action("Login", "Account")
             </div>
-            <div class="register-card"
-                 @Html.Action("Register", "Account")
+            <div id="register-card" class="register-card">
+                @Html.Action("Register", "Account")
             </div>
         </div>
 
@@ -115,7 +114,7 @@
                     </p>
                 </div>
                 <div class="story-section__image animate-on-scroll">
-                    <img src="~/wwwroot/images/working-group.jpg" alt="Previously chaotic team" />
+                    <img src="/wwwroot/images/working-group.jpg" alt="Previously chaotic team" />
                 </div>
             </div>
         </section>
@@ -321,7 +320,7 @@
                     <div class="team-card animate-on-scroll">
                         <div class="team-card-inner">
                             <div class="team-card-front">
-                                <img src="~/wwwroot/images/creater-1.jpg" alt="creater-1" />
+                                <img src="/wwwroot/images/creater-1.jpg" alt="creater-1" />
                             </div>
                             <div class="team-card-back">
                                 <h4>Jin</h4>
@@ -336,7 +335,7 @@
                     <div class="team-card animate-on-scroll" style="transition-delay: 0.2s">
                         <div class="team-card-inner">
                             <div class="team-card-front">
-                                <img src="~/wwwroot/images/creater-2.jpg" alt="creater-2" />
+                                <img src="/wwwroot/images/creater-2.jpg" alt="creater-2" />
                             </div>
                             <div class="team-card-back">
                                 <h4>Ali</h4>
@@ -348,7 +347,7 @@
                     <div class="team-card animate-on-scroll" style="transition-delay: 0.4s">
                         <div class="team-card-inner">
                             <div class="team-card-front">
-                                <img src="~/wwwroot/images/creater-3.jpg" alt="creater-3" />
+                                <img src="/wwwroot/images/creater-3.jpg" alt="creater-3" />
                             </div>
                             <div class="team-card-back">
                                 <h4>Bob</h4>
@@ -379,12 +378,5 @@
             </p>
         </footer>
     </div>
-
-
 </body>
-
 </html>
-
-@section scripts {
-    <script src="~/wwwroot/js/main.js"></script>
-}

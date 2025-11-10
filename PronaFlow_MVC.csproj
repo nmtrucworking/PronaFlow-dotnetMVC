@@ -193,12 +193,14 @@
     <Content Include="wwwroot\images\working-group.jpg" />
     <Content Include="wwwroot\images\working-group1.jpg" />
     <Content Include="Web.config" />
+    <Content Include="wwwroot\js\HomePage.js" />
     <Content Include="wwwroot\js\KanbanPageRefactored.js" />
     <Content Include="wwwroot\js\MyCalendarPage.js" />
     <Content Include="wwwroot\js\SettingPage.js" />
     <Content Include="wwwroot\js\sidebar.dom.js" />
     <Content Include="wwwroot\js\Sidebar.js" />
     <Content Include="wwwroot\js\TaskPage.js" />
+    <Content Include="wwwroot\js\ui.js" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />

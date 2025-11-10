@@ -8,7 +8,11 @@ namespace PronaFlow_MVC.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: Home
+        /// <summary>
+        /// Home Page View - Landing Page (Public)
+        /// | GET: /Home
+        /// </summary>
+        /// <returns>View: Index.cshtml</returns>
         [AllowAnonymous]
         public ActionResult Index()
         {

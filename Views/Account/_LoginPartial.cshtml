@@ -1,10 +1,7 @@
 ﻿@model PronaFlow_MVC.Models.ViewModels.LoginViewModel
 
 <div class="login-card__form-wrapper login-card__form-wrapper--login">
-    @using (Html.BeginForm(
-        "Login", "Account",
-        FormMethod.Post,
-        new { role = "form" }))
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { role = "form" }))
     {
         @Html.AntiForgeryToken()
 
@@ -14,23 +11,13 @@
                 @Html.LabelFor(m => m.Email)
                 @Html.TextBoxFor(m => m.Email, new { @class = "form__input", placeholder = "Email" })
                 @Html.ValidationMessageFor(m => m.Email, "", new { @class = "form__error" })
-
-                @*<input id="loginEmail" name="loginEmail" type="email" class="form__input"*@
-                       @*title="Please enter your email" required placeholder="Email" autocomplete="email" />*@
                 <i data-lucide="mail" class="form__icon"></i>
-                @*<span class="form__error" id="loginEmailError"></span>*@
             </div>
             <div class="form__input-group">
-
                 @Html.LabelFor(m => m.Password)
                 @Html.PasswordFor(m => m.Password, new { @class = "form__input", placeholder = "Password" })
                 @Html.ValidationMessageFor(m => m.Password, "", new { @class = "form__error" })
-                
-                @*<input id="loginPassword" name="loginPassword" type="password" class="form__input"*@
-                @*title="Please enter your password" placeholder="Password" required*@
-                @*autocomplete="current-password" />*@
                 <i data-lucide="lock" class="form__icon"></i>
-                @*<span class="form__error" id="loginPasswordError"></span>*@
             </div>
         </div>
 
