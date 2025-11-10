@@ -1,16 +1,9 @@
-﻿@model IEnumerable[PronaFlow_MVC.Models.ViewModels.ListOfWorkspaces]
-<!-- Danh sách workspace có thể bấm, không dùng JS -->
-<ul class="sidebar__workspace-list">
-    @foreach (var workspace in Model)
+﻿@model IEnumerable<PronaFlow_MVC.Models.ViewModels.ListOfWorkspaces>
+<select id="workspace-selector" class="sidebar__workspace-selector" onchange="location.href=this.value">
+    <option value="" disabled selected hidden>Choose Workspace</option>
+    @foreach (var w in Model)
     {
-        <li>
-            <a class="sidebar__nav-item"
-               href="@Url.Action("Index", "Kanbanboard", new { workspaceId = workspace.Id })"
-               data-workspace-id="@workspace.Id">
-                <i class="nav-icon icon-sm" data-lucide="folder"></i>
-                <span>@workspace.Name</span>
-            </a>
-        </li>
+        <option value="@Url.Action("Index", "Kanbanboard", new { workspaceId = w.Id })">@w.Name</option>
     }
-</ul>
+</select>
 

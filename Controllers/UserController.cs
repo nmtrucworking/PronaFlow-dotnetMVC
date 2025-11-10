@@ -22,10 +22,10 @@ namespace PronaFlow_MVC.Controllers
             return View();
         }
 
-        public ActionResult Profile()
-        {
-            return View();
-        }
+        //public ActionResult Profile()
+        //{
+        //    return View();
+        //}
 
         public ActionResult DeleteAccount()
         {

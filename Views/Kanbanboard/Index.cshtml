@@ -209,13 +209,11 @@
                 ? list
                 : Enumerable.Empty<PronaFlow_MVC.Models.ViewModels.KanbanProjectCardViewModel>();
 
-            @Html.Partial("_KanbanColumn", new { Title = col.Title, UiStatus = col.UiStatus, Projects = projects })
+            @Html.Partial("_KanbanColumn", new { Title = col.Title, UiStatus = col.UiStatus, Projects = projects, WorkspaceId = Model.CurrentWorkspaceId })
         }
     </div>
 
 </main>
-
-
 
 @section scripts {
     <script src="~/wwwroot/js/KanbanPageRefactored.js"></script>
