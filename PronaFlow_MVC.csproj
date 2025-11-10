@@ -337,6 +337,8 @@
     <Content Include="Views\Project\_ProjectDetails.cshtml" />
     <Content Include="Views\Task\_TaskDetails.cshtml" />
     <Content Include="Views\Task\_TaskCard.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

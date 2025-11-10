@@ -24,27 +24,23 @@ namespace PronaFlow_MVC.Controllers
         }
 
         /// <summary>
-        /// Child Action (GET) to display LoginForm
+        /// Hiển thị trang Login (full view)
         /// </summary>
-        /// <returns>Partial View: _LoginPartial.cshtml</returns>
         [HttpGet]
-        [ChildActionOnly]
         [AllowAnonymous]
         public ActionResult Login()
         {
-            return PartialView("_LoginPartial", new LoginViewModel());
+            return View(new LoginViewModel());
         }
 
         /// <summary>
-        /// Child Action (GET) to display RegisterForm
+        /// Hiển thị trang Register (full view)
         /// </summary>
-        /// <returns>Partial View: _RegisterPartial.cshtml</returns>
         [HttpGet]
-        [ChildActionOnly]
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return PartialView("_RegisterPartial", new RegisterViewModel());
+            return View(new RegisterViewModel());
         }
 
         /// <summary>
@@ -58,17 +54,31 @@ namespace PronaFlow_MVC.Controllers
         public ActionResult Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
-                return View();
+            {
+                if (Request.IsAjaxRequest())
+                {
+                    return Json(new { success = false, errors = GetModelErrors(ModelState) });
+                }
+                return View("Login", model);
+            }
 
             var user = _db.users.FirstOrDefault(u => u.email == model.Email && u.is_deleted == false);
             if (user == null || !VerifyPassword(model.Password, user.password_hash))
             {
                 ModelState.AddModelError("", "Email hoặc mật khẩu không đúng.");
-                return View();
+                if (Request.IsAjaxRequest())
+                {
+                    return Json(new { success = false, errors = GetModelErrors(ModelState) });
+                }
+                return View("Login", model);
             }
 
             FormsAuthentication.SetAuthCookie(model.Email, model.RememberMe);
-            return RedirectToAction("Index", "Dashboard");
+            if (Request.IsAjaxRequest())
+            {
+                return Json(new { success = true, message = "Đăng nhập thành công" });
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         //==========================================
@@ -87,13 +97,23 @@ namespace PronaFlow_MVC.Controllers
         public ActionResult Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
-                return View();
+            {
+                if (Request.IsAjaxRequest())
+                {
+                    return Json(new { success = false, errors = GetModelErrors(ModelState) });
+                }
+                return View("Register", model);
+            }
 
             var exists = _db.users.Any(u => u.email == model.Email);
             if (exists)
             {
                 ModelState.AddModelError("", "Email đã tồn tại.");
-                return View();
+                if (Request.IsAjaxRequest())
+                {
+                    return Json(new { success = false, errors = GetModelErrors(ModelState) });
+                }
+                return View("Register", model);
             }
 
             var user = new users
@@ -115,7 +135,11 @@ namespace PronaFlow_MVC.Controllers
             _db.SaveChanges();
 
             FormsAuthentication.SetAuthCookie(model.Email, false);
-            return RedirectToAction("Index", "Dashboard");
+            if (Request.IsAjaxRequest())
+            {
+                return Json(new { success = true, message = "Đăng ký thành công" });
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         //===================================== HELPER METHODS
@@ -186,6 +210,14 @@ namespace PronaFlow_MVC.Controllers
         public ActionResult ResetPassword()
         {
             return View();
+        }
+
+        private static IEnumerable<string> GetModelErrors(System.Web.Mvc.ModelStateDictionary modelState)
+        {
+            return modelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => string.IsNullOrWhiteSpace(e.ErrorMessage) ? "Invalid input." : e.ErrorMessage)
+                .ToList();
         }
     }
 }
