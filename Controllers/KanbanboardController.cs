@@ -143,7 +143,7 @@ namespace PronaFlow_MVC.Controllers
 
             var projectsInWorkspace = _context.projects
                 .Include("tags")
-                .Include("project_members.user")
+                .Include("project_members.users")
                 .Include("tasks")
                 .Where(p => p.workspace_id == workspaceId &&
                              (p.is_deleted == false))

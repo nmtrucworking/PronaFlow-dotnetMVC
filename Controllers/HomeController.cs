@@ -9,6 +9,7 @@ namespace PronaFlow_MVC.Controllers
     public class HomeController : Controller
     {
         // GET: Home
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View();

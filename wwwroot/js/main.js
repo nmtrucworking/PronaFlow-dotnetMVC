@@ -25,4 +25,8 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     initBackdropHome();
+
+    if (window.lucide && window.lucide.createIcons) {
+        window.lucide.createIcons();
+    }
 });

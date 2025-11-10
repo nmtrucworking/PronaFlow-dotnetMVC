@@ -201,6 +201,7 @@
     <Content Include="wwwroot\js\TaskPage.js" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ActivityController.cs" />
@@ -219,6 +220,7 @@
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\TaskListController.cs" />
     <Compile Include="Controllers\TrashController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\WorkspaceController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -289,6 +291,7 @@
     <Compile Include="Models\ViewModels\KanbanProjectCardViewModel.cs" />
     <Compile Include="Models\ViewModels\ListOfWorkspaces.cs" />
     <Compile Include="Models\ViewModels\LoginViewModel.cs" />
+    <Compile Include="Models\ViewModels\MyTasksViewModel.cs" />
     <Compile Include="Models\ViewModels\RegisterViewModel.cs" />
     <Compile Include="Models\ViewModels\SettingsViewModel.cs" />
     <Compile Include="Models\ViewModels\TaskItemViewModel.cs" />
@@ -346,6 +349,7 @@
     <Folder Include="Views\Comment\" />
     <Folder Include="Views\Subtask\" />
     <Folder Include="Views\TaskList\" />
+    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

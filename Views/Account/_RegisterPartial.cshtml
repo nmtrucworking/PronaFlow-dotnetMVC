@@ -1,37 +1,37 @@
-﻿<div class="login-card__form-wrapper login-card__form-wrapper--register">
-    <form action="#" class="form" id="registerForm" name="registerForm" novalidate>
+﻿@model PronaFlow_MVC.Models.ViewModels.RegisterViewModel
+
+<div class="login-card__form-wrapper login-card__form-wrapper--register">
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
+    {
+        @Html.AntiForgeryToken()
         <h1 class="form__title">Registration</h1>
         <div class="form__input-groups">
             <div class="form__input-group">
-                <input id="signupName" name="signupName" type="text" class="form__input"
-                       title="Username must be 4-20 characters" required placeholder="Username"
-                       autocomplete="username" minlength="4" maxlength="20" />
+                @Html.LabelFor(m => m.Username)
+                @Html.TextBoxFor(m => m.Username, new { @class = "form__input", placeholder = "Username", minlength = "4", maxlength = "20" })
+                @Html.ValidationMessageFor(m => m.Username, "", new { @class = "form__error" })
                 <i data-lucide="user" class="form__icon"></i>
-                <span class="form__error" id="registerUsernameError"></span>
             </div>
             <div class="form__input-group">
-                <input id="signupEmail" name="signupEmail" type="email" class="form__input"
-                       title="Please enter a valid email" required placeholder="Email" autocomplete="email" />
+                @Html.LabelFor(m => m.Email)
+                @Html.TextBoxFor(m => m.Email, new { @class = "form__input", placeholder = "Email" })
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "form__error" })
                 <i data-lucide="mail" class="form__icon"></i>
-                <span class="form__error" id="registerEmailError"></span>
             </div>
             <div class="form__input-group">
-                <input id="signupPassword" name="signupPassword" type="password" class="form__input"
-                       title="Password must be at least 8 characters" required placeholder="Password"
-                       autocomplete="new-password" minlength="8" />
-                <i data-lucide="lock" class="form__icon"></i>
-                <span class="form__error" id="registerPasswordError"></span>
+                @Html.LabelFor(m => m.Password)
+                @Html.PasswordFor(m => m.Password, new { @class = "form__input", placeholder = "Password", minlength = "8" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "form__error" })
             </div>
             <div class="form__input-group">
-                <input id="registerConfirmPassword" name="registerConfirmPassword" type="password"
-                       class="form__input" title="Please confirm your password" required
-                       placeholder="Confirm Password" autocomplete="new-password" />
+                @Html.LabelFor(m => m.ConfirmPassword)
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form__input", placeholder = "Confirm Password" })
+                @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "form__error" })
                 <i data-lucide="lock" class="form__icon"></i>
-                <span class="form__error" id="registerConfirmPasswordError"></span>
             </div>
         </div>
         <button id="signUpBtn" type="submit" class="form__submit-btn">Register</button>
-    </form>
+    }
     <p class="form__text">or register with social platforms</p>
     <div class="form_socials">
         <a href="#" class="form__social-link"><i class="bx bxl-google"></i></a>
@@ -40,10 +40,3 @@
         <a href="#" class="form__social-link"><i class="bx bxl-linkedin"></i></a>
     </div>
 </div>
-@*<div class="toggle-box">
-    <div class="toggle-panel toggle-right">
-        <h1 class="toggle-panel__title">Welcome Back!</h1>
-        <p class="toggle-panel__text">Already have an account?</p>
-        <button class="form__submit-btn login-btn">Login</button>
-    </div>
-</div>*@

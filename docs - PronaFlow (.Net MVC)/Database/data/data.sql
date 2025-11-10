@@ -65,15 +65,6 @@ USE db_PronaFlow;
 GO
 
 -- Khai báo các biến để lưu trữ ID
-DECLARE @UserID_DavidJones BIGINT, @UserID_RichardBrown BIGINT, @UserID_CharlesTaylor BIGINT, @UserID_LindaWilliams BIGINT, @UserID_SusanMoore BIGINT;
-DECLARE @WorkspaceID_DavidJones BIGINT, @WorkspaceID_RichardBrown BIGINT, @WorkspaceID_CharlesTaylor BIGINT, @WorkspaceID_LindaWilliams BIGINT, @WorkspaceID_SusanMoore BIGINT;
-DECLARE @ProjectID_ApiDev BIGINT, @ProjectID_Marketing BIGINT, @ProjectID_Redesign BIGINT, @ProjectID_Sql BIGINT;
-DECLARE @TaskListID_Api1 BIGINT, @TaskListID_Api2 BIGINT, @TaskListID_Api3 BIGINT, @TaskListID_Api4 BIGINT;
-DECLARE @TaskListID_Mkt1 BIGINT, @TaskListID_Mkt2 BIGINT, @TaskListID_Mkt3 BIGINT, @TaskListID_Mkt4 BIGINT;
-DECLARE @TaskListID_Design1 BIGINT, @TaskListID_Design2 BIGINT, @TaskListID_Design3 BIGINT;
-DECLARE @TaskID_ApiDefine BIGINT, @TaskID_ApiDbSetup BIGINT, @TaskID_ApiAuth BIGINT, @TaskID_ApiProjectModule BIGINT, @TaskID_ApiTest BIGINT;
-DECLARE @TaskID_MktAnalyze BIGINT, @TaskID_MktDesign BIGINT, @TaskID_MktEmail BIGINT;
-DECLARE @TagID_Backend BIGINT, @TagID_Api BIGINT, @TagID_Db BIGINT, @TagID_Marketing BIGINT, @TagID_Social BIGINT, @TagID_UiUx BIGINT, @TagID_Design BIGINT;
 
 BEGIN TRANSACTION;
 
@@ -90,120 +81,120 @@ BEGIN TRY
     ('susanmoore', 'susan.moore41@pronaflow.dev', '$2a$11$jeplLITyVchMWWNSBCz6zOT64TJ5kyxm187vmR.UhmrKC4OurWx.q', 'Susan Moore', 'https://i.pravatar.cc/150?u=susanmoore', 'QA Engineer', 'dark', 'user');
 
     -- Lấy ID của các user vừa tạo
-    DECLARE @@UserID_DavidJones BIGINT;
-	SELECT @UserID_DavidJones = id FROM [dbo].[users] WHERE username = 'davidjones';
-    SELECT @UserID_RichardBrown = id FROM [dbo].[users] WHERE username = 'richardbrown';
-    SELECT @UserID_CharlesTaylor = id FROM [dbo].[users] WHERE username = 'charlestaylor';
-    SELECT @UserID_LindaWilliams = id FROM [dbo].[users] WHERE username = 'lindawilliams';
-    SELECT @UserID_SusanMoore = id FROM [dbo].[users] WHERE username = 'susanmoore';
+	SELECT id FROM [dbo].[users] WHERE username = 'davidjones'; -- 2
+    SELECT id FROM [dbo].[users] WHERE username = 'richardbrown'; -- 3
+    SELECT id FROM [dbo].[users] WHERE username = 'charlestaylor'; -- 4
+    SELECT id FROM [dbo].[users] WHERE username = 'lindawilliams'; -- 5
+    SELECT id FROM [dbo].[users] WHERE username = 'susanmoore'; -- 6
 
     -- ================================================
     -- 2. CHÈN DỮ LIỆU BẢNG WORKSPACES (THEO NGHIỆP VỤ)
     -- ================================================
     -- Tạo workspace mặc định cho mỗi user
-    INSERT INTO [dbo].[workspaces] ([owner_id], [name], [description]) VALUES
-    (@UserID_DavidJones, 'David Jones''s Workspace', 'Default workspace for David Jones.'),
-    (@UserID_RichardBrown, 'Richard Brown''s Workspace', 'Default workspace for Richard Brown.'),
-    (@UserID_CharlesTaylor, 'Charles Taylor''s Workspace', 'Default workspace for Charles Taylor.'),
-    (@UserID_LindaWilliams, 'Linda Williams''s Workspace', 'Default workspace for Linda Williams.'),
-    (@UserID_SusanMoore, 'Susan Moore''s Workspace', 'Default workspace for Susan Moore.');
-
+    /*INSERT INTO [dbo].[workspaces] ([owner_id], [name], [description]) VALUES
+    (2, 'David Jones''s Workspace', 'Default workspace for David Jones.'),
+    (3, 'Richard Brown''s Workspace', 'Default workspace for Richard Brown.'),
+    (4, 'Charles Taylor''s Workspace', 'Default workspace for Charles Taylor.'),
+    (5, 'Linda Williams''s Workspace', 'Default workspace for Linda Williams.'),
+    (6, 'Susan Moore''s Workspace', 'Default workspace for Susan Moore.');
+	*/
     -- Lấy ID của các workspace chính sẽ được sử dụng
-    SELECT @WorkspaceID_DavidJones = id FROM [dbo].[workspaces] WHERE owner_id = @UserID_DavidJones;
-    SELECT @WorkspaceID_RichardBrown = id FROM [dbo].[workspaces] WHERE owner_id = @UserID_RichardBrown;
-    SELECT @WorkspaceID_LindaWilliams = id FROM [dbo].[workspaces] WHERE owner_id = @UserID_LindaWilliams;
+    SELECT id FROM [dbo].[workspaces] WHERE owner_id = 2; -- 6
+    SELECT id FROM [dbo].[workspaces] WHERE owner_id = 3; -- 5
+    SELECT id FROM [dbo].[workspaces] WHERE owner_id = 5; -- @WorkspaceID_LindaWilliams = 3
 
     -- ================================================
     -- 3. CHÈN DỮ LIỆU BẢNG PROJECTS
     -- ================================================
     INSERT INTO [dbo].[projects] ([workspace_id], [name], [description], [cover_image_url], [status], [project_type], [start_date], [end_date]) VALUES
-    (@WorkspaceID_DavidJones, 'API Development for PronaFlow', 'Building the core RESTful APIs for the application.', 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8Y29kaW5nLGFwaXx8fHx8fDE2MjgxODY2Mzc', 'in-progress', 'team', '2023-05-01', '2023-12-20'),
-    (@WorkspaceID_RichardBrown, 'Marketing Campaign for University Event', 'Planning and executing a marketing campaign for the annual tech fair.', 'https://images.unsplash.com/photo-1557804506-669a67965ba0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8bWFya2V0aW5nLHRlYW18fHx8fHwxNjI4MTg2NzU4', 'in-review', 'team', '2023-08-15', '2023-11-10'),
-    (@WorkspaceID_LindaWilliams, 'UI/UX Redesign for E-commerce Site', 'A complete overhaul of the user interface and experience for an online store.', 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8ZGVzaWduLHVpfHx8fHx8MTYyODE4NjgxNQ', 'done', 'personal', '2023-02-01', '2023-07-31'),
-    (@WorkspaceID_DavidJones, 'Learn Advanced SQL', 'Personal project to master advanced SQL concepts and techniques.', 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8bGVhcm5pbmcsZGF0YWJhc2V8fHx8fHwxNjI4MTg2OTI0', 'not-started', 'personal', '2023-10-01', '2023-12-31');
+    (6, 'API Development for PronaFlow', 'Building the core RESTful APIs for the application.', 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8Y29kaW5nLGFwaXx8fHx8fDE2MjgxODY2Mzc', 'in-progress', 'team', '2023-05-01', '2023-12-20'),
+    (5, 'Marketing Campaign for University Event', 'Planning and executing a marketing campaign for the annual tech fair.', 'https://images.unsplash.com/photo-1557804506-669a67965ba0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8bWFya2V0aW5nLHRlYW18fHx8fHwxNjI4MTg2NzU4', 'in-review', 'team', '2023-08-15', '2023-11-10'),
+    (3, 'UI/UX Redesign for E-commerce Site', 'A complete overhaul of the user interface and experience for an online store.', 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8ZGVzaWduLHVpfHx8fHx8MTYyODE4NjgxNQ', 'done', 'personal', '2023-02-01', '2023-07-31'),
+    (6, 'Learn Advanced SQL', 'Personal project to master advanced SQL concepts and techniques.', 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8bGVhcm5pbmcsZGF0YWJhc2V8fHx8fHwxNjI4MTg2OTI0', 'not-started', 'personal', '2023-10-01', '2023-12-31');
 
     -- Lấy ID của các project vừa tạo
-    SELECT @ProjectID_ApiDev = id FROM [dbo].[projects] WHERE name = 'API Development for PronaFlow';
-    SELECT @ProjectID_Marketing = id FROM [dbo].[projects] WHERE name = 'Marketing Campaign for University Event';
-    SELECT @ProjectID_Redesign = id FROM [dbo].[projects] WHERE name = 'UI/UX Redesign for E-commerce Site';
-    SELECT @ProjectID_Sql = id FROM [dbo].[projects] WHERE name = 'Learn Advanced SQL';
+    SELECT id FROM [dbo].[projects] WHERE name = 'API Development for PronaFlow'; -- 0 0
+    SELECT id FROM [dbo].[projects] WHERE name = 'Marketing Campaign for University Event';
+    SELECT id FROM [dbo].[projects] WHERE name = 'UI/UX Redesign for E-commerce Site';
+    SELECT id FROM [dbo].[projects] WHERE name = 'Learn Advanced SQL';
 
     -- ================================================
     -- 4. CHÈN DỮ LIỆU BẢNG TASK_LISTS
     -- ================================================
     INSERT INTO [dbo].[task_lists] ([project_id], [name], [position]) VALUES
-    (@ProjectID_ApiDev, 'Phase 1: Planning & Design', 1),
-    (@ProjectID_ApiDev, 'Phase 2: Core Module Development', 2),
-    (@ProjectID_ApiDev, 'Phase 3: Integration & Testing', 3),
-    (@ProjectID_ApiDev, 'Phase 4: Deployment', 4),
-    (@ProjectID_Marketing, 'Phrase 1: Research & Strategy', 1),
-    (@ProjectID_Marketing, 'Phrase 2: Content Creation', 2),
-    (@ProjectID_Marketing, 'Phrase 3: Campaign Execution', 3),
-    (@ProjectID_Marketing, 'Phrase 4: Performance Review', 4),
-    (@ProjectID_Redesign, 'Discovery & Research', 1),
-    (@ProjectID_Redesign, 'Wireframing & Prototyping', 2),
-    (@ProjectID_Redesign, 'Visual Design & Handoff', 3);
+    (0, 'Phase 1: Planning & Design', 1),
+    (0, 'Phase 2: Core Module Development', 2),
+    (0, 'Phase 3: Integration & Testing', 3),
+    (0, 'Phase 4: Deployment', 4),
+    (1, 'Phrase 1: Research & Strategy', 1),
+    (1, 'Phrase 2: Content Creation', 2),
+    (1, 'Phrase 3: Campaign Execution', 3),
+    (1, 'Phrase 4: Performance Review', 4),
+    (2, 'Discovery & Research', 1),
+    (2, 'Wireframing & Prototyping', 2),
+    (2, 'Visual Design & Handoff', 3);
 
     -- Lấy ID của các task_list vừa tạo
-    SELECT @TaskListID_Api1 = id FROM [dbo].[task_lists] WHERE project_id = @ProjectID_ApiDev AND name = 'Phase 1: Planning & Design';
-    SELECT @TaskListID_Api2 = id FROM [dbo].[task_lists] WHERE project_id = @ProjectID_ApiDev AND name = 'Phase 2: Core Module Development';
-    SELECT @TaskListID_Api3 = id FROM [dbo].[task_lists] WHERE project_id = @ProjectID_ApiDev AND name = 'Phase 3: Integration & Testing';
-    SELECT @TaskListID_Mkt1 = id FROM [dbo].[task_lists] WHERE project_id = @ProjectID_Marketing AND name = 'Phrase 1: Research & Strategy';
-    SELECT @TaskListID_Mkt2 = id FROM [dbo].[task_lists] WHERE project_id = @ProjectID_Marketing AND name = 'Phrase 2: Content Creation';
-    SELECT @TaskListID_Mkt3 = id FROM [dbo].[task_lists] WHERE project_id = @ProjectID_Marketing AND name = 'Phrase 3: Campaign Execution';
+	SELECT id FROM [dbo].[task_lists] WHERE project_id = 0 AND name = 'Phase 1: Planning & Design';
+    SELECT id FROM [dbo].[task_lists] WHERE project_id = 0 AND name = 'Phase 2: Core Module Development';
+    SELECT id FROM [dbo].[task_lists] WHERE project_id = 0 AND name = 'Phase 3: Integration & Testing';
+    SELECT id FROM [dbo].[task_lists] WHERE project_id = 1 AND name = 'Phrase 1: Research & Strategy';
+    SELECT id FROM [dbo].[task_lists] WHERE project_id = 1 AND name = 'Phrase 2: Content Creation';
+    SELECT id FROM [dbo].[task_lists] WHERE project_id = 1 AND name = 'Phrase 3: Campaign Execution';
 
 
     -- ================================================
     -- 5. CHÈN DỮ LIỆU BẢNG TASKS
     -- ================================================
     INSERT INTO [dbo].[tasks] ([project_id], [task_list_id], [creator_id], [name], [description], [priority], [status], [start_date], [end_date]) VALUES
-    (@ProjectID_ApiDev, @TaskListID_Api1, @UserID_DavidJones, 'Define API endpoints and data models', 'Document all required endpoints using Swagger/OpenAPI specification.', 'high', 'done', '2023-05-02', '2023-05-15'),
-    (@ProjectID_ApiDev, @TaskListID_Api1, @UserID_RichardBrown, 'Setup database schema and migrations', 'Create the initial database schema based on the data models.', 'high', 'done', '2023-05-10', '2023-05-20'),
-    (@ProjectID_ApiDev, @TaskListID_Api2, @UserID_DavidJones, 'Implement User Authentication Service', 'Develop JWT-based authentication and authorization.', 'high', 'in-progress', '2023-05-21', '2023-06-15'),
-    (@ProjectID_ApiDev, @TaskListID_Api2, @UserID_CharlesTaylor, 'Develop Project Management Module', 'CRUD operations for projects, task lists, and tasks.', 'normal', 'not-started', '2023-06-16', '2023-07-31'),
-    (@ProjectID_ApiDev, @TaskListID_Api3, @UserID_SusanMoore, 'Write unit and integration tests', 'Ensure code coverage of at least 80% for all services.', 'normal', 'not-started', '2023-08-01', '2023-09-30'),
-    (@ProjectID_Marketing, @TaskListID_Mkt1, @UserID_RichardBrown, 'Analyze target audience', 'Create detailed personas for university students.', 'high', 'done', '2023-08-16', '2023-08-25'),
-    (@ProjectID_Marketing, @TaskListID_Mkt2, @UserID_LindaWilliams, 'Design social media visuals', 'Create engaging posts for Instagram, Facebook, and TikTok.', 'normal', 'in-progress', '2023-08-26', '2023-09-15'),
-    (@ProjectID_Marketing, @TaskListID_Mkt3, @UserID_RichardBrown, 'Launch email marketing campaign', 'Send out a series of promotional emails to the student body.', 'high', 'not-started', '2023-09-20', '2023-10-10');
+    (0, 0, 2, 'Define API endpoints and data models', 'Document all required endpoints using Swagger/OpenAPI specification.', 'high', 'done', '2023-05-02', '2023-05-15'),
+    (0, 0, 3, 'Setup database schema and migrations', 'Create the initial database schema based on the data models.', 'high', 'done', '2023-05-10', '2023-05-20'),
+    (0, 1, 2, 'Implement User Authentication Service', 'Develop JWT-based authentication and authorization.', 'high', 'in-progress', '2023-05-21', '2023-06-15'),
+    (0, 1, 4, 'Develop Project Management Module', 'CRUD operations for projects, task lists, and tasks.', 'normal', 'not-started', '2023-06-16', '2023-07-31'),
+    (0, 3, 6, 'Write unit and integration tests', 'Ensure code coverage of at least 80% for all services.', 'normal', 'not-started', '2023-08-01', '2023-09-30'),
+    (1, 4, 3, 'Analyze target audience', 'Create detailed personas for university students.', 'high', 'done', '2023-08-16', '2023-08-25'),
+    (1, 5, 5, 'Design social media visuals', 'Create engaging posts for Instagram, Facebook, and TikTok.', 'normal', 'in-progress', '2023-08-26', '2023-09-15'),
+    (1, 6, 3, 'Launch email marketing campaign', 'Send out a series of promotional emails to the student body.', 'high', 'not-started', '2023-09-20', '2023-10-10');
 
     -- Lấy ID của các task vừa tạo
-    SELECT @TaskID_ApiDefine = id FROM [dbo].[tasks] WHERE name = 'Define API endpoints and data models';
-    SELECT @TaskID_ApiAuth = id FROM [dbo].[tasks] WHERE name = 'Implement User Authentication Service';
-    SELECT @TaskID_ApiProjectModule = id FROM [dbo].[tasks] WHERE name = 'Develop Project Management Module';
-    SELECT @TaskID_MktDesign = id FROM [dbo].[tasks] WHERE name = 'Design social media visuals';
+    
+	SELECT id FROM [dbo].[tasks] WHERE name = 'Define API endpoints and data models';
+    SELECT id FROM [dbo].[tasks] WHERE name = 'Implement User Authentication Service';
+    SELECT id FROM [dbo].[tasks] WHERE name = 'Develop Project Management Module';
+    SELECT id FROM [dbo].[tasks] WHERE name = 'Design social media visuals';
 
 
     -- ================================================
     -- 6. CHÈN DỮ LIỆU BẢNG SUBTASKS
     -- ================================================
     INSERT INTO [dbo].[subtasks] ([task_id], [name], [is_completed], [position]) VALUES
-    (@TaskID_ApiDefine, 'Draft initial OpenAPI specification', 1, 1),
-    (@TaskID_ApiDefine, 'Review spec with frontend team', 1, 2),
-    (@TaskID_ApiDefine, 'Finalize v1.0 of the API documentation', 0, 3),
-    (@TaskID_ApiAuth, 'Setup Identity Framework', 1, 1),
-    (@TaskID_ApiAuth, 'Implement token generation endpoint', 0, 2),
-    (@TaskID_ApiAuth, 'Implement role-based access control', 0, 3);
+    (0, 'Draft initial OpenAPI specification', 1, 1),
+    (0, 'Review spec with frontend team', 1, 2),
+    (0, 'Finalize v1.0 of the API documentation', 0, 3),
+    (2, 'Setup Identity Framework', 1, 1),
+    (2, 'Implement token generation endpoint', 0, 2),
+    (2, 'Implement role-based access control', 0, 3);
 
     -- ================================================
     -- 7. CHÈN DỮ LIỆU BẢNG TAGS
     -- ================================================
     INSERT INTO [dbo].[tags] ([workspace_id], [name], [color_hex]) VALUES
-    (@WorkspaceID_DavidJones, 'Backend', '#3498DB'),
-    (@WorkspaceID_DavidJones, 'API', '#9B59B6'),
-    (@WorkspaceID_DavidJones, 'Database', '#F1C40F'),
-    (@WorkspaceID_RichardBrown, 'Marketing', '#2ECC71'),
-    (@WorkspaceID_RichardBrown, 'Social Media', '#E74C3C'),
-    (@WorkspaceID_LindaWilliams, 'UI/UX', '#1ABC9C'),
-    (@WorkspaceID_LindaWilliams, 'Design', '#E67E22');
+    (6, 'Backend', '#3498DB'),
+    (6, 'API', '#9B59B6'),
+    (6, 'Database', '#F1C40F'),
+    (5, 'Marketing', '#2ECC71'),
+    (5, 'Social Media', '#E74C3C'),
+    (3, 'UI/UX', '#1ABC9C'),
+    (3, 'Design', '#E67E22');
 
     -- Lấy ID của các tag vừa tạo
-    SELECT @TagID_Backend = id FROM [dbo].[tags] WHERE name = 'Backend';
-    SELECT @TagID_Api = id FROM [dbo].[tags] WHERE name = 'API';
-    SELECT @TagID_Db = id FROM [dbo].[tags] WHERE name = 'Database';
-    SELECT @TagID_Marketing = id FROM [dbo].[tags] WHERE name = 'Marketing';
-    SELECT @TagID_Social = id FROM [dbo].[tags] WHERE name = 'Social Media';
-    SELECT @TagID_UiUx = id FROM [dbo].[tags] WHERE name = 'UI/UX';
-    SELECT @TagID_Design = id FROM [dbo].[tags] WHERE name = 'Design';
+    SELECT id FROM [dbo].[tags] WHERE name = 'Backend';
+    SELECT id FROM [dbo].[tags] WHERE name = 'API';
+    SELECT id FROM [dbo].[tags] WHERE name = 'Database';
+    SELECT id FROM [dbo].[tags] WHERE name = 'Marketing';
+    SELECT id FROM [dbo].[tags] WHERE name = 'Social Media';
+    SELECT id FROM [dbo].[tags] WHERE name = 'UI/UX';
+    SELECT id FROM [dbo].[tags] WHERE name = 'Design';
 
 
     -- ================================================
@@ -211,24 +202,24 @@ BEGIN TRY
     -- ================================================
     -- Bảng project_members
     INSERT INTO [dbo].[project_members] ([project_id], [user_id], [role]) VALUES
-    (@ProjectID_ApiDev, @UserID_DavidJones, 'admin'),
-    (@ProjectID_ApiDev, @UserID_RichardBrown, 'member'),
-    (@ProjectID_ApiDev, @UserID_CharlesTaylor, 'member'),
-    (@ProjectID_ApiDev, @UserID_SusanMoore, 'member'),
-    (@ProjectID_Marketing, @UserID_RichardBrown, 'admin'),
-    (@ProjectID_Marketing, @UserID_LindaWilliams, 'member'),
-    (@ProjectID_Redesign, @UserID_LindaWilliams, 'admin'),
-    (@ProjectID_Sql, @UserID_DavidJones, 'admin');
+    (0, 2, 'admin'),
+    (0, 3, 'member'),
+    (0, 4, 'member'),
+    (0, 6, 'member'),
+    (1, 3, 'admin'),
+    (1, 5, 'member'),
+    (2, 5, 'admin'),
+    (3, 2, 'admin');
 
     -- Bảng project_tags
     INSERT INTO [dbo].[project_tags] ([project_id], [tag_id]) VALUES
-    (@ProjectID_ApiDev, @TagID_Backend),
-    (@ProjectID_ApiDev, @TagID_Api),
-    (@ProjectID_ApiDev, @TagID_Db),
-    (@ProjectID_Marketing, @TagID_Marketing),
-    (@ProjectID_Marketing, @TagID_Social),
-    (@ProjectID_Redesign, @TagID_UiUx),
-    (@ProjectID_Redesign, @TagID_Design);
+    (0, 0),
+    (0, 1),
+    (0, 2),
+    (1, 3),
+    (1, 4),
+    (2, 5),
+    (2, 6);
 
     -- Bảng task_assignees
     INSERT INTO [dbo].[task_assignees] ([task_id], [user_id])
@@ -251,10 +242,10 @@ BEGIN TRY
 
     -- Bảng comments
     INSERT INTO [dbo].[comments] ([user_id], [content], [commentable_id], [commentable_type]) VALUES
-    (@UserID_RichardBrown, 'Great progress on the API spec! I have a few questions about the pagination parameters.', @TaskID_ApiDefine, 'task'),
-    (@UserID_CharlesTaylor, 'I will start working on the Project module next week. Please assign the relevant tickets to me.', @TaskID_ApiProjectModule, 'task'),
-    (@UserID_LindaWilliams, 'Can we get a review of the latest social media designs by Friday?', @TaskID_MktDesign, 'task'),
-    (@UserID_DavidJones, 'This campaign is looking promising. Let''s ensure we track the analytics closely.', @ProjectID_Marketing, 'project');
+    (3, 'Great progress on the API spec! I have a few questions about the pagination parameters.', 0, 'task'),
+    (4, 'I will start working on the Project module next week. Please assign the relevant tickets to me.', 3, 'task'),
+    (5, 'Can we get a review of the latest social media designs by Friday?', 6, 'task'),
+    (2, 'This campaign is looking promising. Let''s ensure we track the analytics closely.', 1, 'project');
 
     COMMIT TRANSACTION;
     PRINT 'Dữ liệu mẫu đã được chèn thành công!';
