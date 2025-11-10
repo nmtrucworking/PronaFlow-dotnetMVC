@@ -1,0 +1,37 @@
+@{
+    ViewBag.Title = "Create Project | PronaFlow";
+}
+<main id="main" class="main">
+    <header class="page-header">
+        <h2 class="page__title">New Project in @ViewBag.WorkspaceName</h2>
+    </header>
+    @using (Html.BeginForm("Create", "Project", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("workspaceId", (int)ViewBag.WorkspaceId)
+
+        <div class="form-box">
+            <label class="form-label">Name</label>
+            <input type="text" name="name" class="form-input" required />
+        </div>
+
+        <div class="form-box">
+            <label class="form-label">Description</label>
+            <textarea name="description" class="form-input"></textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-box">
+                <label class="form-label">Start date</label>
+                <input type="date" name="startDate" class="form-input" />
+            </div>
+            <div class="form-box">
+                <label class="form-label">End date</label>
+                <input type="date" name="endDate" class="form-input" />
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn--primary">Create</button>
+        <a class="btn btn--secondary" href="@Url.Action("Index","Project", new { workspaceId = (int)ViewBag.WorkspaceId })">Cancel</a>
+    }
+</main>

@@ -1,0 +1,49 @@
+@model PronaFlow_MVC.Models.ViewModels.ProjectDetailsViewModel
+@{
+    ViewBag.Title = "Edit Project | PronaFlow";
+}
+<main id="main" class="main">
+    <header class="page-header">
+        <h2 class="page__title">Edit: @Model.Name</h2>
+    </header>
+    @using (Html.BeginForm("Edit", "Project", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("id", Model.Id)
+
+        <div class="form-box">
+            <label class="form-label">Name</label>
+            <input type="text" name="name" class="form-input" value="@Model.Name" required />
+        </div>
+
+        <div class="form-box">
+            <label class="form-label">Description</label>
+            <textarea name="description" class="form-input">@Model.Description</textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-box">
+                <label class="form-label">Start date</label>
+                <input type="date" name="startDate" class="form-input" value="@(Model.StartDate?.ToString("yyyy-MM-dd"))" />
+            </div>
+            <div class="form-box">
+                <label class="form-label">End date</label>
+                <input type="date" name="endDate" class="form-input" value="@(Model.EndDate?.ToString("yyyy-MM-dd"))" />
+            </div>
+        </div>
+
+        <div class="form-box">
+            <label class="form-label">Status</label>
+            <select name="status" class="form-input">
+                <option value="temp" @(Model.Status == "temp" ? "selected" : "")>On Hold</option>
+                <option value="not-started" @(Model.Status == "not-started" ? "selected" : "")>Not Started</option>
+                <option value="in-progress" @(Model.Status == "in-progress" ? "selected" : "")>In Progress</option>
+                <option value="in-review" @(Model.Status == "in-review" ? "selected" : "")>In Review</option>
+                <option value="done" @(Model.Status == "done" ? "selected" : "")>Completed</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn--primary">Save</button>
+        <a class="btn btn--secondary" href="@Url.Action("Details","Project", new { id = Model.Id })">Cancel</a>
+    }
+</main>

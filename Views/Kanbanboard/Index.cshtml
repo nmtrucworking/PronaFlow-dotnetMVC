@@ -228,3 +228,8 @@
         });
     </script>
 }
+
+@if (ViewBag.OpenProjectId != null)
+{
+    @Html.Action("DetailsPartial", "Project", new { id = (int)ViewBag.OpenProjectId })
+}

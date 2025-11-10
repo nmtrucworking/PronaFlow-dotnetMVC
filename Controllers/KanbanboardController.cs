@@ -21,7 +21,7 @@ namespace PronaFlow_MVC.Controllers
         /// </summary>
         /// <returns>View Index.cshtml</returns>
         [HttpGet]
-        public ActionResult Index(int? workspaceId)
+        public ActionResult Index(int? workspaceId, int? openProjectId)
         {
             // Lấy user hiện tại theo email
             var email = User?.Identity?.Name;
@@ -52,6 +52,8 @@ namespace PronaFlow_MVC.Controllers
             }
 
             var viewModel = GetKanbanBoardData((int)targetWorkspaceId);
+            ViewBag.OpenProjectId = openProjectId;
+            ViewBag.CurrentWorkspaceId = (int)targetWorkspaceId;
             return View(viewModel);
         }
 

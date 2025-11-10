@@ -1,0 +1,19 @@
+@model IEnumerable<PronaFlow_MVC.Models.ViewModels.TaskItemViewModel>
+
+<div id="task-list-container" class="list-cards no-scrollbar">
+    @if (Model != null && Model.Any())
+    {
+        foreach (var task in Model)
+        {
+            @Html.Partial("~/Views/Task/_TaskCard.cshtml", task)
+        }
+    }
+    else
+    {
+        <div class="empty-state-container">
+            <i data-lucide="check-square" class="empty-state__icon"></i>
+            <h3 class="empty-state__text">All tasks completed!</h3>
+            <p class="empty-state__subtext">Add a new task to get started.</p>
+        </div>
+    }
+</div>

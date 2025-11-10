@@ -22,36 +22,37 @@
             <div class="project__cover"></div>
 
             <!-- ========== HEADER ========== -->
+            @model PronaFlow_MVC.Models.ViewModels.ProjectDetailsViewModel
             <div class="modal__header">
                 <div class="inner__header">
                     <div class="modal-header__top">
-                        <label class="custom-checkbox">
-                            <input type="checkbox" name="project-status-checkbox" id="project-status-checkbox">
-                            <span class="custom-checkbox__checkmark round"></span>
-                        </label>
-                        <div id="project-title-container" class="project-detail__title inline-editable"
-                             data-placeholder="Project Title">
-                            <div class="inline-editable__display" id="project-title-display">Dashboard UI Restructure</div>
-                            <div class="inline-editable__edit">
-                                <input type="text"
-                                       class="inline-edit-input"
-                                       value="Dashboard UI Restructure"
-                                       id="project-title-input">
+                        @using (Html.BeginForm("UpdateNameDescription", "Project", FormMethod.Post, new { @class = "inline-edit-form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("id", Model.Id)
+                            <label class="custom-checkbox">
+                                <input type="checkbox" name="project-status-checkbox" id="project-status-checkbox" @(Model.Status == "done" ? "checked" : "") disabled>
+                                <span class="custom-checkbox__checkmark round"></span>
+                            </label>
+                            <div id="project-title-container" class="project-detail__title inline-editable" data-placeholder="Project Title">
+                                <div class="inline-editable__display" id="project-title-display">@Model.Name</div>
+                                <div class="inline-editable__edit">
+                                    <input type="text" class="inline-edit-input" name="name" value="@Model.Name" id="project-title-input" required>
+                                </div>
                             </div>
-                        </div>
+                            <button type="submit" class="btn btn--primary btn--small" title="Save name">Save</button>
+                        }
                     </div>
                     <div class="modal-header__bot">
                         <span>Project status: </span>
                         <!-- Custom Select Wrapper -->
                         <div class="custom-select-wrapper">
-                            <select id="prj-mdl-status" class="project-status-selecter">
-                                <option value="temp" style="background-color: var(--color-status-temp);">
-                                    On Hold
-                                </option>
-                                <option value="not-started">Not Started</option>
-                                <option value="in-progress" selected>In Progress</option>
-                                <option value="in-review">In Review</option>
-                                <option value="done">Completed</option>
+                            <select id="prj-mdl-status" name="status" class="project-status-selecter">
+                                <option value="temp" @(Model.Status == "temp" ? "selected" : "")>On Hold</option>
+                                <option value="not-started" @(Model.Status == "not-started" ? "selected" : "")>Not Started</option>
+                                <option value="in-progress" @(Model.Status == "in-progress" ? "selected" : "")>In Progress</option>
+                                <option value="in-review" @(Model.Status == "in-review" ? "selected" : "")>In Review</option>
+                                <option value="done" @(Model.Status == "done" ? "selected" : "")>Completed</option>
                             </select>
                             <i data-lucide="chevron-down" class="custom-select-arrow"></i>
                         </div>
@@ -180,11 +181,10 @@
                             <div class="attribute__name">Deadline</div>
                             <div class="attribute__content">
                                 <div class="deadline" id="project_deadline">
-                                    <span class="start-date due-date">08/01/2025</span>
+                                    <span class="start-date due-date">@((Model.StartDate?.ToShortDateString()) ?? "-")</span>
                                     <span>-</span>
-                                    <span class="end-date due-date">08/31/2025</span>
+                                    <span class="end-date due-date">@((Model.EndDate?.ToShortDateString()) ?? "-")</span>
                                 </div>
-
                             </div>
                         </div>
                         <!-- Popover: Set Project Deadline -->
@@ -198,15 +198,15 @@
                             <div class="popover__body">
                                 <div class="form-box">
                                     <label for="project-start-date" class="form-label">Start date</label>
-                                    <input type="date" id="project-start-date" class="form-input form-input--small" />
+                                    <input type="date" id="project-start-date" class="form-input" value="@(Model.StartDate?.ToString("yyyy-MM-dd"))" />
                                 </div>
-                                <div class="form-box" style="margin-top: 10px;">
+                                <div class="form-box">
                                     <label for="project-end-date" class="form-label">End date</label>
-                                    <input type="date" id="project-end-date" class="form-input form-input--small" />
+                                    <input type="date" id="project-end-date" class="form-input" value="@(Model.EndDate?.ToString("yyyy-MM-dd"))" />
                                 </div>
-                                <div class="btn-group" style="margin-top: 12px; display: flex; gap: 8px;">
-                                    <button class="btn btn--primary btn-save-deadline" type="button">Save</button>
-                                    <button class="btn btn-cancel-deadline" type="button">Cancel</button>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn--primary btn--small">Save</button>
+                                    <button type="button" class="btn btn--secondary btn--small" popovertarget="project-deadline-popover" popovertargetaction="hide">Cancel</button>
                                 </div>
                             </div>
                         </div>

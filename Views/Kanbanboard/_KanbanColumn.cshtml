@@ -5,8 +5,20 @@
     var projects = (IEnumerable<PronaFlow_MVC.Models.ViewModels.KanbanProjectCardViewModel>)Model.Projects;
     var popoverId = $"kanban-col-options-{uiStatus}";
 }
-<div class="kanban__col hide-scrollbar" data-status="@uiStatus">
+@* Model có Title, UiStatus, Projects *@
+<div class="kanban-column">
     <div class="kanban-column__header">
+        <div class="column__title">@Model.Title</div>
+        <div class="column__actions">
+            @using (Html.BeginForm("CreateMinimal", "Project", FormMethod.Post, new { @class = "inline-add-project-form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("workspaceId", (int)ViewBag.CurrentWorkspaceId)
+                @Html.Hidden("status", (string)Model.UiStatus)
+                <input type="text" name="name" class="form-input form-input--small" placeholder="Project name" required />
+                <button type="submit" class="btn btn--primary btn--small">Add</button>
+            }
+        </div>
         <button class="btn icon-btn add-project-btn">
             <i data-lucide="plus" class="btn-icon"></i>
         </button>

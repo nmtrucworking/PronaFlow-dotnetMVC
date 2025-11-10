@@ -1,0 +1,30 @@
+@model IEnumerable<PronaFlow_MVC.Models.ViewModels.KanbanProjectCardViewModel>
+@{
+    ViewBag.Title = "Projects | PronaFlow";
+}
+<main id="main" class="main">
+    <header class="page-header">
+        <h2 class="page__title">Projects in @ViewBag.WorkspaceName</h2>
+        <div>
+            <a class="btn btn--primary" href="@Url.Action("Create", "Project", new { workspaceId = (int)ViewBag.WorkspaceId })">New Project</a>
+        </div>
+    </header>
+
+    <div class="list-cards no-scrollbar">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var prj in Model)
+            {
+                @Html.Partial("~/Views/Kanbanboard/_ProjectCard.cshtml", prj)
+            }
+        }
+        else
+        {
+            <div class="empty-state-container">
+                <i data-lucide="folder-open"></i>
+                <h3>No projects in this workspace</h3>
+                <p>Create your first project to get started.</p>
+            </div>
+        }
+    </div>
+</main>

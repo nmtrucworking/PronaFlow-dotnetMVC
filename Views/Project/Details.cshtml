@@ -1,0 +1,79 @@
+@model PronaFlow_MVC.Models.ViewModels.ProjectDetailsViewModel
+@{
+    ViewBag.Title = "Project Details | PronaFlow";
+}
+<main id="main" class="main">
+    <header class="page-header">
+        <div class="page__title">@Model.Name</div>
+        <div class="toolbar-actions">
+            <a class="btn btn--secondary" href="@Url.Action("Index", "Project", new { workspaceId = Model.WorkspaceId })">Back</a>
+            <a class="btn btn--primary" href="@Url.Action("Edit", "Project", new { id = Model.Id })">Edit</a>
+        </div>
+    </header>
+
+    <section class="glass-card">
+        <div class="list-row" style="gap:16px;">
+            <div>
+                <div class="label">Status</div>
+                <div>@Model.Status</div>
+            </div>
+            <div>
+                <div class="label">Start date</div>
+                <div>@(Model.StartDate?.ToShortDateString() ?? "-")</div>
+            </div>
+            <div>
+                <div class="label">End date</div>
+                <div>@(Model.EndDate?.ToShortDateString() ?? "-")</div>
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            <div class="divider"></div>
+            <p>@Model.Description</p>
+        }
+        <div class="divider"></div>
+
+        <div class="list-row">
+            <div>
+                <div class="label">Tags</div>
+                <div class="list-row" style="gap:8px;">
+                    @if (Model.Tags != null && Model.Tags.Any())
+                    {
+                        foreach (var tag in Model.Tags)
+                        {
+                            <span class="tag-card" style="background-color:@tag.ColorHex">@tag.Name</span>
+                        }
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </div>
+            </div>
+            <div>
+                <div class="label">Members</div>
+                <div class="list-row" style="gap:8px;">
+                    @if (Model.Members != null && Model.Members.Any())
+                    {
+                        foreach (var m in Model.Members)
+                        {
+                            var avatar = string.IsNullOrWhiteSpace(m.AvatarUrl) ? Url.Content("~/assets/images/default-avatar.png") : Url.Content(m.AvatarUrl);
+                            <img src="@avatar" class="user__avt" style="width:24px;height:24px;border-radius:50%;" />
+                        }
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="glass-card" style="margin-top:16px;">
+        <header class="page-header">
+            <h3 class="page__title">Tasks</h3>
+        </header>
+        @Html.Partial("~/Views/Project/_TaskList.cshtml", Model.Tasks)
+    </section>
+</main>
