@@ -419,11 +419,6 @@ namespace PronaFlow_MVC.Controllers
                 return HttpNotFound("Project thuộc workspace bạn không sở hữu.");
             }
 
-            projects project;
-            users currentUser;
-            var guard = RequireProjectOwner(id, out project, out currentUser);
-            if (guard != null) return guard;
-
             var vm = new ProjectDetailsViewModel
             {
                 Id = (int)project.id,
@@ -475,16 +470,11 @@ namespace PronaFlow_MVC.Controllers
             var email = User?.Identity?.Name;
             var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
             if (currentUser == null) return RedirectToAction("Login", "Account");
-
+        
             var project = db.projects.SingleOrDefault(p => p.id == id && !p.is_deleted);
             if (project == null) return HttpNotFound("Project không tồn tại.");
             if (!db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id))
                 return HttpNotFound("Bạn không có quyền cập nhật project này.");
-
-            projects project;
-            users currentUser;
-            var guard = RequireProjectOwner(id, out project, out currentUser);
-            if (guard != null) return guard;
         
             if (string.IsNullOrWhiteSpace(name))
             {

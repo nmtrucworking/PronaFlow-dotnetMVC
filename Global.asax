@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="PronaFlow_MVC.MvcApplication" Language="C#" %>
+﻿<%@ Application CodeBehind="Global.asax.cs" Inherits="PronaFlow_MVC.MvcApplication" Language="C#" %>
