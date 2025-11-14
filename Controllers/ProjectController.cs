@@ -3,47 +3,117 @@ using PronaFlow_MVC.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.SessionState;
 
 namespace PronaFlow_MVC.Controllers
 {
     public class ProjectController : Controller
     {
-        private readonly PronaFlow_DBContext db = new PronaFlow_DBContext();
-
-        // Helpers cho current user và kiểm tra quyền sở hữu
-        private users GetCurrentUser()
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly string[] AllowedStatus = new[] { "temp", "not-started", "in-progress", "in-review", "done" };
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        private static readonly Dictionary<string, string> StatusDisplayName = new Dictionary<string, string>
         {
-            var email = User?.Identity?.Name;
-            return db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
+            { "temp", "Temp" },
+            { "not-started", "Not Started" },
+            { "in-progress", "In Progress" },
+            { "in-review", "In Review" },
+            { "done", "Done" }
+        };
+        private static readonly string[] RoleMember = { "member", "admin" }; // indexing: 0 - member, 1 - admin
+
+        /// <summary>
+        /// Normalize status input to match database values
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        private static string NormalizeStatusForDb(string status)
+        {
+            if (string.IsNullOrWhiteSpace(status)) return "not-started";
+            var s = status.Trim().ToLower();
+            switch (s)
+            {
+                case "temp":
+                case "on-hold":
+                    return "temp";
+                case "not-started":
+                case "not_started":
+                    return "not-started";
+                case "in-progress":
+                case "in_progress":
+                    return "in-progress";
+                case "in-review":
+                case "in_review":
+                    return "in-review";
+                case "done":
+                case "completed":
+                    return "done";
+                default:
+                    return "not-started";
+            }
         }
 
-        private ActionResult RequireCurrentUser(out users currentUser)
+        // Helpers kiểm tra và xác thực dùng chung
+        private ActionResult AuthorizeUser(out users currentUser, bool asPartial = false)
         {
-            currentUser = GetCurrentUser();
+            currentUser = null;
+            var email = User?.Identity?.Name;
+            if (string.IsNullOrEmpty(email))
+            {
+                return asPartial ? new HttpStatusCodeResult(401) : RedirectToAction("Login", "Account");
+            }
+        
+            currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
             if (currentUser == null)
             {
-                return RedirectToAction("Login", "Account");
+                return asPartial ? new HttpStatusCodeResult(401) : RedirectToAction("Login", "Account");
             }
             return null;
         }
 
-        private bool OwnsWorkspace(long workspaceId, users currentUser)
+        private ActionResult AuthorizeForWorkspace(long workspaceId, out users currentUser, bool asPartial = false)
         {
-            return db.workspaces.Any(w => w.id == workspaceId && w.owner_id == currentUser.id);
+            currentUser = null;
+            var userResult = AuthorizeUser(out currentUser, asPartial);
+            if (userResult != null) return userResult;
+        
+            var ownsWorkspace = db.workspaces.Any(w => w.id == workspaceId && w.owner_id == currentUser.id);
+            if (!ownsWorkspace)
+            {
+                return HttpNotFound("Workspace không thuộc quyền của bạn.");
+            }
+        
+            return null;
         }
 
-        private ActionResult RequireProjectOwner(int projectId, out projects project, out users currentUser)
+        private ActionResult AuthorizeForProject(int projectId, out users currentUser, out projects project, bool asPartial = false)
         {
             project = null;
-            var authResult = RequireCurrentUser(out currentUser);
-            if (authResult != null) return authResult;
-
+            currentUser = null;
+        
+            var userResult = AuthorizeUser(out currentUser, asPartial);
+            if (userResult != null) return userResult;
+        
             project = db.projects.SingleOrDefault(p => p.id == projectId && !p.is_deleted);
-            if (project == null) return HttpNotFound("Project không tồn tại.");
-            if (!OwnsWorkspace(project.workspace_id, currentUser)) return HttpNotFound("Project thuộc workspace bạn không sở hữu.");
-
+            if (project == null)
+            {
+                return HttpNotFound("Project không tồn tại.");
+            }
+        
+            var ownsWorkspace = db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id);
+            if (!ownsWorkspace)
+            {
+                return HttpNotFound("Bạn không có quyền cập nhật project này.");
+            }
+        
             return null;
         }
 
@@ -105,319 +175,17 @@ namespace PronaFlow_MVC.Controllers
             return View(projects);
         }
 
-        public ActionResult Details(int id)
-        {
-            var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
 
-            var project = db.projects.SingleOrDefault(p => p.id == id && !p.is_deleted);
-            if (project == null)
-            {
-                return HttpNotFound("Project không tồn tại.");
-            }
-
-            var ownsWorkspace = db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id);
-            if (!ownsWorkspace)
-            {
-                return HttpNotFound("Project thuộc workspace bạn không sở hữu.");
-            }
-
-            var vm = new ProjectDetailsViewModel
-            {
-                Id = (int)project.id,
-                WorkspaceId = (int)project.workspace_id,
-                Name = project.name,
-                Description = project.description,
-                CoverImageUrl = project.cover_image_url,
-                Status = project.status,
-                StartDate = project.start_date,
-                EndDate = project.end_date,
-                Tags = project.tags.Select(t => new ProjectTagViewModel
-                {
-                    Id = (int)t.id,
-                    Name = t.name,
-                    ColorHex = t.color_hex
-                }).ToList(),
-                Members = project.project_members.Select(m => new ProjectMemberViewModel
-                {
-                    UserId = (int)m.user_id,
-                    AvatarUrl = m.users.avatar_url
-                }).ToList(),
-                Tasks = project.tasks
-                    .Where(t => !t.is_deleted)
-                    .Select(t => new TaskItemViewModel
-                    {
-                        Id = t.id,
-                        Name = t.name,
-                        Status = t.status,
-                        Priority = t.priority,
-                        DueDate = t.end_date,
-                        ProjectName = project.name,
-                        TaskListName = t.task_lists != null ? t.task_lists.name : null
-                    })
-                    .ToList()
-            };
-
-            ViewBag.WorkspaceName = db.workspaces.Where(w => w.id == project.workspace_id).Select(w => w.name).FirstOrDefault();
-            return View(vm);
-        }
-
-        public ActionResult Create(int? workspaceId)
-        {
-            var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            long currentWorkspaceId = workspaceId.HasValue
-                ? (long)workspaceId.Value
-                : db.workspaces.Where(w => w.owner_id == currentUser.id).Select(w => w.id).FirstOrDefault();
-
-            if (currentWorkspaceId == 0 || !db.workspaces.Any(w => w.id == currentWorkspaceId && w.owner_id == currentUser.id))
-            {
-                return HttpNotFound("Workspace không hợp lệ.");
-            }
-
-            ViewBag.WorkspaceId = currentWorkspaceId;
-            ViewBag.WorkspaceName = db.workspaces.Where(w => w.id == currentWorkspaceId).Select(w => w.name).FirstOrDefault();
-            return View();
-        }
-
-        public ActionResult Edit(int id)
-        {
-            var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var project = db.projects.SingleOrDefault(p => p.id == id && !p.is_deleted);
-            if (project == null)
-            {
-                return HttpNotFound("Project không tồn tại.");
-            }
-
-            if (!db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id))
-            {
-                return HttpNotFound("Bạn không có quyền chỉnh sửa project này.");
-            }
-
-            var vm = new ProjectDetailsViewModel
-            {
-                Id = (int)project.id,
-                WorkspaceId = (int)project.workspace_id,
-                Name = project.name,
-                Description = project.description,
-                CoverImageUrl = project.cover_image_url,
-                Status = project.status,
-                StartDate = project.start_date,
-                EndDate = project.end_date
-            };
-
-            return View(vm);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, string name, string description, string status, DateTime? startDate, DateTime? endDate)
-        {
-            var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var project = db.projects.SingleOrDefault(p => p.id == id && !p.is_deleted);
-            if (project == null)
-            {
-                return HttpNotFound("Project không tồn tại.");
-            }
-
-            if (!db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id))
-            {
-                return HttpNotFound("Bạn không có quyền chỉnh sửa project này.");
-            }
-
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                ModelState.AddModelError("name", "Tên project là bắt buộc.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                var vm = new ProjectDetailsViewModel
-                {
-                    Id = (int)project.id,
-                    WorkspaceId = (int)project.workspace_id,
-                    Name = name,
-                    Description = description,
-                    Status = status,
-                    StartDate = startDate,
-                    EndDate = endDate
-                };
-                return View(vm);
-            }
-
-            project.name = name;
-            project.description = description;
-            project.status = NormalizeStatusForDb(status);
-            project.start_date = startDate;
-            project.end_date = endDate;
-            project.updated_at = DateTime.Now;
-
-            db.SaveChanges();
-
-            return RedirectToAction("Details", new { id = project.id });
-        }
-
-        [HttpGet]
-        public ActionResult GetTasks(int projectId)
-        {
-            var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null)
-            {
-                return new HttpStatusCodeResult(401);
-            }
-
-            var project = db.projects.SingleOrDefault(p => p.id == projectId && !p.is_deleted);
-            if (project == null || !db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id))
-            {
-                return HttpNotFound();
-            }
-
-            var tasks = project.tasks
-                .Where(t => !t.is_deleted)
-                .Select(t => new TaskItemViewModel
-                {
-                    Id = t.id,
-                    Name = t.name,
-                    Status = t.status,
-                    Priority = t.priority,
-                    DueDate = t.end_date,
-                    ProjectName = project.name,
-                    TaskListName = t.task_lists != null ? t.task_lists.name : null
-                })
-                .ToList();
-
-            return PartialView("~/Views/Project/_TaskList.cshtml", tasks);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateMinimal(int workspaceId, string name, string status)
-        {
-            var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                ModelState.AddModelError("name", "Tên project là bắt buộc.");
-            }
-
-            var ownsWorkspace = db.workspaces.Any(w => w.id == workspaceId && w.owner_id == currentUser.id);
-            if (!ownsWorkspace)
-            {
-                return HttpNotFound("Workspace không thuộc quyền của bạn.");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return RedirectToAction("Index", "Kanbanboard", new { workspaceId });
-            }
-
-            var now = DateTime.Now;
-            var normalizedStatus = NormalizeStatusForDb(status);
-            var project = new projects
-            {
-                workspace_id = workspaceId,
-                name = name,
-                description = null,
-                cover_image_url = null,
-                status = normalizedStatus,
-                project_type = "personal",
-                start_date = null,
-                end_date = null,
-                is_archived = false,
-                is_deleted = false,
-                created_at = now,
-                updated_at = now
-            };
-
-            db.projects.Add(project);
-            db.SaveChanges();
-
-            // Gán người tạo làm owner của project
-            db.project_members.Add(new project_members
-            {
-                project_id = project.id,
-                user_id = currentUser.id,
-                role = "admin"
-            });
-            db.SaveChanges();
-
-            return RedirectToAction("Index", "Kanbanboard", new { workspaceId, openProjectId = project.id });
-        }
-
-        private static string NormalizeStatusForDb(string status)
-        {
-            if (string.IsNullOrWhiteSpace(status)) return "not-started";
-            var s = status.Trim().ToLower();
-            switch (s)
-            {
-                case "temp":
-                case "on-hold":
-                    return "temp";
-                case "not-started":
-                case "not_started":
-                    return "not-started";
-                case "in-progress":
-                case "in_progress":
-                    return "in-progress";
-                case "in-review":
-                case "in_review":
-                    return "in-review";
-                case "done":
-                case "completed":
-                    return "done";
-                default:
-                    return "not-started";
-            }
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult DetailsPartial(int id)
         {
-            var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null)
-            {
-                return new HttpStatusCodeResult(401);
-            }
-
-            var project = db.projects.SingleOrDefault(p => p.id == id && !p.is_deleted);
-            if (project == null)
-            {
-                return HttpNotFound("Project không tồn tại.");
-            }
-
-            var ownsWorkspace = db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id);
-            if (!ownsWorkspace)
-            {
-                return HttpNotFound("Project thuộc workspace bạn không sở hữu.");
-            }
+            var authResult = AuthorizeForProject(id, out var currentUser, out var project, asPartial: true);
+            if (authResult != null) return authResult;
 
             var vm = new ProjectDetailsViewModel
             {
@@ -463,45 +231,198 @@ namespace PronaFlow_MVC.Controllers
             return PartialView("~/Views/Project/_ProjectDetails.cshtml", vm);
         }
 
+
+        /// <summary>
+        /// Taoj Project
+        /// </summary>
+        /// <param name="workspaceId"></param>
+        /// <returns></returns>
+        public ActionResult Create(int? workspaceId)
+        {
+            var userResult = AuthorizeUser(out var currentUser);
+            if (userResult != null) return userResult;
+
+            long currentWorkspaceId = workspaceId.HasValue
+                ? (long)workspaceId.Value
+                : db.workspaces.Where(w => w.owner_id == currentUser.id).Select(w => w.id).FirstOrDefault();
+
+            if (currentWorkspaceId == 0)
+            {
+                return HttpNotFound("Workspace không hợp lệ.");
+            }
+
+            var wsResult = AuthorizeForWorkspace(currentWorkspaceId, out currentUser);
+            if (wsResult != null) return wsResult;
+
+            ViewBag.WorkspaceId = currentWorkspaceId;
+            ViewBag.WorkspaceName = db.workspaces.Where(w => w.id == currentWorkspaceId).Select(w => w.name).FirstOrDefault();
+            return View();
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            if (authResult != null) return authResult;
+
+            var vm = new ProjectDetailsViewModel
+            {
+                Id = (int)project.id,
+                WorkspaceId = (int)project.workspace_id,
+                Name = project.name,
+                Description = project.description,
+                CoverImageUrl = project.cover_image_url,
+                Status = project.status,
+                StartDate = project.start_date,
+                EndDate = project.end_date
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, string name, string description, string status, DateTime? startDate, DateTime? endDate)
+        {
+            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            if (authResult != null) return authResult;
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                ModelState.AddModelError("name", "Tên project là bắt buộc.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var vm = new ProjectDetailsViewModel
+                {
+                    Id = (int)project.id,
+                    WorkspaceId = (int)project.workspace_id,
+                    Name = name,
+                    Description = description,
+                    Status = status,
+                    StartDate = startDate,
+                    EndDate = endDate
+                };
+                return View(vm);
+            }
+
+            project.name = name;
+            project.description = description;
+            project.status = NormalizeStatusForDb(status);
+            project.start_date = startDate;
+            project.end_date = endDate;
+            project.updated_at = DateTime.Now;
+
+            db.SaveChanges();
+
+            return RedirectToAction("Details", new { id = project.id });
+        }
+
+        [HttpGet]
+        public ActionResult GetTasks(int projectId)
+        {
+            var authResult = AuthorizeForProject(projectId, out var currentUser, out var project, asPartial: true);
+            if (authResult != null) return authResult;
+
+            var tasks = project.tasks
+                .Where(t => !t.is_deleted)
+                .Select(t => new TaskItemViewModel
+                {
+                    Id = t.id,
+                    Name = t.name,
+                    Status = t.status,
+                    Priority = t.priority,
+                    DueDate = t.end_date,
+                    ProjectName = project.name,
+                    TaskListName = t.task_lists != null ? t.task_lists.name : null
+                })
+                .ToList();
+
+            return PartialView("~/Views/Project/_TaskList.cshtml", tasks);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateMinimal(int workspaceId, string name, string status)
+        {
+            var wsResult = AuthorizeForWorkspace(workspaceId, out var currentUser);
+            if (wsResult != null) return wsResult;
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                ModelState.AddModelError("name", "Tên project là bắt buộc.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Index", "Kanbanboard", new { workspaceId });
+            }
+
+            var now = DateTime.Now;
+            var normalizedStatus = NormalizeStatusForDb(status);
+            var project = new projects
+            {
+                workspace_id = workspaceId,
+                name = name,
+                description = null,
+                cover_image_url = null,
+                status = normalizedStatus,
+                project_type = "personal",
+                start_date = null,
+                end_date = null,
+                is_archived = false,
+                is_deleted = false,
+                created_at = now,
+                updated_at = now
+            };
+
+            db.projects.Add(project);
+            db.SaveChanges();
+
+            db.project_members.Add(new project_members
+            {
+                project_id = project.id,
+                user_id = currentUser.id,
+                role = "admin"
+            });
+            db.SaveChanges();
+
+            return RedirectToAction("Index", "Kanbanboard", new { workspaceId, openProjectId = project.id });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult UpdateNameDescription(int id, string name, string description)
         {
-            var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null) return RedirectToAction("Login", "Account");
-        
-            var project = db.projects.SingleOrDefault(p => p.id == id && !p.is_deleted);
-            if (project == null) return HttpNotFound("Project không tồn tại.");
-            if (!db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id))
-                return HttpNotFound("Bạn không có quyền cập nhật project này.");
-        
+            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            if (authResult != null) return authResult;
+
             if (string.IsNullOrWhiteSpace(name))
             {
                 TempData["Error"] = "Tên project là bắt buộc.";
                 return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
             }
-        
+
             project.name = name.Trim();
             project.description = description;
             project.updated_at = DateTime.Now;
             db.SaveChanges();
-        
+
             return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
         }
 
+        /// <summary>
+        /// Update Status[] of Project | POST /Update Status
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult UpdateStatus(int id, string status)
         {
-            var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null) return RedirectToAction("Login", "Account");
-
-            var project = db.projects.SingleOrDefault(p => p.id == id && !p.is_deleted);
-            if (project == null) return HttpNotFound("Project không tồn tại.");
-            if (!db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id))
-                return HttpNotFound("Bạn không có quyền cập nhật project này.");
+            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            if (authResult != null) return authResult;
 
             project.status = NormalizeStatusForDb(status);
             project.updated_at = DateTime.Now;
@@ -510,18 +431,19 @@ namespace PronaFlow_MVC.Controllers
             return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
         }
 
+        /// <summary>
+        /// Update Deadline of Project | POST /UpdateDeadline
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult UpdateDeadline(int id, DateTime? startDate, DateTime? endDate)
         {
-            var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null) return RedirectToAction("Login", "Account");
-
-            var project = db.projects.SingleOrDefault(p => p.id == id && !p.is_deleted);
-            if (project == null) return HttpNotFound("Project không tồn tại.");
-            if (!db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id))
-                return HttpNotFound("Bạn không có quyền cập nhật project này.");
+            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            if (authResult != null) return authResult;
 
             project.start_date = startDate;
             project.end_date = endDate;
@@ -531,18 +453,18 @@ namespace PronaFlow_MVC.Controllers
             return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
         }
 
+        /// <summary>
+        /// Add member to project and set member's role is "member" | POST /AddMember
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="memberEmail"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddMember(int id, string memberEmail)
         {
-            var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null) return RedirectToAction("Login", "Account");
-
-            var project = db.projects.SingleOrDefault(p => p.id == id && !p.is_deleted);
-            if (project == null) return HttpNotFound("Project không tồn tại.");
-            if (!db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id))
-                return HttpNotFound("Bạn không có quyền cập nhật project này.");
+            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            if (authResult != null) return authResult;
 
             if (string.IsNullOrWhiteSpace(memberEmail))
             {
@@ -572,18 +494,19 @@ namespace PronaFlow_MVC.Controllers
             return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
         }
 
+
+        /// <summary>
+        /// Remove member from project | POST /RemoveMember
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult RemoveMember(int id, int userId)
         {
-            var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null) return RedirectToAction("Login", "Account");
-
-            var project = db.projects.SingleOrDefault(p => p.id == id && !p.is_deleted);
-            if (project == null) return HttpNotFound("Project không tồn tại.");
-            if (!db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id))
-                return HttpNotFound("Bạn không có quyền cập nhật project này.");
+            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            if (authResult != null) return authResult;
 
             var pm = db.project_members.SingleOrDefault(m => m.project_id == project.id && m.user_id == userId);
             if (pm != null)
@@ -595,18 +518,18 @@ namespace PronaFlow_MVC.Controllers
             return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
         }
 
+        /// <summary>
+        /// Add Tags to Project | POST /AddTag
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="tagId"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddTag(int id, int tagId)
         {
-            var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null) return RedirectToAction("Login", "Account");
-
-            var project = db.projects.SingleOrDefault(p => p.id == id && !p.is_deleted);
-            if (project == null) return HttpNotFound("Project không tồn tại.");
-            if (!db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id))
-                return HttpNotFound("Bạn không có quyền cập nhật project này.");
+            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            if (authResult != null) return authResult;
 
             var tag = db.tags.SingleOrDefault(t => t.id == tagId && t.workspace_id == project.workspace_id);
             if (tag == null)
@@ -628,14 +551,8 @@ namespace PronaFlow_MVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult RemoveTag(int id, int tagId)
         {
-            var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null) return RedirectToAction("Login", "Account");
-
-            var project = db.projects.SingleOrDefault(p => p.id == id && !p.is_deleted);
-            if (project == null) return HttpNotFound("Project không tồn tại.");
-            if (!db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id))
-                return HttpNotFound("Bạn không có quyền cập nhật project này.");
+            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            if (authResult != null) return authResult;
 
             var tag = project.tags.SingleOrDefault(t => t.id == tagId);
             if (tag != null)
@@ -651,14 +568,8 @@ namespace PronaFlow_MVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateTagAndAssign(int id, string name, string colorHex)
         {
-            var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null) return RedirectToAction("Login", "Account");
-
-            var project = db.projects.SingleOrDefault(p => p.id == id && !p.is_deleted);
-            if (project == null) return HttpNotFound("Project không tồn tại.");
-            if (!db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id))
-                return HttpNotFound("Bạn không có quyền cập nhật project này.");
+            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            if (authResult != null) return authResult;
 
             if (string.IsNullOrWhiteSpace(name))
             {

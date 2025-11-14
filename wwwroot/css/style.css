@@ -1323,17 +1323,18 @@ input:focus::placeholder {
 
 /* ==================== BLOCK: login-card ==================== */
 .register-card, .login-card {
-    position: absolute;
-    top: 25%;
-    left: 25%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    
     width: 850px;
     height: 550px;
     background-color: var(--color-background);
-    margin: 20px;
+    margin: 0px;
     border-radius: 30px;
     box-shadow: 0 0 30px rbga(0, 0, 0, 0.2);
     overflow: hidden;
-
+    transform: translate(-50%, -50%);
     opacity: 0;
     z-index: 20001;
 }
