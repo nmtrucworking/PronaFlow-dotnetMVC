@@ -347,7 +347,7 @@ namespace PronaFlow_MVC.Controllers
                 description = null,
                 cover_image_url = null,
                 status = normalizedStatus,
-                project_type = "general",
+                project_type = "personal",
                 start_date = null,
                 end_date = null,
                 is_archived = false,
@@ -364,7 +364,7 @@ namespace PronaFlow_MVC.Controllers
             {
                 project_id = project.id,
                 user_id = currentUser.id,
-                role = "owner"
+                role = "admin"
             });
             db.SaveChanges();
 

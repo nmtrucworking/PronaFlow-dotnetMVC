@@ -39,10 +39,197 @@ export function setLoadingState(button, isLoading, text) {
     button.textContent = isLoading ? 'Loading...' : text;
 }
 
-export function toggleForms(container, show) {
-    if (show === 'register') {
-        container.classList.add('active');
-    } else {
-        container.classList.remove('active');
-    }
+// export function toggleForms(container, show) {
+//     if (show === 'register') {
+//         container.classList.add('active');
+//     } else {
+//         container.classList.remove('active');
+//     }
+// }
+
+// ...existing code...
+
+/* 
+createBackdropManager({
+        backdropSelector: '#backdrop',
+        items: [
+            {
+                openBtnSelector: '#login-btn',
+                cardSelector: '#login-card',
+                formRole: 'form',
+                successMessage: 'Đăng nhập thành công'
+            },
+            {
+                openBtnSelector: '#sigup-btn',
+                cardSelector: '#register-card',
+                formRole: 'form',
+                successMessage: 'Đăng ký thành công'
+            }
+        ]
+    });
+*/
+
+// Chuyển thành hàm tổng: createBackdropManager(config)
+function createBackdropManager(config = {}) {
+    const backdrop = document.querySelector(config.backdropSelector || '#backdrop');
+    const items = Array.isArray(config.items) ? config.items : [];
+
+    if (!backdrop) return;
+
+    const setScrollLock = (lock) => {
+        document.body.style.overflow = lock ? 'hidden' : '';
+    };
+
+    const centerCard = (card) => {
+        if (!card) return;
+        card.style.position = 'fixed';
+        card.style.top = '50%';
+        card.style.left = '50%';
+        card.style.transform = 'translate(-50%, -50%)';
+        card.style.margin = '0';
+        card.style.zIndex = '20001';
+    };
+
+    const resetCardPosition = (card) => {
+        if (!card) return;
+        card.style.position = '';
+        card.style.top = '';
+        card.style.left = '';
+        card.style.transform = '';
+        card.style.margin = '';
+        card.style.zIndex = '';
+    };
+
+    const focusFirstInput = (card) => {
+        if (!card) return;
+        const input = card.querySelector('input, textarea, select, button');
+        if (input && typeof input.focus === 'function') input.focus();
+    };
+
+    const showToast = typeof window.showToast === 'function'
+        ? window.showToast
+        : (msg, type = 'success') => console.warn('showToast missing:', type, msg);
+
+    const attachAjaxSubmit = (form, successMessage) => {
+        if (!form || form.dataset.ajaxBound === 'true') return;
+        form.dataset.ajaxBound = 'true';
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) submitBtn.disabled = true;
+
+            try {
+                const formData = new FormData(form);
+                const res = await fetch(form.action, {
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    body: formData
+                });
+
+                const contentType = res.headers.get('content-type') || '';
+                if (contentType.includes('application/json')) {
+                    const data = await res.json();
+                    if (data.success) {
+                        showToast(successMessage || 'Thao tác thành công', 'success');
+                        closeAll();
+                        if (data.redirectUrl) window.location.href = data.redirectUrl;
+                    } else {
+                        const msg = Array.isArray(data.errors) && data.errors.length
+                            ? data.errors.join('\n')
+                            : 'Thao tác thất bại. Vui lòng kiểm tra lại.';
+                        showToast(msg, 'error');
+                    }
+                } else {
+                    if (res.redirected) {
+                        showToast(successMessage || 'Thao tác thành công', 'success');
+                        closeAll();
+                        window.location.href = res.url;
+                    } else if (!res.ok) {
+                        showToast('Có lỗi xảy ra. Vui lòng thử lại.', 'error');
+                    }
+                }
+            } catch (err) {
+                showToast('Lỗi mạng hoặc máy chủ. Vui lòng thử lại.', 'error');
+                console.error('Auth submit error:', err);
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+            }
+        });
+    };
+
+    // Build map of card elements for easy control
+    const cards = items.reduce((map, it) => {
+        const card = document.querySelector(it.cardSelector);
+        if (card) map[it.cardSelector] = { el: card, successMessage: it.successMessage || null };
+        return map;
+    }, {});
+
+    // Attach AJAX forms and open buttons
+    items.forEach(it => {
+        const card = document.querySelector(it.cardSelector);
+        if (!card) return;
+
+        // Attach AJAX submit if form specified
+        if (it.formRole) {
+            const form = card.querySelector(`form[role="${it.formRole}"]`);
+            attachAjaxSubmit(form, it.successMessage);
+        }
+
+        // Bind open button
+        if (it.openBtnSelector) {
+            const btn = document.querySelector(it.openBtnSelector);
+            if (btn) {
+                btn.addEventListener('click', () => openCard(card));
+            }
+        }
+    });
+
+    const openCard = (cardToOpen) => {
+        backdrop.classList.add('is-visible');
+
+        // mark classes on cards: add .is-open on the opened one, remove from others
+        Object.values(cards).forEach(({ el }) => {
+            if (el === cardToOpen) {
+                el.classList.add('is-open');
+                centerCard(el);
+                focusFirstInput(el);
+            } else {
+                el.classList.remove('is-open');
+                resetCardPosition(el);
+            }
+        });
+
+        setScrollLock(true);
+    };
+
+    const closeAll = () => {
+        backdrop.classList.remove('is-visible');
+        Object.values(cards).forEach(({ el }) => {
+            el.classList.remove('is-open');
+            resetCardPosition(el);
+        });
+        setScrollLock(false);
+    };
+
+    // Backdrop click closes when clicking exact backdrop element
+    backdrop.addEventListener('click', (e) => {
+        if (e.target === backdrop) closeAll();
+    });
+
+    // Escape to close
+    const onEsc = (e) => {
+        if (e.key === 'Escape') closeAll();
+    };
+    document.addEventListener('keydown', onEsc);
+
+    // Provide a small API for external usage if needed
+    return {
+        open: (selectorOrElement) => {
+            const el = typeof selectorOrElement === 'string' ? document.querySelector(selectorOrElement) : selectorOrElement;
+            if (el) openCard(el);
+        },
+        close: closeAll
+    };
 }
+// ...existing code...
