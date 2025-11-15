@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,14 +37,14 @@ namespace PronaFlow_MVC.Controllers
 
             if (currentWorkspaceId == 0)
             {
-                return HttpNotFound("Không có workspace nào cho người dùng hiện tại.");
+                return HttpNotFound(ErrorList.NoWorkspaceForCurrentUser);
             }
 
             var workspace = _context.workspaces
                                     .SingleOrDefault(w => w.id == currentWorkspaceId && w.owner_id == currentUser.id);
             if (workspace == null)
             {
-                return HttpNotFound($"Workspace ID {currentWorkspaceId} không thuộc quyền của người dùng hiện tại.");
+                return HttpNotFound(ErrorList.WorkspaceNotOwned(currentWorkspaceId));
             }
 
             var viewModel = new WorkspaceDetailViewModel

@@ -1,4 +1,4 @@
-﻿using PronaFlow_MVC.Models;
+using PronaFlow_MVC.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +21,13 @@ namespace PronaFlow_MVC.Controllers
 
             if (currentWorkspaceId == 0)
             {
-                return HttpNotFound("No workspace selected or no workspace exists.");
+                return HttpNotFound(ErrorList.NoWorkspaceSelectedOrExists);
             }
 
             var workspace = _db.workspaces.SingleOrDefault(w => w.id == currentWorkspaceId);
             if (workspace == null)
             {
-                return HttpNotFound($"Workspace with ID {currentWorkspaceId} not found.");
+                return HttpNotFound(ErrorList.WorkspaceWithIdNotFound(currentWorkspaceId));
             }
 
             var tasksQuery = _db.tasks

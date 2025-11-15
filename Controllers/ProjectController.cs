@@ -1,4 +1,5 @@
-﻿using PronaFlow_MVC.Models;
+﻿using Internal;
+using PronaFlow_MVC.Models;
 using PronaFlow_MVC.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,12 +14,22 @@ namespace PronaFlow_MVC.Controllers
     public class ProjectController : Controller
     {
         /// <summary>
-        /// 
+        /// db is the database context for PronaFlow_DBContext. This context is used to interact with the database.
+        /// </summary>
+        private readonly PronaFlow_DBContext db = new PronaFlow_DBContext();
+        
+
+        //=========================================================================================
+        //===================================== HELPER METHODS ====================================
+        //=========================================================================================
+
+        /// <summary>
+        /// [HelperMethod] List of allowed status values for project
         /// </summary>
         private static readonly string[] AllowedStatus = new[] { "temp", "not-started", "in-progress", "in-review", "done" };
         
         /// <summary>
-        /// 
+        /// [HelperMethod] StatusDisplayName is a dictionary that maps status values to their display names.
         /// </summary>
         private static readonly Dictionary<string, string> StatusDisplayName = new Dictionary<string, string>
         {
@@ -28,13 +39,22 @@ namespace PronaFlow_MVC.Controllers
             { "in-review", "In Review" },
             { "done", "Done" }
         };
+
+        /// <summary>
+        /// [HelperMethod] List of allowed role values for project member {0 - member, 1 - admin}
+        /// </summary>
         private static readonly string[] RoleMember = { "member", "admin" }; // indexing: 0 - member, 1 - admin
 
         /// <summary>
-        /// Normalize status input to match database values
+        /// [HelperMethod] List of allowed project type values {0 - personal, 1 - team}
+        /// </summary>
+        private static readonly string[] ProjectType = { "personal", "team" }; // indexing: 0 - personal, 1 - team
+
+        /// <summary>
+        /// [HelperMethod] Normalize status input to match database values
         /// </summary>
         /// <param name="status"></param>
-        /// <returns></returns>
+        /// <returns>Normalized status string</returns>
         private static string NormalizeStatusForDb(string status)
         {
             if (string.IsNullOrWhiteSpace(status)) return "not-started";
@@ -62,23 +82,56 @@ namespace PronaFlow_MVC.Controllers
         }
 
         // Helpers kiểm tra và xác thực dùng chung
+        /// <summary>
+        /// [HelperMethod] Authorize user based on session and database.
+        /// If user is not authorized, return appropriate response.
+        /// </summary>
+        /// <param name="currentUser"></param>
+        /// <param name="asPartial"></param>
+        /// <returns>ActionResult</returns>
         private ActionResult AuthorizeUser(out users currentUser, bool asPartial = false)
         {
             currentUser = null;
             var email = User?.Identity?.Name;
             if (string.IsNullOrEmpty(email))
             {
-                return asPartial ? new HttpStatusCodeResult(401) : RedirectToAction("Login", "Account");
+                if (asPartial)
+                {
+                    return new HttpStatusCodeResult(401);
+                    Console.WriteLine("User not authorized as partial.");
+                }
+                else
+                {
+                    return RedirectToAction("Login", "Account");
+                    Console.WriteLine("User not authorized. Redirecting to login.");
+                }
             }
         
             currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
             if (currentUser == null)
             {
-                return asPartial ? new HttpStatusCodeResult(401) : RedirectToAction("Login", "Account");
+                if (asPartial)
+                {
+                    return new HttpStatusCodeResult(401);
+                    Console.WriteLine("User not authorized as partial.");
+                }
+                else
+                {
+                    return RedirectToAction("Login", "Account");
+                    Console.WriteLine("User not authorized. Redirecting to login.");
+                } 
             }
             return null;
         }
 
+        /// <summary>
+        /// [HelperMethod] Authorize user for workspace.
+        /// If user is not authorized, return appropriate response.
+        /// </summary>
+        /// <param name="workspaceId">Workspace ID to check authorization for</param>
+        /// <param name="currentUser">Current user object</param>
+        /// <param name="asPartial">Flag indicating whether to return partial response (401) or full redirect (302)</param>
+        /// <returns>ActionResult: null if authorized, otherwise appropriate response</returns>
         private ActionResult AuthorizeForWorkspace(long workspaceId, out users currentUser, bool asPartial = false)
         {
             currentUser = null;
@@ -89,6 +142,7 @@ namespace PronaFlow_MVC.Controllers
             if (!ownsWorkspace)
             {
                 return HttpNotFound("Workspace không thuộc quyền của bạn.");
+                // WorkspaceNotFound: Workspace does not exist or user does not own it
             }
         
             return null;
@@ -105,18 +159,74 @@ namespace PronaFlow_MVC.Controllers
             project = db.projects.SingleOrDefault(p => p.id == projectId && !p.is_deleted);
             if (project == null)
             {
-                return HttpNotFound("Project không tồn tại.");
+                return HttpNotFound(ErrorList.ProjectNotFound);
+                // Project not found or deleted -> ProjectNotFound
             }
         
             var ownsWorkspace = db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id);
             if (!ownsWorkspace)
             {
-                return HttpNotFound("Bạn không có quyền cập nhật project này.");
+                return HttpNotFound(ErrorList.UnauthorizedUpdateProject);
             }
         
             return null;
         }
 
+        /// <summary>
+        /// Map project entity to ProjectDetailsViewModel.
+        /// </summary>
+        /// <param name="project">Project entity to map</param>
+        /// <returns>ProjectDetailsViewModel</returns>
+        private ProjectDetailsViewModel MapToProjectDetailsViewModel(projects project)
+        {
+            var tags = project.tags?.Select(t => new ProjectTagViewModel
+            {
+                Id = (int)t.id,
+                Name = t.name,
+                ColorHex = t.color_hex
+            }).ToList() ?? new List<ProjectTagViewModel>();
+
+            var members = project.project_members?.Select(m => new ProjectMemberViewModel
+            {
+                UserId = (int)m.user_id,
+                AvatarUrl = m.users.avatar_url
+            }).ToList() ?? new List<ProjectMemberViewModel>();
+
+            var tasks = project.tasks?
+                .Where(t => !t.is_deleted)
+                .Select(t => new TaskItemViewModel
+                {
+                    Id = t.id,
+                    Name = t.name,
+                    Status = t.status,
+                    Priority = t.priority,
+                    DueDate = t.end_date,
+                    ProjectName = project.name,
+                    TaskListName = t.task_lists != null ? t.task_lists.name : null
+                })
+                .ToList() ?? new List<TaskItemViewModel>();
+
+            return new ProjectDetailsViewModel
+            {
+                Id = (int)project.id,
+                WorkspaceId = (int)project.workspace_id,
+                Name = project.name,
+                Description = project.description,
+                CoverImageUrl = project.cover_image_url,
+                Status = project.status,
+                StartDate = project.start_date,
+                EndDate = project.end_date,
+                Tags = tags,
+                Members = members,
+                Tasks = tasks
+            };
+        }
+
+        /// <summary>
+        /// Get all projects in a workspace.
+        /// </summary>
+        /// <param name="workspaceId">Workspace ID to get projects for</param>
+        /// <returns>ActionResult: View with list of projects</returns>
         [HttpGet]
         public ActionResult Index(int? workspaceId)
         {
@@ -133,13 +243,13 @@ namespace PronaFlow_MVC.Controllers
 
             if (currentWorkspaceId == 0)
             {
-                return HttpNotFound("Không tìm thấy workspace cho người dùng hiện tại.");
+                return HttpNotFound(ErrorList.NoWorkspaceForCurrentUser);
             }
 
             var ownsWorkspace = db.workspaces.Any(w => w.id == currentWorkspaceId && w.owner_id == currentUser.id);
             if (!ownsWorkspace)
             {
-                return HttpNotFound("Workspace không thuộc quyền của bạn.");
+                return HttpNotFound(ErrorList.WorkspaceNotBelongToYou);
             }
 
             var projects = db.projects
@@ -177,51 +287,17 @@ namespace PronaFlow_MVC.Controllers
 
 
         /// <summary>
-        /// 
+        /// Get project details partial view.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Project ID to get details for</param>
+        /// <returns>ActionResult: Partial view with project details</returns>
         [HttpGet]
         public ActionResult DetailsPartial(int id)
         {
             var authResult = AuthorizeForProject(id, out var currentUser, out var project, asPartial: true);
             if (authResult != null) return authResult;
 
-            var vm = new ProjectDetailsViewModel
-            {
-                Id = (int)project.id,
-                WorkspaceId = (int)project.workspace_id,
-                Name = project.name,
-                Description = project.description,
-                CoverImageUrl = project.cover_image_url,
-                Status = project.status,
-                StartDate = project.start_date,
-                EndDate = project.end_date,
-                Tags = project.tags.Select(t => new ProjectTagViewModel
-                {
-                    Id = (int)t.id,
-                    Name = t.name,
-                    ColorHex = t.color_hex
-                }).ToList(),
-                Members = project.project_members.Select(m => new ProjectMemberViewModel
-                {
-                    UserId = (int)m.user_id,
-                    AvatarUrl = m.users.avatar_url
-                }).ToList(),
-                Tasks = project.tasks
-                    .Where(t => !t.is_deleted)
-                    .Select(t => new TaskItemViewModel
-                    {
-                        Id = t.id,
-                        Name = t.name,
-                        Status = t.status,
-                        Priority = t.priority,
-                        DueDate = t.end_date,
-                        ProjectName = project.name,
-                        TaskListName = t.task_lists != null ? t.task_lists.name : null
-                    })
-                    .ToList()
-            };
+            var vm = MapToProjectDetailsViewModel(project);
 
             var availableTags = db.tags
                 .Where(t => t.workspace_id == project.workspace_id && !project.tags.Select(pt => pt.id).Contains(t.id))
@@ -264,17 +340,7 @@ namespace PronaFlow_MVC.Controllers
             var authResult = AuthorizeForProject(id, out var currentUser, out var project);
             if (authResult != null) return authResult;
 
-            var vm = new ProjectDetailsViewModel
-            {
-                Id = (int)project.id,
-                WorkspaceId = (int)project.workspace_id,
-                Name = project.name,
-                Description = project.description,
-                CoverImageUrl = project.cover_image_url,
-                Status = project.status,
-                StartDate = project.start_date,
-                EndDate = project.end_date
-            };
+            var vm = MapToProjectDetailsViewModel(project);
 
             return View(vm);
         }
@@ -341,6 +407,15 @@ namespace PronaFlow_MVC.Controllers
             return PartialView("~/Views/Project/_TaskList.cshtml", tasks);
         }
 
+        
+
+        /// <summary>
+        /// Create a new project with minimal information.
+        /// </summary>
+        /// <param name="workspaceId">Workspace ID to create project in</param>
+        /// <param name="name">Project name</param>
+        /// <param name="status">Project status</param>
+        /// <returns>ActionResult: Redirect to project details or back to Kanbanboard</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateMinimal(int workspaceId, string name, string status)
@@ -351,6 +426,7 @@ namespace PronaFlow_MVC.Controllers
             if (string.IsNullOrWhiteSpace(name))
             {
                 ModelState.AddModelError("name", "Tên project là bắt buộc.");
+                // name, status are required fields
             }
 
             if (!ModelState.IsValid)
@@ -390,6 +466,13 @@ namespace PronaFlow_MVC.Controllers
             return RedirectToAction("Index", "Kanbanboard", new { workspaceId, openProjectId = project.id });
         }
 
+        /// <summary>
+        /// Update Name and Description of Project | POST /UpdateNameDescription
+        /// </summary>
+        /// <param name="id">Project ID</param>
+        /// <param name="name">Project Name</param>
+        /// <param name="description">Project Description</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult UpdateNameDescription(int id, string name, string description)
@@ -408,7 +491,8 @@ namespace PronaFlow_MVC.Controllers
             project.updated_at = DateTime.Now;
             db.SaveChanges();
 
-            return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
+            return
+                RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
         }
 
         /// <summary>
@@ -456,9 +540,9 @@ namespace PronaFlow_MVC.Controllers
         /// <summary>
         /// Add member to project and set member's role is "member" | POST /AddMember
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="memberEmail"></param>
-        /// <returns></returns>
+        /// <param name="id">Project ID</param>
+        /// <param name="memberEmail">Member Email</param>
+        /// <returns>Redirect to Kanbanboard: {workspaceId, openProjectId = id}</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AddMember(int id, string memberEmail)
@@ -515,7 +599,11 @@ namespace PronaFlow_MVC.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
+            return RedirectToAction("Index", "Kanbanboard", new 
+                { 
+                    workspaceId = (int)project.workspace_id, 
+                    openProjectId = id 
+                });
         }
 
         /// <summary>
@@ -535,7 +623,8 @@ namespace PronaFlow_MVC.Controllers
             if (tag == null)
             {
                 TempData["Error"] = "Tag không hợp lệ.";
-                return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
+                return RedirectToAction("Index", "Kanbanboard", new 
+                    { workspaceId = (int)project.workspace_id, openProjectId = id });
             }
 
             if (!project.tags.Any(t => t.id == tag.id))
@@ -544,7 +633,8 @@ namespace PronaFlow_MVC.Controllers
                 db.SaveChanges();
             }
 
-            return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
+            return RedirectToAction("Index", "Kanbanboard", new 
+                { workspaceId = (int)project.workspace_id, openProjectId = id });
         }
 
         [HttpPost]
