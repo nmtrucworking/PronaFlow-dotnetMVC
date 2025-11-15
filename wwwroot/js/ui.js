@@ -232,3 +232,4 @@ function createBackdropManager(config = {}) {
         close: closeAll
     };
 }
+

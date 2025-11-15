@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="activities">
           <Key>
             <PropertyRef Name="id" />
@@ -98,7 +98,7 @@
           <Property Name="workspace_id" Type="bigint" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="description" Type="nvarchar(max)" />
-          <Property Name="cover_image_url" Type="nvarchar" MaxLength="255" />
+          <Property Name="cover_image_url" Type="nvarchar(max)" />
           <Property Name="status" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="project_type" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="start_date" Type="date" />
@@ -525,9 +525,35 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="sp_DuplicateProject" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SourceProjectID" Type="bigint" Mode="In" />
+          <Parameter Name="UserID" Type="bigint" Mode="In" />
+        </Function>
         <Function Name="sp_GetProjectDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ProjectID" Type="bigint" Mode="In" />
           <Parameter Name="UserID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="sp_GetProjectsForKanban" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="WorkspaceID" Type="bigint" Mode="In" />
+          <Parameter Name="UserID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="sp_GetUserDashboardMetrics" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="bigint" Mode="In" />
+        </Function>
+        <Function Name="sp_GetUserTasks" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="bigint" Mode="In" />
+          <Parameter Name="WorkspaceID" Type="bigint" Mode="In" />
+          <Parameter Name="SearchTerm" Type="nvarchar" Mode="In" />
+          <Parameter Name="FilterByProjectIDs" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="FilterByStatus" Type="nvarchar" Mode="In" />
+          <Parameter Name="SortBy" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_LogActivity" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="bigint" Mode="In" />
+          <Parameter Name="ActionType" Type="nvarchar" Mode="In" />
+          <Parameter Name="TargetID" Type="bigint" Mode="In" />
+          <Parameter Name="TargetType" Type="nvarchar" Mode="In" />
+          <Parameter Name="Content" Type="nvarchar(max)" Mode="In" />
         </Function>
         <Function Name="sp_MoveTask" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TaskID" Type="bigint" Mode="In" />
@@ -537,6 +563,9 @@
           <Parameter Name="WorkspaceID" Type="bigint" Mode="In" />
           <Parameter Name="ProjectID" Type="bigint" Mode="In" />
           <Parameter Name="SearchTerm" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_SoftDeleteUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="bigint" Mode="In" />
         </Function>
         <EntityContainer Name="ModelsStoreContainer">
           <EntitySet Name="activities" EntityType="Self.activities" Schema="dbo" store:Type="Tables" />
@@ -654,8 +683,7 @@
             <End Role="workspaces" EntitySet="workspaces" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -754,7 +782,7 @@
           <Property Name="workspace_id" Type="Int64" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="cover_image_url" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="cover_image_url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="project_type" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="start_date" Type="DateTime" Precision="0" />
@@ -1240,6 +1268,35 @@
             <Parameter Name="ProjectID" Mode="In" Type="Int64" />
             <Parameter Name="SearchTerm" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="sp_DuplicateProject">
+            <Parameter Name="SourceProjectID" Mode="In" Type="Int64" />
+            <Parameter Name="UserID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GetProjectsForKanban">
+            <Parameter Name="WorkspaceID" Mode="In" Type="Int64" />
+            <Parameter Name="UserID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GetUserDashboardMetrics" ReturnType="Collection(Models.sp_GetUserDashboardMetrics_Result)">
+            <Parameter Name="UserID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GetUserTasks">
+            <Parameter Name="UserID" Mode="In" Type="Int64" />
+            <Parameter Name="WorkspaceID" Mode="In" Type="Int64" />
+            <Parameter Name="SearchTerm" Mode="In" Type="String" />
+            <Parameter Name="FilterByProjectIDs" Mode="In" Type="String" />
+            <Parameter Name="FilterByStatus" Mode="In" Type="String" />
+            <Parameter Name="SortBy" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_LogActivity">
+            <Parameter Name="UserID" Mode="In" Type="Int64" />
+            <Parameter Name="ActionType" Mode="In" Type="String" />
+            <Parameter Name="TargetID" Mode="In" Type="Int64" />
+            <Parameter Name="TargetType" Mode="In" Type="String" />
+            <Parameter Name="Content" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_SoftDeleteUser">
+            <Parameter Name="UserID" Mode="In" Type="Int64" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="sp_GetProjectDetails_Result">
           <Property Type="Int64" Name="id" Nullable="false" />
@@ -1262,6 +1319,11 @@
           <Property Type="String" Name="full_name" Nullable="false" MaxLength="100" />
           <Property Type="String" Name="email" Nullable="false" MaxLength="255" />
           <Property Type="String" Name="avatar_url" Nullable="true" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="sp_GetUserDashboardMetrics_Result">
+          <Property Type="Int32" Name="TotalProjects" Nullable="true" />
+          <Property Type="Int32" Name="InProgressTasks" Nullable="true" />
+          <Property Type="Int32" Name="OverdueTasks" Nullable="true" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1520,6 +1582,20 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_DuplicateProject" FunctionName="Models.Store.sp_DuplicateProject" />
+          <FunctionImportMapping FunctionImportName="sp_GetProjectsForKanban" FunctionName="Models.Store.sp_GetProjectsForKanban" />
+          <FunctionImportMapping FunctionImportName="sp_GetUserDashboardMetrics" FunctionName="Models.Store.sp_GetUserDashboardMetrics">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Models.sp_GetUserDashboardMetrics_Result">
+                <ScalarProperty Name="TotalProjects" ColumnName="TotalProjects" />
+                <ScalarProperty Name="InProgressTasks" ColumnName="InProgressTasks" />
+                <ScalarProperty Name="OverdueTasks" ColumnName="OverdueTasks" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GetUserTasks" FunctionName="Models.Store.sp_GetUserTasks" />
+          <FunctionImportMapping FunctionImportName="sp_LogActivity" FunctionName="Models.Store.sp_LogActivity" />
+          <FunctionImportMapping FunctionImportName="sp_SoftDeleteUser" FunctionName="Models.Store.sp_SoftDeleteUser" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

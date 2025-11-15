@@ -237,6 +237,7 @@
     <Compile Include="Models\comments.cs">
       <DependentUpon>PronaFlowDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ErrorList.cs" />
     <Compile Include="Models\invitations.cs">
       <DependentUpon>PronaFlowDataModel.tt</DependentUpon>
     </Compile>
@@ -268,6 +269,9 @@
       <DependentUpon>PronaFlowDataModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\sp_GetProjectDetails_Result.cs">
+      <DependentUpon>PronaFlowDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_GetUserDashboardMetrics_Result.cs">
       <DependentUpon>PronaFlowDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\sp_SearchUsersForProject_Result.cs">

@@ -7,10 +7,10 @@ using PronaFlow_MVC.Models;
 
 namespace PronaFlow_MVC.Controllers
 {
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly PronaFlow_DBContext _db = new PronaFlow_DBContext();
-        
         
         /// <summary>
         /// Displayed Dashboard main page

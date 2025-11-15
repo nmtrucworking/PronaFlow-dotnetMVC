@@ -7,15 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
-using System.Data.Entity.Core.Objects;
-using System.Linq;
-
 namespace PronaFlow_MVC.Models
 {
-    
+    using System;
+    using System.Data.Entity;
+    using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class PronaFlow_DBContext : DbContext
     {
@@ -86,6 +84,104 @@ namespace PronaFlow_MVC.Models
                 new ObjectParameter("SearchTerm", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_SearchUsersForProject_Result>("sp_SearchUsersForProject", workspaceIDParameter, projectIDParameter, searchTermParameter);
+        }
+    
+        public virtual int sp_DuplicateProject(Nullable<long> sourceProjectID, Nullable<long> userID)
+        {
+            var sourceProjectIDParameter = sourceProjectID.HasValue ?
+                new ObjectParameter("SourceProjectID", sourceProjectID) :
+                new ObjectParameter("SourceProjectID", typeof(long));
+    
+            var userIDParameter = userID.HasValue ?
+                new ObjectParameter("UserID", userID) :
+                new ObjectParameter("UserID", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_DuplicateProject", sourceProjectIDParameter, userIDParameter);
+        }
+    
+        public virtual int sp_GetProjectsForKanban(Nullable<long> workspaceID, Nullable<long> userID)
+        {
+            var workspaceIDParameter = workspaceID.HasValue ?
+                new ObjectParameter("WorkspaceID", workspaceID) :
+                new ObjectParameter("WorkspaceID", typeof(long));
+    
+            var userIDParameter = userID.HasValue ?
+                new ObjectParameter("UserID", userID) :
+                new ObjectParameter("UserID", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_GetProjectsForKanban", workspaceIDParameter, userIDParameter);
+        }
+    
+        public virtual ObjectResult<sp_GetUserDashboardMetrics_Result> sp_GetUserDashboardMetrics(Nullable<long> userID)
+        {
+            var userIDParameter = userID.HasValue ?
+                new ObjectParameter("UserID", userID) :
+                new ObjectParameter("UserID", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetUserDashboardMetrics_Result>("sp_GetUserDashboardMetrics", userIDParameter);
+        }
+    
+        public virtual int sp_GetUserTasks(Nullable<long> userID, Nullable<long> workspaceID, string searchTerm, string filterByProjectIDs, string filterByStatus, string sortBy)
+        {
+            var userIDParameter = userID.HasValue ?
+                new ObjectParameter("UserID", userID) :
+                new ObjectParameter("UserID", typeof(long));
+    
+            var workspaceIDParameter = workspaceID.HasValue ?
+                new ObjectParameter("WorkspaceID", workspaceID) :
+                new ObjectParameter("WorkspaceID", typeof(long));
+    
+            var searchTermParameter = searchTerm != null ?
+                new ObjectParameter("SearchTerm", searchTerm) :
+                new ObjectParameter("SearchTerm", typeof(string));
+    
+            var filterByProjectIDsParameter = filterByProjectIDs != null ?
+                new ObjectParameter("FilterByProjectIDs", filterByProjectIDs) :
+                new ObjectParameter("FilterByProjectIDs", typeof(string));
+    
+            var filterByStatusParameter = filterByStatus != null ?
+                new ObjectParameter("FilterByStatus", filterByStatus) :
+                new ObjectParameter("FilterByStatus", typeof(string));
+    
+            var sortByParameter = sortBy != null ?
+                new ObjectParameter("SortBy", sortBy) :
+                new ObjectParameter("SortBy", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_GetUserTasks", userIDParameter, workspaceIDParameter, searchTermParameter, filterByProjectIDsParameter, filterByStatusParameter, sortByParameter);
+        }
+    
+        public virtual int sp_LogActivity(Nullable<long> userID, string actionType, Nullable<long> targetID, string targetType, string content)
+        {
+            var userIDParameter = userID.HasValue ?
+                new ObjectParameter("UserID", userID) :
+                new ObjectParameter("UserID", typeof(long));
+    
+            var actionTypeParameter = actionType != null ?
+                new ObjectParameter("ActionType", actionType) :
+                new ObjectParameter("ActionType", typeof(string));
+    
+            var targetIDParameter = targetID.HasValue ?
+                new ObjectParameter("TargetID", targetID) :
+                new ObjectParameter("TargetID", typeof(long));
+    
+            var targetTypeParameter = targetType != null ?
+                new ObjectParameter("TargetType", targetType) :
+                new ObjectParameter("TargetType", typeof(string));
+    
+            var contentParameter = content != null ?
+                new ObjectParameter("Content", content) :
+                new ObjectParameter("Content", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_LogActivity", userIDParameter, actionTypeParameter, targetIDParameter, targetTypeParameter, contentParameter);
+        }
+    
+        public virtual int sp_SoftDeleteUser(Nullable<long> userID)
+        {
+            var userIDParameter = userID.HasValue ?
+                new ObjectParameter("UserID", userID) :
+                new ObjectParameter("UserID", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_SoftDeleteUser", userIDParameter);
         }
     }
 }
