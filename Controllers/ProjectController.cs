@@ -248,7 +248,7 @@ namespace PronaFlow_MVC.Controllers
         /// <param name="asPartial"></param>
         /// <returns>ActionResult: Partial view with project details</returns
         [HttpGet]
-        public ActionResult DetailsPartial(int id, users currentUser, bool asPartial)
+        public ActionResult DetailsPartial(int id, users currentUser, bool asPartial = true)
         {
             var (error, project) = GetAuthorizedProject(id);
             if (error != null) return error;
@@ -256,7 +256,8 @@ namespace PronaFlow_MVC.Controllers
             var vm = MapToProjectDetailsViewModel(project);
 
             var availableTags = _context.tags
-                .Where(t => t.workspace_id == project.workspace_id && !project.tags.Select(pt => pt.id).Contains(t.id))
+                .Where(t => t.workspace_id == project.workspace_id 
+                            && !project.tags.Select(pt => pt.id).Contains(t.id))
                 .ToList();
             ViewBag.AvailableTags = availableTags;
 

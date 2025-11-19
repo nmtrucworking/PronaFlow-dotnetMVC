@@ -3,32 +3,18 @@
     string title = Model.Title;
     string uiStatus = Model.UiStatus;
     var projects = (IEnumerable<PronaFlow_MVC.Models.ViewModels.KanbanProjectCardViewModel>)Model.Projects;
-    var popoverId = $"kanban-col-options-{uiStatus}";
+    
+    var optionsPopoverId = $"kanban-col-options-{uiStatus}";
+    var addPopoverId = $"kanban-add-project-{uiStatus}";
 }
-@* Model có Title, UiStatus, Projects *@
-<div class="kanban-column">
-    <div class="kanban-column__header">
-        <div class="column__title">@Model.Title</div>
-        <div class="column__actions">
-            @using (Html.BeginForm("CreateMinimal", "Project", FormMethod.Post, new { @class = "inline-add-project-form" }))
-            {
-                @using (Html.BeginForm("CreateMinimal", "Project", FormMethod.Post, new { @class = "inline-add-project-form" }))
-                {
-                    @Html.AntiForgeryToken()
-                    @Html.Hidden("workspaceId", (int)ViewBag.CurrentWorkspaceId)
-                    @Html.Hidden("status", (string)Model.UiStatus)
 
-                    <div class="input-group-merge">
-                        <input type="text" name="name" class="form-input form-input--small" placeholder="New project..." required autocomplete="off" />
-                        <button type="submit" class="btn btn--primary btn--icon-only">
-                            <i data-lucide="plus" class="icon-xs"></i>
-                        </button>
-                    </div>
-                }
-            }
-        </div>
+<div class="kanban-column kanban__col" data-status="@uiStatus">
+    <div class="kanban-column__header">
+        <button class="btn-icon-only btn-add-trigger" popovertarget="@addPopoverId" type="button">
+            <i data-lucide="plus" class="icon-sm"></i>
+        </button>
         <h3>@title</h3>
-        <button class="btn icon-btn btn-kanban-col-options-@uiStatus" popovertarget="@popoverId">
+        <button class="btn icon-btn btn-kanban-col-options-@uiStatus" popovertarget="@optionsPopoverId">
             <i data-lucide="ellipsis-vertical" class="btn-icon"></i>
         </button>
     </div>
@@ -40,7 +26,31 @@
         }
     </div>
 
-    <div popover class="popover kanban-col-options-@uiStatus" id="@popoverId">
+    <div id="@addPopoverId" popover class="popover popover-add-project">
+        <div class="popover__header">
+            <span class="popover__title">New Project in @title</span>
+            <button type="button" popovertarget="@addPopoverId" popovertargetaction="hide" class="btn-close-popover">
+                <i data-lucide="x" class="icon-xs"></i>
+            </button>
+        </div>
+        <div class="popover__body">
+            @using (Html.BeginForm("CreateMinimal", "Project", FormMethod.Post, new { @class = "popover-form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("workspaceId", (int)ViewBag.CurrentWorkspaceId)
+                @Html.Hidden("initialStatus", uiStatus)
+
+                <div class="form-group">
+                    <input type="text" name="projectName" class="form-input" placeholder="Project name..." required autocomplete="off" autofocus />
+                </div>
+                <div class="form-actions-right">
+                    <button type="submit" class="btn btn--primary btn--sm">Create</button>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div popover class="popover kanban-col-options-@uiStatus" id="@optionsPopoverId">
         <div class="popover__header">
             <span class="popover__title">Column Options</span>
             <button type="button">

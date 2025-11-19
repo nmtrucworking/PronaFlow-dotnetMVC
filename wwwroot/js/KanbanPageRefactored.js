@@ -2,8 +2,6 @@
     console.log("🚀 Kanban Page Loaded");
     if (window.lucide) { lucide.createIcons(); }
 
-
-    initializeProjectCardClicks();
     initKanbanDragDrop();
 });
 function notify(type, message) {
@@ -16,29 +14,6 @@ function notify(type, message) {
         console.warn(`[${type.toUpperCase()}] ${message}`);
         alert(message);
     }
-}
-
-
-/**
- * Gán sự kiện click cho các project card để mở modal.
- * (Giữ nguyên logic Event Delegation)
- */
-function initializeProjectCardClicks() {
-    const kanbanView = document.getElementById('kanban-view');
-    kanbanView.addEventListener('click', (e) => {
-        const projectCard = e.target.closest('.project-card');
-        if (projectCard) {
-            const projectId = projectCard.dataset.projectId;
-            // Giả định initializeProjectDetailModal, showProjectDetailModal, populateModalWithData 
-            // được định nghĩa trong một tệp JS khác và đã được tải.
-            if (typeof showProjectDetailModal === 'function') {
-                showProjectDetailModal();
-                populateModalWithData(projectId);
-            } else {
-                console.warn('Modal functions not found. Project ID:', projectId);
-            }
-        }
-    });
 }
 
 /**

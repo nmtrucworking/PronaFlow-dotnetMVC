@@ -60,9 +60,9 @@
                 </div>
 
                 <!-- Main close button -->
-                <button class="btn-exit" id="closeProjectDetailModal">
+                <a class="btn-exit" id="closeProjectDetailModal" href="@Url.Action("Index", "Kanbanboard", new { workspaceId = ViewBag.CurrentWorkspaceId })">
                     <i class="nav-icon icon-lg" data-lucide="x"></i>
-                </button>
+                </a>
 
             </div>
 

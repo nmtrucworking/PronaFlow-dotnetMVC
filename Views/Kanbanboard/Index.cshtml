@@ -7,11 +7,11 @@
     string GetUiStatus(string dbStatus)
     {
         var statusMapping = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-        {
+{
             { "temp", "temp"},
-            { "notstarted", "not-started"},
-            { "inprogress", "in-progress"},
-            { "inreview", "in-review"},
+            { "not-started", "not-started"},
+            { "in-progress", "in-progress"},
+            { "in-review", "in-review"},
             { "done", "done"},
         };
         return statusMapping.TryGetValue(dbStatus, out var uiStatus) ? uiStatus : "unknown-status";
@@ -47,7 +47,7 @@
         <div class="frame frame--kanban">
             <h3 class="frame__title">My Tasks</h3>
             <div class="frame__content hide-scrollbar">
-                @*@Html.Action("GetTasksPartial", "Task", new { workspaceId = Model.CurrentWorkspaceID })*@ 
+                @*@Html.Action("GetTasksPartial", "Task", new { workspaceId = Model.CurrentWorkspaceID })*@
             </div>
         </div>
     </div>
@@ -57,8 +57,9 @@
         @foreach (var col in columns)
         {
             var projects = byStatus.TryGetValue(col.UiStatus, out var list)
-                ? list
-                : Enumerable.Empty<PronaFlow_MVC.Models.ViewModels.KanbanProjectCardViewModel>();
+            ? list
+            : Enumerable.Empty<PronaFlow_MVC.Models.ViewModels.KanbanProjectCardViewModel>();
+
 
             @Html.Partial("_KanbanColumn", new { Title = col.Title, UiStatus = col.UiStatus, Projects = projects, WorkspaceId = Model.CurrentWorkspaceId })
         }
@@ -72,5 +73,5 @@
 
 @if (ViewBag.OpenProjectId != null)
 {
-    @Html.Action("DetailsPartial", "Project", new { id = (int)ViewBag.OpenProjectId })
+    @Html.Action("DetailsPartial", "Project", new { id = (int)ViewBag.OpenProjectId, asPartial = true })
 }
