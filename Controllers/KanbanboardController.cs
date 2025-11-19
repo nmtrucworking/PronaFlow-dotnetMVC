@@ -208,25 +208,41 @@ namespace PronaFlow_MVC.Controllers
                 var project = _context.projects.SingleOrDefault(p => p.id == projectId);
                 if (project == null)
                 {
-                    return Json(new { success = false, message = "Project không tồn tại." });
+                    return Json(new 
+                    { 
+                        success = false, 
+                        message = ErrorList.ProjectNotFound 
+                    });
                 }
 
                 // Kiểm tra quyền: project phải thuộc workspace của user
                 var ownsWorkspace = _context.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id);
                 if (!ownsWorkspace)
                 {
-                    return Json(new { success = false, message = "Không có quyền cập nhật project ở workspace này." });
+                    return Json(new 
+                    { 
+                        success = false, 
+                        message = ErrorList.UnauthorizedUpdateProject
+                    });
                 }
 
                 project.status = normalizedStatus;
                 project.updated_at = DateTime.Now;
                 _context.SaveChanges();
 
-                return Json(new { success = true, message = $"Status updated to {newStatus}" });
+                return Json(new 
+                { 
+                    success = true, 
+                    message = $"Status updated to {newStatus}" 
+                });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Update failed: " + ex.Message });
+                return Json(new 
+                { 
+                    success = false, 
+                    message = ErrorList.UpdateFailedPrefix + ex.Message
+                });
             }
         }
 
@@ -248,7 +264,11 @@ namespace PronaFlow_MVC.Controllers
             var ownsWorkspace = _context.workspaces.Any(w => w.id == workspaceId && w.owner_id == currentUser.id);
             if (!ownsWorkspace)
             {
-                return Json(new { success = false, message = "Không có quyền tạo project trong workspace này." });
+                return Json(new 
+                { 
+                    success = false, 
+                    message = ErrorList.UnauthorizedCreateProject
+                });
             }
 
             try
@@ -287,7 +307,11 @@ namespace PronaFlow_MVC.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Create failed: " + ex.Message });
+                return Json(new 
+                { 
+                    success = false, 
+                    message = ErrorList.CreateFailedPrefix + ex.Message 
+                });
             }
         }        
     }
