@@ -185,10 +185,28 @@
     --project-modal__left-col: 35px;
     --task-page-sidebar: 400px;
     --task-page-sidebar--second: 300px;
-    /* Z-index    */
-    --z-index__first: 2000;
-    --z-index__second: 0;
-    --z-index__second: 0;
+    /* =================================================================== */
+    /* Z-INDEX LAYER SYSTEM (HỆ THỐNG PHÂN LỚP) */
+    /* Nguyên tắc: Khoảng cách giữa các lớp đủ lớn để chèn thêm nếu cần */
+    /* =================================================================== */
+    /* Lớp âm: Dùng cho các phần tử trang trí chìm hoặc ẩn */
+    --z-negative: -1;
+    /* Lớp cơ bản: Nội dung thông thường nằm trên nền */
+    --z-base: 1;
+    --z-decorator: 10; /* Các icon trang trí, button đóng nhỏ */
+    /* Lớp dính/cố định cấp thấp: Header, Sidebar, Floating Action Button */
+    --z-sticky: 100;
+    --z-fixed: 200; /* Sidebar thường cao hơn Header một chút nếu đè lên */
+    /* Lớp phủ nền: Backdrop làm mờ */
+    --z-backdrop: 900;
+    /* Lớp Modal/Dialog: Hộp thoại tương tác chính */
+    --z-modal: 1000;
+    /* Lớp Popover/Dropdown: Menu ngữ cảnh, phải nổi lên trên Modal */
+    --z-popover: 1100;
+    /* Lớp thông báo: Toast/Notification luôn phải cao nhất để người dùng thấy */
+    --z-toast: 2000;
+    /* Lớp tối thượng: Dùng cho các trường hợp Loading toàn trang hoặc Debug */
+    --z-max: 9999;
 }
 
 

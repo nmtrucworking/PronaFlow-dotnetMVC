@@ -12,16 +12,21 @@
         <div class="column__actions">
             @using (Html.BeginForm("CreateMinimal", "Project", FormMethod.Post, new { @class = "inline-add-project-form" }))
             {
-                @Html.AntiForgeryToken()
-                @Html.Hidden("workspaceId", (int)ViewBag.CurrentWorkspaceId)
-                @Html.Hidden("status", (string)Model.UiStatus)
-                <input type="text" name="name" class="form-input form-input--small" placeholder="Project name" required />
-                <button type="submit" class="btn btn--primary btn--small">Add</button>
+                @using (Html.BeginForm("CreateMinimal", "Project", FormMethod.Post, new { @class = "inline-add-project-form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("workspaceId", (int)ViewBag.CurrentWorkspaceId)
+                    @Html.Hidden("status", (string)Model.UiStatus)
+
+                    <div class="input-group-merge">
+                        <input type="text" name="name" class="form-input form-input--small" placeholder="New project..." required autocomplete="off" />
+                        <button type="submit" class="btn btn--primary btn--icon-only">
+                            <i data-lucide="plus" class="icon-xs"></i>
+                        </button>
+                    </div>
+                }
             }
         </div>
-        <button class="btn icon-btn add-project-btn">
-            <i data-lucide="plus" class="btn-icon"></i>
-        </button>
         <h3>@title</h3>
         <button class="btn icon-btn btn-kanban-col-options-@uiStatus" popovertarget="@popoverId">
             <i data-lucide="ellipsis-vertical" class="btn-icon"></i>

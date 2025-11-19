@@ -39,14 +39,15 @@
     </div>
 
     <div class="frames frames--grid-2col">
-        <!---->
+        <!--My Agenda-->
         <div class="frame frame--kanban">
             <!-- Render from Calendar/AgendaCalendar-->
         </div>
+        <!--My Tasks-->
         <div class="frame frame--kanban">
             <h3 class="frame__title">My Tasks</h3>
             <div class="frame__content hide-scrollbar">
-                @Html.Action("GetTasksPartial", "Task"), new { workspaceId = Model.CurrentWorkspaceID}
+                @*@Html.Action("GetTasksPartial", "Task", new { workspaceId = Model.CurrentWorkspaceID })*@ 
             </div>
         </div>
     </div>
@@ -67,9 +68,6 @@
 
 @section scripts {
     <script src="~/wwwroot/js/KanbanPageRefactored.js"></script>
-    <script>
-        
-    </script>
 }
 
 @if (ViewBag.OpenProjectId != null)

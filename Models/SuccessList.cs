@@ -21,6 +21,8 @@
         public const string ProjectCreated = "Dự án mới đã được tạo.";
         public const string WorkspaceCreated = "Workspace mới đã được khởi tạo.";
         public const string MemberAdded = "Đã thêm thành viên vào dự án.";
+        public const string ProjectUpdated = "Cập nhật thông tin dự án thành công.";
+        public const string ProjectDeleted = "Dự án đã được xóa thành công.";
 
         // --- Dynamic Methods (Nếu cần tham số) ---
         public static string WelcomeUser(string userName)

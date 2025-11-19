@@ -384,10 +384,10 @@ namespace PronaFlow_MVC.Controllers
             var (wsError, workspace) = GetAuthorizedWorkspace(workspaceId);
             if (wsError != null) return wsError;
 
+            // Validate input
             if (string.IsNullOrWhiteSpace(name))
             {
-                ModelState.AddModelError("name", "Tên project là bắt buộc.");
-                // name, status are required fields
+                SetErrorToast(ErrorList.ProjectNameRequired);
             }
 
             if (!ModelState.IsValid)
@@ -423,6 +423,8 @@ namespace PronaFlow_MVC.Controllers
             });
             _context.SaveChanges();
 
+            SetSuccessToast(SuccessList.ProjectCreated);
+
             return RedirectToAction("Index", "Kanbanboard", new { workspaceId, openProjectId = project.id });
         }
 
@@ -442,7 +444,8 @@ namespace PronaFlow_MVC.Controllers
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                SetToastMessage("error", "Tên dự án không được để trống.");
+                SetErrorToast(ErrorList.ProjectNameRequired);
+                return RedirectToKanban(project);
             }
 
             project.name = name.Trim();
@@ -451,8 +454,8 @@ namespace PronaFlow_MVC.Controllers
             _context.SaveChanges();
 
             LogConsole("UpdateNameDescription", $"Updated Project {id}");
-            SetToastMessage("success", "Cập nhật thông tin dự án thành công.");
-
+            SetSuccessToast(SuccessList.ProjectUpdated);
+            
             return RedirectToKanban(project);
         }
 
