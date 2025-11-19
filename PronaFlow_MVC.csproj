@@ -281,6 +281,7 @@
     <Compile Include="Models\subtasks.cs">
       <DependentUpon>PronaFlowDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SuccessList.cs" />
     <Compile Include="Models\tags.cs">
       <DependentUpon>PronaFlowDataModel.tt</DependentUpon>
     </Compile>

@@ -89,5 +89,23 @@ namespace PronaFlow_MVC.Controllers
             TempData["ToastType"] = type;
             TempData["ToastMessage"] = message;
         }
+
+        /// <summary>
+        /// Set Noti - Success Toast
+        /// </summary>
+        /// <param name="message">text</param>
+        protected void SetSuccessToast(string message)
+        {
+            SetToastMessage("success", message);
+        }
+
+        /// <summary>
+        /// Set Noti - Error Toast
+        /// </summary>
+        /// <param name="message">text</param>
+        protected void SetErrorToast(string message)
+        {
+            SetToastMessage("error", message);
+        }
     }
 }

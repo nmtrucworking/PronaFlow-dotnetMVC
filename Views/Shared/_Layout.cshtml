@@ -42,7 +42,21 @@
     @RenderSection("scripts", required: false)
     <script src="~/wwwroot/js/sidebar.dom.js"></script>
     <script src="~/wwwroot/js/main.js"></script>
-    @*<script src="~/Scripts/jquery-1.10.2.min.js"></script>*@
-    @*<script src="~/Scripts/bootstrap.min.js"></script>*@
+    <script type="module">
+        import { showToast } from '/wwwroot/js/ui.js';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var toastType = '@TempData["ToastType"]';
+            var toastMessage = '@Html.Raw(TempData["ToastMessage"])';
+
+            if (toastMessage && toastMessage !== '') {
+                if (typeof window.showToast === 'function') {
+                    window.showToast(toastMessage, toastType);
+                } else {
+                    showToast(toastMessage, toastType);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
