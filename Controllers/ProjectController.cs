@@ -40,16 +40,7 @@ namespace PronaFlow_MVC.Controllers
             { "done", "Done" }
         };
 
-        /// <summary>
-        /// [HelperMethod] List of allowed role values for project member {0 - admin, 1 - member}
-        /// </summary>
-        private static readonly string[] RoleMember = { "admin" , "member" }; // indexing: 0 - admin, 1 - member
-
-        /// <summary>
-        /// [HelperMethod] List of allowed project type values {0 - personal, 1 - team}
-        /// </summary>
-        private static readonly string[] ProjectType = { "personal", "team" }; // indexing: 0 - personal, 1 - team
-
+        
         /// <summary>
         /// [HelperMethod] Normalize status input to match database values
         /// </summary>
@@ -90,7 +81,7 @@ namespace PronaFlow_MVC.Controllers
             var (authError, currentUser) = GetAuthenticatedUserOrError();
             if (authError != null) return (authError, null);
 
-            var workspace = _context.workspaces.SingleOrDefault(w => w.id == workspaceId && !w.is_deleted);
+            var workspace = _context.workspaces.SingleOrDefault(w => w.id == workspaceId);
             if (workspace == null)
             {
                 return (HttpNotFound("Workspace không tồn tại."), null);

@@ -51,5 +51,16 @@ namespace PronaFlow_MVC.Controllers
             if (disposing) _context.Dispose();
             base.Dispose(disposing);
         }
+
+        /// <summary>
+        /// [HelperMethod] List of allowed role values for project member {0 - admin, 1 - member}
+        /// </summary>
+        protected static readonly string[] RoleMember = { "admin", "member" }; // indexing: 0 - admin, 1 - member
+
+        /// <summary>
+        /// [HelperMethod] List of allowed project type values {0 - personal, 1 - team}
+        /// </summary>
+        protected static readonly string[] ProjectType = { "personal", "team" }; // indexing: 0 - personal, 1 - team
+
     }
 }

@@ -15,131 +15,52 @@ namespace PronaFlow_MVC.Controllers
     public class KanbanboardController : BaseController
     {
         /// <summary>
-        /// Displayed Kanban Board | Get: `/Kanbanboard`
-        /// </summary>
-        /// <returns>View Index.cshtml</returns>
-        [HttpGet]
-        public ActionResult Index(int? workspaceId, int? openProjectId)
-        {
-            var authResult = TryGetAuthenticatedUser(out users currentUser);
-            if (authResult != null) return authResult;
-
-            // Chọn workspace mặc định theo owner; hoặc kiểm tra workspaceId truyền vào
-            long targetWorkspaceId = workspaceId.HasValue
-                ? (long)workspaceId.Value
-                : _context.workspaces
-                          .Where(w => w.owner_id == currentUser.id)
-                          .Select(w => w.id)
-                          .FirstOrDefault();
-
-            if (targetWorkspaceId == 0)
-            {
-                return HttpNotFound(ErrorList.NoWorkspaceForCurrentUser);
-            }
-
-            // Chỉ cho phép vào workspace thuộc user
-            var belongsToUser = _context.workspaces.Any(w => w.id == targetWorkspaceId && w.owner_id == currentUser.id);
-            if (!belongsToUser)
-            {
-                return HttpNotFound(ErrorList.WorkspaceNotOwned(targetWorkspaceId));
-            }
-
-            var viewModel = GetKanbanBoardData((int)targetWorkspaceId);
-            ViewBag.OpenProjectId = openProjectId;
-            ViewBag.CurrentWorkspaceId = (int)targetWorkspaceId;
-            return View(viewModel);
-        }
-
-        /// <summary>
-        /// Update Project Status | Post: `/Kanbanboard/UpdateProjectStatus`
-        /// </summary>
-        /// <param name="projectId"></param>
-        /// <param name="newStatus"></param>
-        /// <returns>Json and SaveChanges</returns>
-        [HttpPost]
-        public ActionResult UpdateProjectStatus(int projectId, string newStatus)
-        {
-            var authResult = TryGetAuthenticatedUserJson(out users currentUser);
-            if (authResult != null) return authResult;
-
-            var normalizedStatus = NormalizeStatusForDb(newStatus);
-            try
-            {
-                var project = _context.projects.SingleOrDefault(p => p.id == projectId);
-                if (project == null)
-                {
-                    return Json(new { success = false, message = "Project không tồn tại." });
-                }
-
-                // Kiểm tra quyền: project phải thuộc workspace của user
-                var ownsWorkspace = _context.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id);
-                if (!ownsWorkspace)
-                {
-                    return Json(new { success = false, message = "Không có quyền cập nhật project ở workspace này." });
-                }
-
-                project.status = normalizedStatus;
-                _context.SaveChanges();
-
-                return Json(new { success = true, message = $"Status updated to {newStatus}" });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = "Update failed: " + ex.Message });
-            }
-        }
-
-        /// <summary>
-        /// Create Project and displayed project card if success
-        /// | POST: `/Kanbanboard/CreateProject`
+        /// Authorize Workspace
         /// </summary>
         /// <param name="workspaceId"></param>
-        /// <param name="projectName"></param>
-        /// <param name="initialStatus"></param>
         /// <returns></returns>
-        [HttpPost]
-        public ActionResult CreateProject(int workspaceId, string projectName, string initialStatus)
+        private (ActionResult Error, workspaces Workspace) GetAuthorizedWorkspace(long workspaceId)
         {
-            var authResult = TryGetAuthenticatedUserJson(out users currentUser);
-            if (authResult != null) return authResult;
+            // 1. Kiểm tra đăng nhập
+            var (authError, currentUser) = GetAuthenticatedUserOrError();
+            if (authError != null) return (authError, null);
 
-            // Chỉ cho phép tạo project trong workspace thuộc user
-            var ownsWorkspace = _context.workspaces.Any(w => w.id == workspaceId && w.owner_id == currentUser.id);
-            if (!ownsWorkspace)
+            // 2. Tìm Workspace
+            var workspace = _context.workspaces.SingleOrDefault(w => w.id == workspaceId);
+            if (workspace == null)
             {
-                return Json(new { success = false, message = "Không có quyền tạo project trong workspace này." });
+                return (HttpNotFound(ErrorList.NoWorkspaceForCurrentUser), null);
             }
 
-            var normalizedStatus = NormalizeStatusForDb(initialStatus);
-            try
+            // 3. Kiểm tra quyền sở hữu (Owner)
+            if (workspace.owner_id != currentUser.id)
             {
-                var newProject = new projects
-                {
-                    workspace_id = workspaceId,
-                    name = projectName,
-                    status = normalizedStatus,
-                    created_at = DateTime.Now,
-                    description = "",
-                    is_archived = false,
-                    is_deleted = false,
-                    updated_at = DateTime.Now,
-                    cover_image_url = ""
-                };
-
-                _context.projects.Add(newProject);
-                _context.SaveChanges();
-
-                var projectViewModel = MapToKanbanCardViewModel(newProject);
-
-                return Json(new { success = true, project = projectViewModel });
+                // Nếu muốn cho phép thành viên truy cập, cần sửa logic ở đây để check bảng workspace_members
+                return (new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden, ErrorList.WorkspaceNotOwned(workspaceId)), null);
             }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = "Create failed: " + ex.Message });
-            }
+
+            return (null, workspace);
         }
 
-        //========================== HELPER METHODS //==========================
+        /// <summary>
+        /// Normalize Status of Project for Database
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        private string NormalizeStatusForDb(string status)
+        {
+            if (string.IsNullOrWhiteSpace(status)) return "not-started";
+            var s = status.ToLower().Trim().Replace("-", "");
+
+            // Mapping nhanh các trường hợp
+            if (s.Contains("temp")) return "temp";
+            if (s.Contains("start")) return "not-started";
+            if (s.Contains("progress")) return "in-progress";
+            if (s.Contains("review")) return "in-review";
+            if (s.Contains("done") || s.Contains("complet")) return "done";
+
+            return "not-started";
+        }
 
         /// <summary>
         /// Helper Method to Get Kanban Board Data
@@ -176,7 +97,7 @@ namespace PronaFlow_MVC.Controllers
             var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
             var today = DateTime.Now.Date;
             var next7 = today.AddDays(7);
-            
+
 
             return new KanbanBoardViewModel
             {
@@ -187,6 +108,11 @@ namespace PronaFlow_MVC.Controllers
             };
         }
 
+        /// <summary>
+        /// Mapping
+        /// </summary>
+        /// <param name="project"></param>
+        /// <returns></returns>
         private KanbanProjectCardViewModel MapToKanbanCardViewModel(projects project)
         {
             int totalTasks = project.tasks?.Count ?? 0;
@@ -227,12 +153,143 @@ namespace PronaFlow_MVC.Controllers
             };
         }
 
-        private string NormalizeStatusForDb(string status)
+        //====================================================================================
+
+        /// <summary>
+        /// Displayed Kanban Board | Get: `/Kanbanboard`
+        /// </summary>
+        /// <returns>View Index.cshtml</returns>
+        [HttpGet]
+        public ActionResult Index(int? workspaceId, int? openProjectId)
         {
-            if (string.IsNullOrWhiteSpace(status)) return "unknown";
-            var s = status.ToLower().Trim();
-            return s.Replace("-", "");
+            var (authError, currentUser) = GetAuthenticatedUserOrError();
+            if (authError != null) return authError;
+
+            // Chọn workspace mặc định theo owner; hoặc kiểm tra workspaceId truyền vào
+            long targetWorkspaceId = workspaceId.HasValue
+                ? (long)workspaceId.Value
+                : _context.workspaces
+                          .Where(w => w.owner_id == currentUser.id)
+                          .Select(w => w.id)
+                          .FirstOrDefault();
+
+            if (targetWorkspaceId == 0)
+            {
+                var defaultWs = _context.workspaces.FirstOrDefault(w => w.owner_id == currentUser.id);
+                if (defaultWs == null) return HttpNotFound(ErrorList.NoWorkspaceForCurrentUser);
+                targetWorkspaceId = defaultWs.id;
+            }
+
+            // Chỉ cho phép vào workspace thuộc user
+            var (wsError, workspace) = GetAuthorizedWorkspace(targetWorkspaceId);
+            if (wsError != null) return wsError;
+
+            var viewModel = GetKanbanBoardData((int)targetWorkspaceId);
+            ViewBag.OpenProjectId = openProjectId;
+            ViewBag.CurrentWorkspaceId = (int)targetWorkspaceId;
+            return View(viewModel);
         }
+
+        /// <summary>
+        /// Update Project Status | Post: `/Kanbanboard/UpdateProjectStatus`
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="newStatus"></param>
+        /// <returns>Json and SaveChanges</returns>
+        [HttpPost]
+        public ActionResult UpdateProjectStatus(int projectId, string newStatus)
+        {
+            var (authError, currentUser) = GetAuthenticatedUserOrErrorJson();
+            if (authError != null) return authError;
+
+            var normalizedStatus = NormalizeStatusForDb(newStatus);
+            try
+            {
+                var project = _context.projects.SingleOrDefault(p => p.id == projectId);
+                if (project == null)
+                {
+                    return Json(new { success = false, message = "Project không tồn tại." });
+                }
+
+                // Kiểm tra quyền: project phải thuộc workspace của user
+                var ownsWorkspace = _context.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id);
+                if (!ownsWorkspace)
+                {
+                    return Json(new { success = false, message = "Không có quyền cập nhật project ở workspace này." });
+                }
+
+                project.status = normalizedStatus;
+                project.updated_at = DateTime.Now;
+                _context.SaveChanges();
+
+                return Json(new { success = true, message = $"Status updated to {newStatus}" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Update failed: " + ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Create Project and displayed project card if success
+        /// | POST: `/Kanbanboard/CreateProject`
+        /// </summary>
+        /// <param name="workspaceId"></param>
+        /// <param name="projectName"></param>
+        /// <param name="initialStatus"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult CreateProject(int workspaceId, string projectName, string initialStatus)
+        {
+            var (authError, currentUser) = GetAuthenticatedUserOrErrorJson();
+            if (authError != null) return authError;
+
+            // Chỉ cho phép tạo project trong workspace thuộc user
+            var ownsWorkspace = _context.workspaces.Any(w => w.id == workspaceId && w.owner_id == currentUser.id);
+            if (!ownsWorkspace)
+            {
+                return Json(new { success = false, message = "Không có quyền tạo project trong workspace này." });
+            }
+
+            try
+            {
+                var normalizedStatus = NormalizeStatusForDb(initialStatus);
+                var now = DateTime.Now;
+                var newProject = new projects
+                {
+                    workspace_id = workspaceId,
+                    name = projectName,
+                    status = normalizedStatus,
+                    created_at = now,
+                    updated_at = now,
+                    description = "",
+                    is_archived = false,
+                    is_deleted = false,
+                    cover_image_url = "",
+                    project_type = ProjectType[0]
+
+                };
+
+                _context.projects.Add(newProject);
+                _context.SaveChanges();
+
+                _context.project_members.Add(new project_members
+                {
+                    project_id = newProject.id,
+                    user_id = currentUser.id,
+                    role = RoleMember[0]
+                });
+                _context.SaveChanges();
+
+                var projectViewModel = MapToKanbanCardViewModel(newProject);
+
+                return Json(new { success = true, project = projectViewModel });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Create failed: " + ex.Message });
+            }
+        }        
     }
 }
 
