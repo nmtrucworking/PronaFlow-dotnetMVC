@@ -12,10 +12,8 @@ using PronaFlow_MVC.Models.ViewModels;
 namespace PronaFlow_MVC.Controllers
 {
     //[Authentication
-    public class KanbanboardController : Controller
+    public class KanbanboardController : BaseController
     {
-        private readonly PronaFlow_DBContext _context = new PronaFlow_DBContext();
-
         /// <summary>
         /// Displayed Kanban Board | Get: `/Kanbanboard`
         /// </summary>
@@ -23,13 +21,8 @@ namespace PronaFlow_MVC.Controllers
         [HttpGet]
         public ActionResult Index(int? workspaceId, int? openProjectId)
         {
-            // Lấy user hiện tại theo email
-            var email = User?.Identity?.Name;
-            var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
+            var authResult = TryGetAuthenticatedUser(out users currentUser);
+            if (authResult != null) return authResult;
 
             // Chọn workspace mặc định theo owner; hoặc kiểm tra workspaceId truyền vào
             long targetWorkspaceId = workspaceId.HasValue
@@ -66,12 +59,8 @@ namespace PronaFlow_MVC.Controllers
         [HttpPost]
         public ActionResult UpdateProjectStatus(int projectId, string newStatus)
         {
-            var email = User?.Identity?.Name;
-            var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null)
-            {
-                return Json(new { success = false, message = "Bạn cần đăng nhập." });
-            }
+            var authResult = TryGetAuthenticatedUserJson(out users currentUser);
+            if (authResult != null) return authResult;
 
             var normalizedStatus = NormalizeStatusForDb(newStatus);
             try
@@ -111,12 +100,8 @@ namespace PronaFlow_MVC.Controllers
         [HttpPost]
         public ActionResult CreateProject(int workspaceId, string projectName, string initialStatus)
         {
-            var email = User?.Identity?.Name;
-            var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null)
-            {
-                return Json(new { success = false, message = "Bạn cần đăng nhập." });
-            }
+            var authResult = TryGetAuthenticatedUserJson(out users currentUser);
+            if (authResult != null) return authResult;
 
             // Chỉ cho phép tạo project trong workspace thuộc user
             var ownsWorkspace = _context.workspaces.Any(w => w.id == workspaceId && w.owner_id == currentUser.id);

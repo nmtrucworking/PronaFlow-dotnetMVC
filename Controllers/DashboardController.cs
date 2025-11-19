@@ -8,9 +8,8 @@ using PronaFlow_MVC.Models;
 namespace PronaFlow_MVC.Controllers
 {
     [Authorize]
-    public class DashboardController : Controller
+    public class DashboardController : BaseController
     {
-        private readonly PronaFlow_DBContext _db = new PronaFlow_DBContext();
         
         /// <summary>
         /// Displayed Dashboard main page
@@ -20,22 +19,22 @@ namespace PronaFlow_MVC.Controllers
         public ActionResult Index()
         {
             var email = User?.Identity?.Name;
-            var currentUser = _db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
+            var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
             if (currentUser == null)
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            var workspaceIds = _db.workspaces.Where(w => w.owner_id == currentUser.id).Select(w => w.id);
-            var totalProjects = _db.projects.Count(p => !p.is_deleted && workspaceIds.Contains(p.workspace_id));
+            var workspaceIds = _context.workspaces.Where(w => w.owner_id == currentUser.id).Select(w => w.id);
+            var totalProjects = _context.projects.Count(p => !p.is_deleted && workspaceIds.Contains(p.workspace_id));
 
-            var assignedTasks = _db.tasks.Where(t => !t.is_deleted && t.users1.Any(u => u.id == currentUser.id));
+            var assignedTasks = _context.tasks.Where(t => !t.is_deleted && t.users1.Any(u => u.id == currentUser.id));
             var inProgressCount = assignedTasks.Count(t => t.status == "inprogress" || t.status == "in-progress");
             var overdueCount = assignedTasks.Count(t => t.end_date.HasValue && t.end_date.Value < DateTime.Now && !(t.status == "done" || t.status == "completed"));
 
             var today = DateTime.Now.Date;
             var next7 = today.AddDays(7);
-            var upcomingTasks = _db.tasks
+            var upcomingTasks = _context.tasks
                 .Include("projects.workspaces")
                 .Include("task_lists")
                 .Where(t => !t.is_deleted && t.users1.Any(u => u.id == currentUser.id))

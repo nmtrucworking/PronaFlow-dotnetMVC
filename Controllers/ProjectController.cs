@@ -12,12 +12,11 @@ using System.Web.UI;
 
 namespace PronaFlow_MVC.Controllers
 {
-    public class ProjectController : Controller
+    public class ProjectController : BaseController
     {
         /// <summary>
-        /// db is the database context for PronaFlow_DBContext. This context is used to interact with the database.
+        /// _context is the database context for PronaFlow__contextContext. This context is used to interact with the database.
         /// </summary>
-        private readonly PronaFlow_DBContext db = new PronaFlow_DBContext();
         
 
         //=========================================================================================
@@ -56,7 +55,7 @@ namespace PronaFlow_MVC.Controllers
         /// </summary>
         /// <param name="status"></param>
         /// <returns>Normalized status string</returns>
-        private static string NormalizeStatusForDb(string status)
+        private static string NormalizeStatusFor_context(string status)
         {
             if (string.IsNullOrWhiteSpace(status)) return "not-started";
             var s = status.Trim().ToLower();
@@ -108,7 +107,7 @@ namespace PronaFlow_MVC.Controllers
                 }
             }
         
-            currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
+            currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
             if (currentUser == null)
             {
                 if (asPartial)
@@ -139,7 +138,7 @@ namespace PronaFlow_MVC.Controllers
             var userResult = AuthorizeUser(currentUser, asPartial);
             if (userResult != null) return userResult;
         
-            var ownsWorkspace = db.workspaces.Any(w => w.id == workspaceId && w.owner_id == currentUser.id);
+            var ownsWorkspace = _context.workspaces.Any(w => w.id == workspaceId && w.owner_id == currentUser.id);
             if (!ownsWorkspace)
             {
                 return HttpNotFound("Workspace không thuộc quyền của bạn.");
@@ -153,32 +152,29 @@ namespace PronaFlow_MVC.Controllers
         /// 
         /// </summary>
         /// <param name="projectId"></param>
-        /// <param name="currentUser"></param>
-        /// <param name="project"></param>
-        /// <param name="asPartial"></param>
         /// <returns></returns>
-        private ActionResult AuthorizeForProject(int projectId, users currentUser, projects project, bool asPartial = false)
+        private (ActionResult Error, projects Project) GetAuthorizedProject(int projectId)
         {
-            project = null;
-            currentUser = null;
-        
-            var userResult = AuthorizeUser(currentUser, asPartial);
-            if (userResult != null) return userResult;
-        
-            project = db.projects.SingleOrDefault(p => p.id == projectId && !p.is_deleted);
+            // 1. Kiểm tra User
+            var (authError, currentUser) = GetAuthenticatedUserOrError();
+            if (authError != null) return (authError, null);
+
+            // 2. Tìm Project
+            var project = _context.projects.SingleOrDefault(p => p.id == projectId && !p.is_deleted);
             if (project == null)
             {
-                return HttpNotFound(ErrorList.ProjectNotFound);
-                // Project not found or deleted -> ProjectNotFound
+                return (HttpNotFound(ErrorList.ProjectNotFound), null);
             }
-        
-            var ownsWorkspace = db.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id);
+
+            // 3. Kiểm tra quyền sở hữu Workspace
+            var ownsWorkspace = _context.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id);
             if (!ownsWorkspace)
             {
-                return HttpNotFound(ErrorList.UnauthorizedUpdateProject);
+                return (new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden, "Không có quyền truy cập."), null);
             }
-        
-            return null;
+
+            // Thành công: Trả về Error = null và Project object
+            return (null, project);
         }
 
         /// <summary>
@@ -231,6 +227,13 @@ namespace PronaFlow_MVC.Controllers
             };
         }
 
+        private ActionResult RedirectToKanban(projects project)
+        {
+            return RedirectToAction("Index", "Kanbanboard", new { workspaceId = project.workspace_id, openProjectId = project.id });
+        }
+
+        //===============================================================================================
+
         /// <summary>
         /// Get all projects in a workspace.
         /// </summary>
@@ -240,7 +243,7 @@ namespace PronaFlow_MVC.Controllers
         public ActionResult Index(int? workspaceId)
         {
             var email = User?.Identity?.Name;
-            var currentUser = db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
+            var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
             if (currentUser == null)
             {
                 return RedirectToAction("Login", "Account");
@@ -248,20 +251,20 @@ namespace PronaFlow_MVC.Controllers
 
             long currentWorkspaceId = workspaceId.HasValue
                 ? (long)workspaceId.Value
-                : db.workspaces.Where(w => w.owner_id == currentUser.id).Select(w => w.id).FirstOrDefault();
+                : _context.workspaces.Where(w => w.owner_id == currentUser.id).Select(w => w.id).FirstOrDefault();
 
             if (currentWorkspaceId == 0)
             {
                 return HttpNotFound(ErrorList.NoWorkspaceForCurrentUser);
             }
 
-            var ownsWorkspace = db.workspaces.Any(w => w.id == currentWorkspaceId && w.owner_id == currentUser.id);
+            var ownsWorkspace = _context.workspaces.Any(w => w.id == currentWorkspaceId && w.owner_id == currentUser.id);
             if (!ownsWorkspace)
             {
                 return HttpNotFound(ErrorList.WorkspaceNotBelongToYou);
             }
 
-            var projects = db.projects
+            var projects = _context.projects
                 .Where(p => !p.is_deleted && p.workspace_id == currentWorkspaceId)
                 .Select(p => new KanbanProjectCardViewModel
                 {
@@ -289,7 +292,7 @@ namespace PronaFlow_MVC.Controllers
                 .ToList();
 
             ViewBag.WorkspaceId = currentWorkspaceId;
-            ViewBag.WorkspaceName = db.workspaces.Where(w => w.id == currentWorkspaceId).Select(w => w.name).FirstOrDefault();
+            ViewBag.WorkspaceName = _context.workspaces.Where(w => w.id == currentWorkspaceId).Select(w => w.name).FirstOrDefault();
 
             return View(projects);
         }
@@ -304,14 +307,15 @@ namespace PronaFlow_MVC.Controllers
         /// <param name="asPartial"></param>
         /// <returns>ActionResult: Partial view with project details</returns
         [HttpGet]
-        public ActionResult DetailsPartial(int id, users currentUser, projects project, bool asPartial)
+        public ActionResult DetailsPartial(int id, users currentUser, bool asPartial)
         {
-            var authResult = AuthorizeForProject(id, currentUser, project, asPartial: true);
-            if (authResult != null) return authResult;
+            var (error, project) = GetAuthorizedProject(id);
+
+            if (error != null) return error;
 
             var vm = MapToProjectDetailsViewModel(project);
 
-            var availableTags = db.tags
+            var availableTags = _context.tags
                 .Where(t => t.workspace_id == project.workspace_id && !project.tags.Select(pt => pt.id).Contains(t.id))
                 .ToList();
             ViewBag.AvailableTags = availableTags;
@@ -325,14 +329,14 @@ namespace PronaFlow_MVC.Controllers
         /// </summary>
         /// <param name="workspaceId"></param>
         /// <returns></returns>
-        public ActionResult Create(int? workspaceId, users currentUser)
+        public ActionResult Create(int? workspaceId)
         {
-            var userResult = AuthorizeUser(currentUser);
-            if (userResult != null) return userResult;
+            var authResult = TryGetAuthenticatedUser(out users currentUser);
+            if (authResult != null) return authResult;
 
             long currentWorkspaceId = workspaceId.HasValue
                 ? (long)workspaceId.Value
-                : db.workspaces.Where(w => w.owner_id == currentUser.id).Select(w => w.id).FirstOrDefault();
+                : _context.workspaces.Where(w => w.owner_id == currentUser.id).Select(w => w.id).FirstOrDefault();
 
             if (currentWorkspaceId == 0)
             {
@@ -343,26 +347,16 @@ namespace PronaFlow_MVC.Controllers
             if (wsResult != null) return wsResult;
 
             ViewBag.WorkspaceId = currentWorkspaceId;
-            ViewBag.WorkspaceName = db.workspaces.Where(w => w.id == currentWorkspaceId).Select(w => w.name).FirstOrDefault();
+            ViewBag.WorkspaceName = _context.workspaces.Where(w => w.id == currentWorkspaceId).Select(w => w.name).FirstOrDefault();
             return View();
-        }
-
-        public ActionResult Edit(int id, users currentUser, projects project)
-        {
-            var authResult = AuthorizeForProject(id, currentUser, project);
-            if (authResult != null) return authResult;
-
-            var vm = MapToProjectDetailsViewModel(project);
-
-            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, string name, string description, string status, DateTime? startDate, DateTime? endDate, users currentUser, projects project)
+        public ActionResult Edit(int id, string name, string description, string status, DateTime? startDate, DateTime? endDate, users currentUser)
         {
-            var authResult = AuthorizeForProject(id, currentUser, project);
-            if (authResult != null) return authResult;
+            var (error, project) = GetAuthorizedProject(id);
+            if (error != null) return error;
 
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -386,21 +380,21 @@ namespace PronaFlow_MVC.Controllers
 
             project.name = name;
             project.description = description;
-            project.status = NormalizeStatusForDb(status);
+            project.status = NormalizeStatusFor_context(status);
             project.start_date = startDate;
             project.end_date = endDate;
             project.updated_at = DateTime.Now;
 
-            db.SaveChanges();
+            _context.SaveChanges();
 
             return RedirectToAction("Details", new { id = project.id });
         }
 
         [HttpGet]
-        public ActionResult GetTasks(int projectId, users currentUser, projects project, bool asPartial)
+        public ActionResult GetTasks(int id, bool asPartial)
         {
-            var authResult = AuthorizeForProject(projectId, currentUser, project, asPartial: true);
-            if (authResult != null) return authResult;
+            var (error, project) = GetAuthorizedProject(id);
+            if (error != null) return error;
 
             var tasks = project.tasks
                 .Where(t => !t.is_deleted)
@@ -430,10 +424,10 @@ namespace PronaFlow_MVC.Controllers
         /// <returns>ActionResult: Redirect to project details or back to Kanbanboard</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateMinimal(int workspaceId, string name, string status, users currentUser)
+        public ActionResult CreateMinimal(int workspaceId, string name, string status)
         {
-            var wsResult = AuthorizeForWorkspace(workspaceId, currentUser);
-            if (wsResult != null) return wsResult;
+            var authResult = TryGetAuthenticatedUser(out users currentUser);
+            if (authResult != null) return authResult;
 
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -447,7 +441,7 @@ namespace PronaFlow_MVC.Controllers
             }
 
             var now = DateTime.Now;
-            var normalizedStatus = NormalizeStatusForDb(status);
+            var normalizedStatus = NormalizeStatusFor_context(status);
             var project = new projects
             {
                 workspace_id = workspaceId,
@@ -464,16 +458,16 @@ namespace PronaFlow_MVC.Controllers
                 updated_at = now
             };
 
-            db.projects.Add(project);
-            db.SaveChanges();
+            _context.projects.Add(project);
+            _context.SaveChanges();
 
-            db.project_members.Add(new project_members
+            _context.project_members.Add(new project_members
             {
                 project_id = project.id,
                 user_id = currentUser.id,
                 role = "admin"
             });
-            db.SaveChanges();
+            _context.SaveChanges();
 
             return RedirectToAction("Index", "Kanbanboard", new { workspaceId, openProjectId = project.id });
         }
@@ -487,21 +481,21 @@ namespace PronaFlow_MVC.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateNameDescription(int id, string name, string description, users currentUser, projects project)
+        public ActionResult UpdateNameDescription(int id, string name, string description, projects project)
         {
-            var authResult = AuthorizeForProject(id, currentUser, project);
+            var authResult = TryGetAuthenticatedUser(out users currentUser);
             if (authResult != null) return authResult;
 
             if (string.IsNullOrWhiteSpace(name))
             {
                 TempData["Error"] = "Tên project là bắt buộc.";
-                return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
+                return RedirectToKanban(project);
             }
 
             project.name = name.Trim();
             project.description = description;
             project.updated_at = DateTime.Now;
-            db.SaveChanges();
+            _context.SaveChanges();
 
             return
                 RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
@@ -520,11 +514,11 @@ namespace PronaFlow_MVC.Controllers
             var authResult = AuthorizeForProject(id, currentUser, project);
             if (authResult != null) return authResult;
 
-            project.status = NormalizeStatusForDb(status);
+            project.status = NormalizeStatusFor_context(status);
             project.updated_at = DateTime.Now;
-            db.SaveChanges();
+            _context.SaveChanges();
 
-            return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
+            return RedirectToKanban(project);
         }
 
         /// <summary>
@@ -544,9 +538,9 @@ namespace PronaFlow_MVC.Controllers
             project.start_date = startDate;
             project.end_date = endDate;
             project.updated_at = DateTime.Now;
-            db.SaveChanges();
+            _context.SaveChanges();
 
-            return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
+            return RedirectToKanban(project);
         }
 
         /// <summary>
@@ -557,37 +551,37 @@ namespace PronaFlow_MVC.Controllers
         /// <returns>Redirect to Kanbanboard: {workspaceId, openProjectId = id}</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddMember(int id, string memberEmail, users currentUser, projects project)
+        public ActionResult AddMember(int id, string memberEmail, users currentUser)
         {
-            var authResult = AuthorizeForProject(id, currentUser, project);
-            if (authResult != null) return authResult;
+            var (error, project) = GetAuthorizedProject(id);
+            if (error != null) return error;
 
             if (string.IsNullOrWhiteSpace(memberEmail))
             {
                 TempData["Error"] = "Email thành viên là bắt buộc.";
-                return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
+                return RedirectToKanban(project);
             }
 
-            var user = db.users.SingleOrDefault(u => u.email == memberEmail && !u.is_deleted);
+            var user = _context.users.SingleOrDefault(u => u.email == memberEmail && !u.is_deleted);
             if (user == null)
             {
                 TempData["Error"] = "Không tìm thấy người dùng với email này.";
-                return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
+                return RedirectToKanban(project);
             }
 
-            var exists = db.project_members.Any(pm => pm.project_id == project.id && pm.user_id == user.id);
+            var exists = _context.project_members.Any(pm => pm.project_id == project.id && pm.user_id == user.id);
             if (!exists)
             {
-                db.project_members.Add(new project_members
+                _context.project_members.Add(new project_members
                 {
                     project_id = project.id,
                     user_id = user.id,
                     role = "member"
                 });
-                db.SaveChanges();
+                _context.SaveChanges();
             }
 
-            return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
+            return RedirectToKanban(project);
         }
 
 
@@ -604,11 +598,11 @@ namespace PronaFlow_MVC.Controllers
             var authResult = AuthorizeForProject(id, currentUser, project);
             if (authResult != null) return authResult;
 
-            var pm = db.project_members.SingleOrDefault(m => m.project_id == project.id && m.user_id == userId);
+            var pm = _context.project_members.SingleOrDefault(m => m.project_id == project.id && m.user_id == userId);
             if (pm != null)
             {
-                db.project_members.Remove(pm);
-                db.SaveChanges();
+                _context.project_members.Remove(pm);
+                _context.SaveChanges();
             }
 
             return RedirectToAction("Index", "Kanbanboard", new 
@@ -631,7 +625,7 @@ namespace PronaFlow_MVC.Controllers
             var authResult = AuthorizeForProject(id, currentUser, project);
             if (authResult != null) return authResult;
 
-            var tag = db.tags.SingleOrDefault(t => t.id == tagId && t.workspace_id == project.workspace_id);
+            var tag = _context.tags.SingleOrDefault(t => t.id == tagId && t.workspace_id == project.workspace_id);
             if (tag == null)
             {
                 TempData["Error"] = "Tag không hợp lệ.";
@@ -642,7 +636,7 @@ namespace PronaFlow_MVC.Controllers
             if (!project.tags.Any(t => t.id == tag.id))
             {
                 project.tags.Add(tag);
-                db.SaveChanges();
+                _context.SaveChanges();
             }
 
             return RedirectToAction("Index", "Kanbanboard", new 
@@ -660,10 +654,10 @@ namespace PronaFlow_MVC.Controllers
             if (tag != null)
             {
                 project.tags.Remove(tag);
-                db.SaveChanges();
+                _context.SaveChanges();
             }
 
-            return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
+            return RedirectToKanban(project);
         }
 
         [HttpPost]
@@ -676,7 +670,7 @@ namespace PronaFlow_MVC.Controllers
             if (string.IsNullOrWhiteSpace(name))
             {
                 TempData["Error"] = "Tên tag là bắt buộc.";
-                return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
+                return RedirectToKanban(project);
             }
 
             var tag = new tags
@@ -685,17 +679,17 @@ namespace PronaFlow_MVC.Controllers
                 name = name.Trim(),
                 color_hex = string.IsNullOrWhiteSpace(colorHex) ? "#80c8ff" : colorHex.Trim()
             };
-            db.tags.Add(tag);
-            db.SaveChanges();
+            _context.tags.Add(tag);
+            _context.SaveChanges();
 
-            var createdTag = db.tags.SingleOrDefault(t => t.id == tag.id);
+            var createdTag = _context.tags.SingleOrDefault(t => t.id == tag.id);
             if (createdTag != null && !project.tags.Any(t => t.id == createdTag.id))
             {
                 project.tags.Add(createdTag);
-                db.SaveChanges();
+                _context.SaveChanges();
             }
 
-            return RedirectToAction("Index", "Kanbanboard", new { workspaceId = (int)project.workspace_id, openProjectId = id });
+            return RedirectToKanban(project);
         }
     }
 }
