@@ -362,6 +362,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Views\Activity\" />
     <Folder Include="Views\Attachment\" />
+    <Folder Include="Views\Base\" />
     <Folder Include="Views\Comment\" />
     <Folder Include="Views\Subtask\" />
     <Folder Include="Views\TaskList\" />

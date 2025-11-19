@@ -1,6 +1,6 @@
 ﻿@model PronaFlow_MVC.Models.ViewModels.RegisterViewModel
 
-<div class="login-card__form-wrapper login-card__form-wrapper--register">
+<div class="register-card__form-wrapper register-card__form-wrapper--register">
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
     {
         @Html.AntiForgeryToken()

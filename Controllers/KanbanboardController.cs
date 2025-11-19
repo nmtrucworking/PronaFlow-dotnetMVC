@@ -191,45 +191,20 @@ namespace PronaFlow_MVC.Controllers
             var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
             var today = DateTime.Now.Date;
             var next7 = today.AddDays(7);
-            var upcomingTasks = _context.tasks
-                .Include("projects")
-                .Include("task_lists")
-                .Where(t => !t.is_deleted && t.end_date.HasValue && t.end_date.Value >= today && t.end_date.Value <= next7)
-                .Where(t => !(t.status == "done" || t.status == "completed"))
-                .Where(t => projectsInWorkspace.Select(p => p.id).Contains(t.project_id))
-                .Where(t => currentUser != null && t.users1.Any(u => u.id == currentUser.id))
-                .OrderBy(t => t.end_date)
-                .Take(10)
-                .Select(t => new PronaFlow_MVC.Models.ViewModels.TaskItemViewModel
-                {
-                    Id = t.id,
-                    Name = t.name,
-                    Status = t.status,
-                    Priority = t.priority,
-                    DueDate = t.end_date,
-                    ProjectName = t.projects.name,
-                    TaskListName = t.task_lists.name,
-                    WorkspaceName = workspace.name
-                })
-                .ToList();
+            
 
             return new KanbanBoardViewModel
             {
                 CurrentWorkspaceId = (int)workspace.id,
                 WorkspaceName = workspace.name,
                 WorkspaceDescription = workspace.description,
-                Projects = projectViewModels,
-                UpcomingTasks = upcomingTasks
+                Projects = projectViewModels
             };
         }
 
         private KanbanProjectCardViewModel MapToKanbanCardViewModel(projects project)
         {
-            // Cần đảm bảo các trường của project.tasks, project.tags, project.project_members có dữ liệu
-            // nếu không Entity Framework có thể trả về null, gây ra lỗi NullReference.
-
             int totalTasks = project.tasks?.Count ?? 0;
-            // Giả định trường status của task là 'status' và status hoàn thành là 'completed'
             int completedTasks = project.tasks?.Count(t => t.status != null && t.status.ToLower() == "completed") ?? 0;
 
             int remainingDays = 0;
@@ -248,7 +223,7 @@ namespace PronaFlow_MVC.Controllers
             var members = project.project_members?.Select(pm => new ProjectMemberViewModel
             {
                 UserId = (int)pm.user_id,
-                AvatarUrl = pm.users.avatar_url // Giả định project_members có navigation property users
+                AvatarUrl = pm.users.avatar_url
             }).ToList() ?? new List<ProjectMemberViewModel>();
 
             return new KanbanProjectCardViewModel

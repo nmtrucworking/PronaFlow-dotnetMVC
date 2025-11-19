@@ -37,8 +37,6 @@
         <span id="workspaceDescription" class="workspace__description">@Model.WorkspaceDescription</span>
     </div>
 
-    <div class="divider"></div>
-
     <div class="frames frames--grid-2col">
         <!--  CALENDAR FRAME (PRONAFLOW AGENDA) - START  -->
         <div class="frame frame--kanban">
@@ -47,15 +45,11 @@
         <div class="frame frame--kanban">
             <h3 class="frame__title">My Tasks</h3>
             <div class="frame__content hide-scrollbar">
-                <div class="task-list">
-                    <!-- sample task-card -->
-                </div>
+                @Html.Action("GetTasksPartial", "Task"), new { workspaceId = Model.CurrentWorkspaceID}
             </div>
         </div>
     </div>
-    .
 
-    <div class="divider"></div>
     <input type="hidden" id="currentWorkspaceId" value="@Model.CurrentWorkspaceId" />
     <div id="kanban-view" class="kanban-view">
         @foreach (var col in columns)

@@ -15,8 +15,8 @@ namespace PronaFlow_MVC.Controllers
         [HttpGet]
         public ActionResult Index(int? workspaceId)
         {
-            long currentWorkspaceId = workspaceId.HasValue 
-                ? (long)workspaceId.Value 
+            long currentWorkspaceId = workspaceId.HasValue
+                ? (long)workspaceId.Value
                 : (_db.workspaces.FirstOrDefault()?.id ?? 0);
 
             if (currentWorkspaceId == 0)
@@ -241,6 +241,39 @@ namespace PronaFlow_MVC.Controllers
         {
             var task = _db.tasks.Find(id);
             return View();
+        }
+
+        public ActionResult GetTasksPartial(int workspaceId)
+        {
+            var email = User?.Identity?.Name;
+            var currentUser = _db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
+
+            if (currentUser == null) return Content("");
+
+            var today = DateTime.Now.Date;
+            var next7 = today.AddDays(7);
+
+            var tasks = _db.tasks
+                .Where(t => !t.is_deleted
+                    && t.projects.workspace_id == workspaceId
+                    && t.users1.Any(u => u.id == currentUser.id) // Giả định users1 là navigation property cho assignees
+                    && t.status != "done" && t.status != "completed")
+                .OrderBy(t => t.end_date)
+                .Take(10)
+                .Select(t => new PronaFlow_MVC.Models.ViewModels.TaskItemViewModel
+                {
+                    Id = t.id,
+                    Name = t.name,
+                    Status = t.status,
+                    Priority = t.priority,
+                    DueDate = t.end_date,
+                    ProjectName = t.projects.name,
+                    TaskListName = t.task_lists.name,
+                    //WorkspaceName = workspace.name
+                })
+                .ToList();
+
+            return PartialView("_TaskListPartial", tasks);
         }
     }
 }

@@ -54,6 +54,5 @@ namespace PronaFlow_MVC.Models.ViewModels
         public string WorkspaceName { get; set; }
         public string WorkspaceDescription { get; set; }
         public List<KanbanProjectCardViewModel> Projects { get; set; }
-        public List<TaskItemViewModel> UpcomingTasks { get; set; }
     }
 }
