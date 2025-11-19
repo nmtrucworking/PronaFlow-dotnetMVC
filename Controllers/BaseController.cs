@@ -1,6 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using PronaFlow_MVC.Models;
+using System.Diagnostics;
 using System.Linq;
-using PronaFlow_MVC.Models;
+using System.Web.Mvc;
 
 namespace PronaFlow_MVC.Controllers
 {
@@ -62,5 +63,31 @@ namespace PronaFlow_MVC.Controllers
         /// </summary>
         protected static readonly string[] ProjectType = { "personal", "team" }; // indexing: 0 - personal, 1 - team
 
+
+        /// <summary>
+        /// Log Console
+        /// </summary>
+        /// <param name="method"></param>
+        /// <param name="message"></param>
+        /// <param name="isError"></param>
+        protected void LogConsole(string method, string message, bool isError = false)
+        {
+            string prefix = isError ? "[ERROR]" : "[INFO]";
+            string log = $"{prefix} [{method}] :: {message}";
+
+            // Ghi vào Output Window của Visual Studio
+            Debug.WriteLine(log);
+        }
+
+        /// <summary>
+        /// Set Noti (Toast) for Action Redirect | type: "success", "error", "warning", "info"
+        /// </summary>
+        /// <param name="type">"success", "error", "warning", "info"</param>
+        /// <param name="message">text</param>
+        protected void SetToastMessage(string type, string message)
+        {
+            TempData["ToastType"] = type;
+            TempData["ToastMessage"] = message;
+        }
     }
 }

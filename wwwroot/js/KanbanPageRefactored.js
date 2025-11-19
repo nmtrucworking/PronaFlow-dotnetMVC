@@ -1,4 +1,24 @@
-﻿// Các hàm logic UI/UX và giao tiếp Server (AJAX/Fetch)
+﻿document.addEventListener('DOMContentLoaded', function () {
+    console.log("🚀 Kanban Page Loaded");
+    if (window.lucide) { lucide.createIcons(); }
+
+
+    initializeAddProjectButtons();
+    initializeProjectCardClicks();
+    initKanbanDragDrop();
+});
+function notify(type, message) {
+    // Mapping type của bạn: 'success', 'error' (khớp với CSS class trong ui.js)
+    if (window.showToast) {
+        // ui.js signature: showToast(message, type, duration)
+        window.showToast(message, type);
+    } else {
+        // Fallback nếu chưa load ui.js
+        console.warn(`[${type.toUpperCase()}] ${message}`);
+        alert(message);
+    }
+}
+
 
 /**
  * Gán sự kiện click cho các project card để mở modal.

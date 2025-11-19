@@ -442,13 +442,16 @@ namespace PronaFlow_MVC.Controllers
 
             if (string.IsNullOrWhiteSpace(name))
             {
-                TempData["Error"] = "Tên project là bắt buộc.";
+                SetToastMessage("error", "Tên dự án không được để trống.");
             }
 
             project.name = name.Trim();
             project.description = description;
             project.updated_at = DateTime.Now;
             _context.SaveChanges();
+
+            LogConsole("UpdateNameDescription", $"Updated Project {id}");
+            SetToastMessage("success", "Cập nhật thông tin dự án thành công.");
 
             return RedirectToKanban(project);
         }
@@ -510,15 +513,13 @@ namespace PronaFlow_MVC.Controllers
 
             if (string.IsNullOrWhiteSpace(memberEmail))
             {
-                TempData["Error"] = "Email thành viên là bắt buộc.";
-                return RedirectToKanban(project);
+                SetToastMessage("error", "Member Email is required.");
             }
 
             var user = _context.users.SingleOrDefault(u => u.email == memberEmail && !u.is_deleted);
             if (user == null)
             {
-                TempData["Error"] = "Không tìm thấy người dùng với email này.";
-                return RedirectToKanban(project);
+                SetToastMessage("error", "Not found any user with this email.");
             }
 
             var exists = _context.project_members.Any(pm => pm.project_id == project.id && pm.user_id == user.id);

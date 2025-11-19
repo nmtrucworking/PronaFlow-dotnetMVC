@@ -162,6 +162,8 @@ namespace PronaFlow_MVC.Controllers
         [HttpGet]
         public ActionResult Index(int? workspaceId, int? openProjectId)
         {
+            LogConsole("Index", $"Accessing KanbanBoard. WorkspaceId: {workspaceId}");
+
             var (authError, currentUser) = GetAuthenticatedUserOrError();
             if (authError != null) return authError;
 
@@ -176,7 +178,10 @@ namespace PronaFlow_MVC.Controllers
             if (targetWorkspaceId == 0)
             {
                 var defaultWs = _context.workspaces.FirstOrDefault(w => w.owner_id == currentUser.id);
-                if (defaultWs == null) return HttpNotFound(ErrorList.NoWorkspaceForCurrentUser);
+                if (defaultWs == null) {
+                    LogConsole("Index", "No default workspace found.", true);
+                    return HttpNotFound(ErrorList.NoWorkspaceForCurrentUser);
+                }
                 targetWorkspaceId = defaultWs.id;
             }
 
@@ -199,6 +204,8 @@ namespace PronaFlow_MVC.Controllers
         [HttpPost]
         public ActionResult UpdateProjectStatus(int projectId, string newStatus)
         {
+            LogConsole("UpdateProjectStatus", $"Project: {projectId}, NewStatus: {newStatus}");
+
             var (authError, currentUser) = GetAuthenticatedUserOrErrorJson();
             if (authError != null) return authError;
 
@@ -230,6 +237,8 @@ namespace PronaFlow_MVC.Controllers
                 project.updated_at = DateTime.Now;
                 _context.SaveChanges();
 
+                LogConsole("UpdateProjectStatus", "Update success.");
+
                 return Json(new 
                 { 
                     success = true, 
@@ -238,6 +247,8 @@ namespace PronaFlow_MVC.Controllers
             }
             catch (Exception ex)
             {
+                LogConsole("UpdateProjectStatus", ex.Message, true);
+
                 return Json(new 
                 { 
                     success = false, 
@@ -257,6 +268,8 @@ namespace PronaFlow_MVC.Controllers
         [HttpPost]
         public ActionResult CreateProject(int workspaceId, string projectName, string initialStatus)
         {
+            LogConsole("CreateProject", $"Workspace: {workspaceId}, Name: {projectName}");
+
             var (authError, currentUser) = GetAuthenticatedUserOrErrorJson();
             if (authError != null) return authError;
 
@@ -302,6 +315,8 @@ namespace PronaFlow_MVC.Controllers
                 _context.SaveChanges();
 
                 var projectViewModel = MapToKanbanCardViewModel(newProject);
+
+                LogConsole("CreateProject", $"Created Project ID: {newProject.id}");
 
                 return Json(new { success = true, project = projectViewModel });
             }

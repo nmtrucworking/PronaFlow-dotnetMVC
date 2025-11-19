@@ -33,11 +33,12 @@ export function showToast(message, type = 'success', duration = 3000) {
         toast.className = toast.className.replace('show', '');
     }, duration);
 }
-
+window.showToast = showToast;
 export function setLoadingState(button, isLoading, text) {
     button.disabled = isLoading;
     button.textContent = isLoading ? 'Loading...' : text;
 }
+window.setLoadingState = setLoadingState;
 
 // export function toggleForms(container, show) {
 //     if (show === 'register') {

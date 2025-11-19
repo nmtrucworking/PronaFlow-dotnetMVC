@@ -1,6 +1,7 @@
 ﻿@model PronaFlow_MVC.Models.ViewModels.KanbanBoardViewModel
 @{
     ViewBag.Title = "Kanban Board | PronaFlow";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{
     string GetUiStatus(string dbStatus)
@@ -38,7 +39,7 @@
     </div>
 
     <div class="frames frames--grid-2col">
-        <!--  CALENDAR FRAME (PRONAFLOW AGENDA) - START  -->
+        <!---->
         <div class="frame frame--kanban">
             <!-- Render from Calendar/AgendaCalendar-->
         </div>
@@ -67,12 +68,7 @@
 @section scripts {
     <script src="~/wwwroot/js/KanbanPageRefactored.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            if (window.lucide) { lucide.createIcons(); }
-            initializeAddProjectButtons();
-            initializeProjectCardClicks();
-            initKanbanDragDrop();
-        });
+        
     </script>
 }
 
