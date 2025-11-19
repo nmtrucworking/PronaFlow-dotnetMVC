@@ -1,5 +1,11 @@
-﻿<div class="modal-container modal-container--centered modal-component" id="projectDetailModal">
-    <!-- Phần .modal__content và nội dung bên trong giữ nguyên -->
+﻿@model PronaFlow_MVC.Models.ViewModels.ProjectDetailsViewModel
+
+<div class="modal-container modal-container--centered modal-component" id="projectDetailModal">
+
+    <a href="@Url.Action("Index", "Kanbanboard", new { workspaceId = ViewBag.CurrentWorkspaceId })"
+       class="modal-overlay-backdrop"
+    </a>
+
     <div class="modal__content no-scrollbar">
 
         <!-- =============================================================== -->
@@ -22,7 +28,6 @@
             <div class="project__cover"></div>
 
             <!-- ========== HEADER ========== -->
-            @model PronaFlow_MVC.Models.ViewModels.ProjectDetailsViewModel
             <div class="modal__header">
                 <div class="inner__header">
                     <div class="modal-header__top">
