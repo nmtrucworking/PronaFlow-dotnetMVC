@@ -4,39 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "6ae852ea85886f23",
+        "id": "2296af615e3da00e",
         "type": "tabs",
         "children": [
           {
-            "id": "8c783ba0cbc7701a",
+            "id": "54e1dbbbeac8b84d",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Database/Overview Database - PronaFlow.md",
+                "file": "README.md.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Overview Database - PronaFlow"
-            }
-          },
-          {
-            "id": "8d6baf3de7156bc7",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "PronaFlow by using C#-sharp/Authentication.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Authentication"
+              "title": "README.md"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -93,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 341.5,
-    "collapsed": true
+    "width": 341.5
   },
   "right": {
     "id": "7ed4e8f5e29b036a",
@@ -185,20 +169,22 @@
       "bases:Create new base": false
     }
   },
-  "active": "8d6baf3de7156bc7",
+  "active": "54e1dbbbeac8b84d",
   "lastOpenFiles": [
+    "PronaFlow by using ASP.NET MVC/Plan.md",
+    "PronaFlow by using ASP.NET MVC/Cấu hình Xác thực người dùng.md",
+    "Database/Overview Database - PronaFlow.md",
+    "Database/Database - PronaFlow.md",
+    "Database/Đánh giá Cơ sở Dữ liệu db_PronaFlow.md",
     "Database/CreateDBForPronaFlow.md",
-    "PronaFlow by using C#-sharp/Authentication.md",
+    "Database/Business Rules Updated for PronaFLow (Ver 2).md",
+    "PronaFlow by using ASP.NET MVC/Authentication.md",
     "Database/data/kutz1icq.g4r~",
     "Database/data/rzjmupzd.5j5~",
     "Database/data/sp-pronaflow.sql",
     "Database/data/tberhbku.z51~",
     "Database/data/trigger-pronaflow.sql",
     "Database/User Flow/UserFlow - Activities.md",
-    "Database/Database - PronaFlow.md",
-    "Database/Overview Database - PronaFlow.md",
-    "Database/Business Rules Updated for PronaFLow (Ver 2).md",
-    "Database/Đánh giá Cơ sở Dữ liệu db_PronaFlow.md",
     "Database/User Flow/UserFlow - Users.md",
     "DIAGRAM/UML Diagrams for PronaFlow.md",
     "DIAGRAM/USE CASE DIAGRAM/Use Case Diagram for PronaFlow System.md",
@@ -214,13 +200,11 @@
     "Database/User Flow/UserFlow - Workspace.md",
     "Database/User Flow/UserFlow - Projects.md",
     "Database/database diagram.png",
-    "PronaFlow by using C#-sharp/Plan.md",
     "Database/UserFlow - PronaFlow.md",
     "README.md.md",
     "Database/User Flow/UserFlow - Attachments.md",
     "Admin/Describe Admin Pages.md",
     "Admin/Code Organization.md",
-    "Admin/Tree View - Admin - PronaFlow.md",
     "Admin",
     "Database/data/data2.sql",
     "Database/data/admin account.sql",

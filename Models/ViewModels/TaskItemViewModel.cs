@@ -11,5 +11,6 @@ namespace PronaFlow_MVC.Models.ViewModels
         public DateTime? DueDate { get; set; }
         public string ProjectName { get; set; }
         public string TaskListName { get; set; }
+        public string WorkspaceName { get; set; }
     }
 }

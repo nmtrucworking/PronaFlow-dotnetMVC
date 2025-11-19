@@ -34,180 +34,161 @@
 /* =================================================================== */
 
 :root {
-  /* ----------------------------------------------- */
-  /* --- 2.1. BẢNG MÀU CHÍNH (LIGHT MODE) --- */
-  /* ----------------------------------------------- */
-
-  /* A1. Màu Thương Hiệu & Nhấn */
-  --color-primary: #2D5B9A;
-  /* Lam đậm - Màu chủ đạo cho hành động chính */
-  --color-primary-hover: #24487a;
-  /* Lam đậm hơn khi hover */
-  --color-primary-light: #EAF0F6;
-  /* Lam rất nhạt - Dùng cho nền của các mục được chọn */
-  --color-accent: #8A7968;
-  /* Nâu - Dùng cho các điểm nhấn phụ, không quá nổi bật */
-
-  /* A2. Màu Nền & Bề Mặt */
-  --color-background: #F8F9FA;
-  /* Xám siêu nhạt - Nền chính của toàn bộ trang */
-  --color-background-second: #dfdbdb;
-  --color-background-third: #1F2937;
-  --color-background-fourth: #F0F1F3;
-  --color-background-fifth: #d1d0d09a;
-  --color-surface: #FFFFFF;
-  /* Trắng - Nền của các Card, Modal, Sidebar */
-  --color-surface-hover: #dbdadad4;
-  /* Xám nhạt - Khi hover lên các mục trong danh sách */
-  --color-background-header: linear-gradient(180deg, rgba(45, 91, 154, 1) 0%, #98afce 42%, rgba(213, 223, 235, 1) 73%, transparent 100%);
-  --color-background-have-bg-img: #f0f1f389;
-
-  /* A3. Màu Văn Bản */
-  --color-text-primary: #1F2937;
-  /* Xám Đen - Chữ chính, tiêu đề */
-  --color-text-secondary: #3c414c;
-  /* Xám Vừa - Chữ phụ, mô tả, icon */
-  --color-text-tertiary: #9CA3AF;
-  /* Xám Nhạt - Chữ placeholder, thông tin mờ */
-  --color-text-on-primary: #FFFFFF;
-  /* Trắng - Chữ trên nền màu --color-primary */
-  --color-text-heading: linear-gradient(180deg, rgba(248, 249, 250, 1) 0%, rgba(213, 223, 235, 1) 27%, rgba(152, 175, 206, 1) 53%, rgba(45, 91, 154, 1) 100%);
-
-  /* A4. Màu Viền & Phân Cách */
-  --color-border-1: #E5E7EB;
-  /* Viền cho card, input */
-  --color-border-2: #aaabaf;
-  --color-divider: #999999;
-  /* Đường kẻ phân cách */
-  --color-focus-ring: #5E92E3;
-  /* Vòng sáng xanh khi focus vào input */
-  --cl-border-light: #e0e0e0;
-  --cl-border-modal: #dee2e6;
-  --cl-border-hover: #B2D4F5;
-  --cl-divider: #ddd;
-
-  /* A5. Màu Trạng Thái */
-  --color-success: linear-gradient(331deg, rgba(47, 75, 128, 1) 20%, rgba(96, 120, 164, 1) 50%);
-  /* Lục - Cho các hành động thành công, trạng thái "Done" */
-  --color-warning: #fece8fcb;
-  /* Vàng - Cho cảnh báo, sắp hết hạn */
-  --color-text-warning: #b96d0a;
-  --color-danger: #ff4d40;
-  /* Đỏ - Cho hành động xóa, lỗi, quá hạn */
-  --color-danger-1: #ea89d582;
-  --color-background-danger: radial-gradient(circle, rgba(247, 143, 143, 1) 0%, rgb(255, 255, 255) 100%);
-  --color-info: #0077D4;
-  /* Xanh dương - Cho các thông báo thông tin */
-  --color-picker-default: #80c8ff;
-  --color-archive: #a8ffccc0;
-  --color-text-archive: #006a2c;
-  --color-btn-focus: #98afce;
-  --color-priority-high: #ffca37;
-
-  /* A6. Màu Nền Theo Trạng Thái Công Việc */
-  --color-background-temp: linear-gradient(90deg, rgba(223, 219, 219, 0.6) 0%, rgba(232, 229, 229, 0.6) 22%, rgba(255, 255, 255, 0.6) 81%, rgba(255, 255, 255, 0.6) 100%);
-  --color-background-inprogress: linear-gradient(90deg, rgba(128, 200, 255, 0.6) 0%, rgba(170, 218, 255, 0.6) 17%, rgba(255, 255, 255, 0.6) 73%, rgba(255, 255, 255, 0.6) 100%);
-  --color-background-inreview: linear-gradient(90deg, rgba(179, 255, 186, 0.6) 0%, rgba(176, 242, 209, 0.6) 21%, rgba(173, 229, 234, 0.6) 34%, rgba(170, 218, 255, 0.6) 78%);
-  --color-background-done: linear-gradient(90deg, rgba(255, 255, 255, 0.6) 0%, rgba(179, 255, 186, 0.6) 63%, rgba(177, 248, 199, 0.6) 83%, rgba(176, 242, 209, 0.6) 100%);
-  --color-background-overdue: linear-gradient(90deg, rgba(255, 196, 196, 0.6) 0%, rgba(173, 171, 212, 0.6) 64%, rgba(130, 178, 255, 0.6) 100%);
-
-  /* A7. Màu cho Tags */
-  --cl-tag-default: rgb(132, 132, 132);
-  --cl-tag-gray: #4e4e4e;
-  --cl-tag-brown: #6f381c;
-  --cl-tag-orange: #ff7a1b;
-  --cl-tag-yellow: #ffca37;
-  --cl-tag-green: #1fcf34;
-  --cl-tag-blue: #23a0e3;
-  --cl-tag-purple: #a145ec;
-  --cl-tag-pink: #ed398a;
-  --cl-tag-red: #f82f14;
-
-  /* A8. Màu Glassmorphism (Dùng cho trang Login) */
-  --cl-glass-bg-light: rgba(255, 255, 255, 0.1);
-  --cl-glass-bg-form: rgba(255, 255, 255, 0.28);
-  --cl-glass-bg-footer: rgba(255, 255, 255, 0.2);
-  --cl-glass-border: rgba(255, 255, 255, 0.3);
-
-
-  /* ----------------------------------------------- */
-  /* --- 2.2. CÁC BIẾN GIAO DIỆN KHÁC --- */
-  /* ----------------------------------------------- */
-
-  /* B1. Typography (Phông chữ & Kích thước) - CẬP NHẬT */
-  --font-family-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-family-heading: 'Kanit', sans-serif;
-  --font-family-accent: 'Playfair Display', serif;
-  --font-widget-hello: "Dancing script", cursive;
-
-  /* Thang đo kích thước phông chữ (MỚI) */
-  --font-size-xs: 0.75rem;
-  /* 12px */
-  --font-size-sm: 0.875rem;
-  /* 14px */
-  --font-size-base: 1rem;
-  /* 16px */
-  --font-size-lg: 1.25rem;
-  /* 20px */
-  --font-size-xl: 1.5rem;
-  /* 24px */
-  --font-size-2xl: 1.875rem;
-  /* 30px */
-  --font-size-3xl: 2.25rem;
-  /* 36px */
-  --font-size-4xl: 2.5rem;
-  /* 40px */
-
-  /* B2. Spacing (Khoảng cách) */
-  --spacing-xxs: 2px;
-  --spacing-xs: 5px;
-  --spacing-sm: 10px;
-  --spacing-md: 15px;
-  --spacing-lg: 20px;
-  --spacing-xl: 30px;
-  --spacing-xxl: 40px;
-  --spacing-3xl: 60px;
-  --spacing-4xl: 100px;
-
-  /* B3. Border Radius (Độ bo góc) */
-  --border-radius-sm: 5px;
-  --border-radius-md: 10px;
-  --border-radius-lg: 15px;
-  --border-radius-xl: 30px;
-  --border-radius-pill: 50px;
-  --border-radius-circle: 50%;
-
-  /* B4. Shadows (Hiệu ứng đổ bóng) */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(68, 71, 120, 0.6), 0 4px 6px -2px rgba(68, 71, 120, 0.6);
-  --shadow-sm1: 0 1px 2px rgba(255, 255, 255, 0.05);
-  --shadow-md1: 0 4px 6px -1px rgba(255, 255, 255, 0.1), 0 2px 4px -1px rgba(255, 255, 255, 0.06);
-  --shadow-lg1: 0 10px 15px -3px rgba(255, 255, 255, 0.1), 0 4px 6px -2px rgba(255, 255, 255, 0.05);
-  --card-shadow: 0 10px 30px rgba(17, 0, 150, 0.478);
-
-  /* B5. Transitions (Hiệu ứng chuyển động) */
-  --transition-fast: all 0.15s ease-in-out;
-  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* B6. Kích thước (Layout) */
-  --divider-height: 20.5px;
-
-  --sidebar-width: 240px;
-  --sidebar-width-collapsed: 56px;
-
-  --laptop-sidebar-width: 240px;
-  --laptop-sidebar-width-collapsed: 56px;
-
-  --tablet-sidebar-width: 56px;
-  --tablet-sidebar-width-opened: 240px;
-
-  --mobile-sidebar-height: 56px;
-
-  --project-modal__left-col: 35px;
-
-  --task-page-sidebar: 400px;
-  --task-page-sidebar--second: 300px;
+    /* ----------------------------------------------- */
+    /* --- 2.1. BẢNG MÀU CHÍNH (LIGHT MODE) --- */
+    /* ----------------------------------------------- */
+    /* A1. Màu Thương Hiệu & Nhấn */
+    --color-primary: #2D5B9A;
+    /* Lam đậm - Màu chủ đạo cho hành động chính */
+    --color-primary-hover: #24487a;
+    /* Lam đậm hơn khi hover */
+    --color-primary-light: #EAF0F6;
+    /* Lam rất nhạt - Dùng cho nền của các mục được chọn */
+    --color-accent: #8A7968;
+    /* Nâu - Dùng cho các điểm nhấn phụ, không quá nổi bật */
+    /* A2. Màu Nền & Bề Mặt */
+    --color-background: #F8F9FA;
+    /* Xám siêu nhạt - Nền chính của toàn bộ trang */
+    --color-background-second: #dfdbdb;
+    --color-background-third: #1F2937;
+    --color-background-fourth: #F0F1F3;
+    --color-background-fifth: #d1d0d09a;
+    --color-surface: #FFFFFF;
+    /* Trắng - Nền của các Card, Modal, Sidebar */
+    --color-surface-hover: #dbdadad4;
+    /* Xám nhạt - Khi hover lên các mục trong danh sách */
+    --color-background-header: linear-gradient(180deg, rgba(45, 91, 154, 1) 0%, #98afce 42%, rgba(213, 223, 235, 1) 73%, transparent 100%);
+    --color-background-have-bg-img: #f0f1f389;
+    /* A3. Màu Văn Bản */
+    --color-text-primary: #1F2937;
+    /* Xám Đen - Chữ chính, tiêu đề */
+    --color-text-secondary: #3c414c;
+    /* Xám Vừa - Chữ phụ, mô tả, icon */
+    --color-text-tertiary: #9CA3AF;
+    /* Xám Nhạt - Chữ placeholder, thông tin mờ */
+    --color-text-on-primary: #FFFFFF;
+    /* Trắng - Chữ trên nền màu --color-primary */
+    --color-text-heading: linear-gradient(180deg, rgba(248, 249, 250, 1) 0%, rgba(213, 223, 235, 1) 27%, rgba(152, 175, 206, 1) 53%, rgba(45, 91, 154, 1) 100%);
+    /* A4. Màu Viền & Phân Cách */
+    --color-border-1: #E5E7EB;
+    /* Viền cho card, input */
+    --color-border-2: #aaabaf;
+    --color-divider: #999999;
+    /* Đường kẻ phân cách */
+    --color-focus-ring: #5E92E3;
+    /* Vòng sáng xanh khi focus vào input */
+    --cl-border-light: #e0e0e0;
+    --cl-border-modal: #dee2e6;
+    --cl-border-hover: #B2D4F5;
+    --cl-divider: #ddd;
+    /* A5. Màu Trạng Thái */
+    --color-success: linear-gradient(331deg, rgba(47, 75, 128, 1) 20%, rgba(96, 120, 164, 1) 50%);
+    /* Lục - Cho các hành động thành công, trạng thái "Done" */
+    --color-warning: #fece8fcb;
+    /* Vàng - Cho cảnh báo, sắp hết hạn */
+    --color-text-warning: #b96d0a;
+    --color-danger: #ff4d40;
+    /* Đỏ - Cho hành động xóa, lỗi, quá hạn */
+    --color-danger-1: #ea89d582;
+    --color-background-danger: radial-gradient(circle, rgba(247, 143, 143, 1) 0%, rgb(255, 255, 255) 100%);
+    --color-info: #0077D4;
+    /* Xanh dương - Cho các thông báo thông tin */
+    --color-picker-default: #80c8ff;
+    --color-archive: #a8ffccc0;
+    --color-text-archive: #006a2c;
+    --color-btn-focus: #98afce;
+    --color-priority-high: #ffca37;
+    /* A6. Màu Nền Theo Trạng Thái Công Việc */
+    --color-background-temp: linear-gradient(90deg, rgba(223, 219, 219, 0.6) 0%, rgba(232, 229, 229, 0.6) 22%, rgba(255, 255, 255, 0.6) 81%, rgba(255, 255, 255, 0.6) 100%);
+    --color-background-inprogress: linear-gradient(90deg, rgba(128, 200, 255, 0.6) 0%, rgba(170, 218, 255, 0.6) 17%, rgba(255, 255, 255, 0.6) 73%, rgba(255, 255, 255, 0.6) 100%);
+    --color-background-inreview: linear-gradient(90deg, rgba(179, 255, 186, 0.6) 0%, rgba(176, 242, 209, 0.6) 21%, rgba(173, 229, 234, 0.6) 34%, rgba(170, 218, 255, 0.6) 78%);
+    --color-background-done: linear-gradient(90deg, rgba(255, 255, 255, 0.6) 0%, rgba(179, 255, 186, 0.6) 63%, rgba(177, 248, 199, 0.6) 83%, rgba(176, 242, 209, 0.6) 100%);
+    --color-background-overdue: linear-gradient(90deg, rgba(255, 196, 196, 0.6) 0%, rgba(173, 171, 212, 0.6) 64%, rgba(130, 178, 255, 0.6) 100%);
+    /* A7. Màu cho Tags */
+    --cl-tag-default: rgb(132, 132, 132);
+    --cl-tag-gray: #4e4e4e;
+    --cl-tag-brown: #6f381c;
+    --cl-tag-orange: #ff7a1b;
+    --cl-tag-yellow: #ffca37;
+    --cl-tag-green: #1fcf34;
+    --cl-tag-blue: #23a0e3;
+    --cl-tag-purple: #a145ec;
+    --cl-tag-pink: #ed398a;
+    --cl-tag-red: #f82f14;
+    /* A8. Màu Glassmorphism (Dùng cho trang Login) */
+    --cl-glass-bg-light: rgba(255, 255, 255, 0.1);
+    --cl-glass-bg-form: rgba(255, 255, 255, 0.28);
+    --cl-glass-bg-footer: rgba(255, 255, 255, 0.2);
+    --cl-glass-border: rgba(255, 255, 255, 0.3);
+    /* ----------------------------------------------- */
+    /* --- 2.2. CÁC BIẾN GIAO DIỆN KHÁC --- */
+    /* ----------------------------------------------- */
+    /* B1. Typography (Phông chữ & Kích thước) - CẬP NHẬT */
+    --font-family-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-family-heading: 'Kanit', sans-serif;
+    --font-family-accent: 'Playfair Display', serif;
+    --font-widget-hello: "Dancing script", cursive;
+    /* Thang đo kích thước phông chữ (MỚI) */
+    --font-size-xs: 0.75rem;
+    /* 12px */
+    --font-size-sm: 0.875rem;
+    /* 14px */
+    --font-size-base: 1rem;
+    /* 16px */
+    --font-size-lg: 1.25rem;
+    /* 20px */
+    --font-size-xl: 1.5rem;
+    /* 24px */
+    --font-size-2xl: 1.875rem;
+    /* 30px */
+    --font-size-3xl: 2.25rem;
+    /* 36px */
+    --font-size-4xl: 2.5rem;
+    /* 40px */
+    /* B2. Spacing (Khoảng cách) */
+    --spacing-xxs: 2px;
+    --spacing-xs: 5px;
+    --spacing-sm: 10px;
+    --spacing-md: 15px;
+    --spacing-lg: 20px;
+    --spacing-xl: 30px;
+    --spacing-xxl: 40px;
+    --spacing-3xl: 60px;
+    --spacing-4xl: 100px;
+    /* B3. Border Radius (Độ bo góc) */
+    --border-radius-sm: 5px;
+    --border-radius-md: 10px;
+    --border-radius-lg: 15px;
+    --border-radius-xl: 30px;
+    --border-radius-pill: 50px;
+    --border-radius-circle: 50%;
+    /* B4. Shadows (Hiệu ứng đổ bóng) */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(68, 71, 120, 0.6), 0 4px 6px -2px rgba(68, 71, 120, 0.6);
+    --shadow-sm1: 0 1px 2px rgba(255, 255, 255, 0.05);
+    --shadow-md1: 0 4px 6px -1px rgba(255, 255, 255, 0.1), 0 2px 4px -1px rgba(255, 255, 255, 0.06);
+    --shadow-lg1: 0 10px 15px -3px rgba(255, 255, 255, 0.1), 0 4px 6px -2px rgba(255, 255, 255, 0.05);
+    --card-shadow: 0 10px 30px rgba(17, 0, 150, 0.478);
+    /* B5. Transitions (Hiệu ứng chuyển động) */
+    --transition-fast: all 0.15s ease-in-out;
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* B6. Kích thước (Layout) */
+    --divider-height: 20.5px;
+    --sidebar-width: 240px;
+    --sidebar-width-collapsed: 56px;
+    --laptop-sidebar-width: 240px;
+    --laptop-sidebar-width-collapsed: 56px;
+    --tablet-sidebar-width: 56px;
+    --tablet-sidebar-width-opened: 240px;
+    --mobile-sidebar-height: 56px;
+    --project-modal__left-col: 35px;
+    --task-page-sidebar: 400px;
+    --task-page-sidebar--second: 300px;
+    /* Z-index    */
+    --z-index__first: 2000;
+    --z-index__second: 0;
+    --z-index__second: 0;
 }
 
 

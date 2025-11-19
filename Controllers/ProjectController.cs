@@ -1,4 +1,4 @@
-﻿using Internal;
+﻿using System.Configuration.Internal;
 using PronaFlow_MVC.Models;
 using PronaFlow_MVC.Models.ViewModels;
 using System;
@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.SessionState;
+using System.Web.UI;
 
 namespace PronaFlow_MVC.Controllers
 {
@@ -89,7 +90,7 @@ namespace PronaFlow_MVC.Controllers
         /// <param name="currentUser"></param>
         /// <param name="asPartial"></param>
         /// <returns>ActionResult</returns>
-        private ActionResult AuthorizeUser(out users currentUser, bool asPartial = false)
+        private ActionResult AuthorizeUser(users currentUser, bool asPartial = false)
         {
             currentUser = null;
             var email = User?.Identity?.Name;
@@ -132,10 +133,10 @@ namespace PronaFlow_MVC.Controllers
         /// <param name="currentUser">Current user object</param>
         /// <param name="asPartial">Flag indicating whether to return partial response (401) or full redirect (302)</param>
         /// <returns>ActionResult: null if authorized, otherwise appropriate response</returns>
-        private ActionResult AuthorizeForWorkspace(long workspaceId, out users currentUser, bool asPartial = false)
+        private ActionResult AuthorizeForWorkspace(long workspaceId,  users currentUser, bool asPartial = false)
         {
             currentUser = null;
-            var userResult = AuthorizeUser(out currentUser, asPartial);
+            var userResult = AuthorizeUser(currentUser, asPartial);
             if (userResult != null) return userResult;
         
             var ownsWorkspace = db.workspaces.Any(w => w.id == workspaceId && w.owner_id == currentUser.id);
@@ -148,12 +149,20 @@ namespace PronaFlow_MVC.Controllers
             return null;
         }
 
-        private ActionResult AuthorizeForProject(int projectId, out users currentUser, out projects project, bool asPartial = false)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <param name="currentUser"></param>
+        /// <param name="project"></param>
+        /// <param name="asPartial"></param>
+        /// <returns></returns>
+        private ActionResult AuthorizeForProject(int projectId, users currentUser, projects project, bool asPartial = false)
         {
             project = null;
             currentUser = null;
         
-            var userResult = AuthorizeUser(out currentUser, asPartial);
+            var userResult = AuthorizeUser(currentUser, asPartial);
             if (userResult != null) return userResult;
         
             project = db.projects.SingleOrDefault(p => p.id == projectId && !p.is_deleted);
@@ -290,11 +299,14 @@ namespace PronaFlow_MVC.Controllers
         /// Get project details partial view.
         /// </summary>
         /// <param name="id">Project ID to get details for</param>
-        /// <returns>ActionResult: Partial view with project details</returns>
+        /// <param name="currentUser"></param>
+        /// <param name="project"></param>
+        /// <param name="asPartial"></param>
+        /// <returns>ActionResult: Partial view with project details</returns
         [HttpGet]
-        public ActionResult DetailsPartial(int id)
+        public ActionResult DetailsPartial(int id, users currentUser, projects project, bool asPartial)
         {
-            var authResult = AuthorizeForProject(id, out var currentUser, out var project, asPartial: true);
+            var authResult = AuthorizeForProject(id, currentUser, project, asPartial: true);
             if (authResult != null) return authResult;
 
             var vm = MapToProjectDetailsViewModel(project);
@@ -313,9 +325,9 @@ namespace PronaFlow_MVC.Controllers
         /// </summary>
         /// <param name="workspaceId"></param>
         /// <returns></returns>
-        public ActionResult Create(int? workspaceId)
+        public ActionResult Create(int? workspaceId, users currentUser)
         {
-            var userResult = AuthorizeUser(out var currentUser);
+            var userResult = AuthorizeUser(currentUser);
             if (userResult != null) return userResult;
 
             long currentWorkspaceId = workspaceId.HasValue
@@ -327,7 +339,7 @@ namespace PronaFlow_MVC.Controllers
                 return HttpNotFound("Workspace không hợp lệ.");
             }
 
-            var wsResult = AuthorizeForWorkspace(currentWorkspaceId, out currentUser);
+            var wsResult = AuthorizeForWorkspace(currentWorkspaceId, currentUser);
             if (wsResult != null) return wsResult;
 
             ViewBag.WorkspaceId = currentWorkspaceId;
@@ -335,9 +347,9 @@ namespace PronaFlow_MVC.Controllers
             return View();
         }
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int id, users currentUser, projects project)
         {
-            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            var authResult = AuthorizeForProject(id, currentUser, project);
             if (authResult != null) return authResult;
 
             var vm = MapToProjectDetailsViewModel(project);
@@ -347,9 +359,9 @@ namespace PronaFlow_MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, string name, string description, string status, DateTime? startDate, DateTime? endDate)
+        public ActionResult Edit(int id, string name, string description, string status, DateTime? startDate, DateTime? endDate, users currentUser, projects project)
         {
-            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            var authResult = AuthorizeForProject(id, currentUser, project);
             if (authResult != null) return authResult;
 
             if (string.IsNullOrWhiteSpace(name))
@@ -385,9 +397,9 @@ namespace PronaFlow_MVC.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetTasks(int projectId)
+        public ActionResult GetTasks(int projectId, users currentUser, projects project, bool asPartial)
         {
-            var authResult = AuthorizeForProject(projectId, out var currentUser, out var project, asPartial: true);
+            var authResult = AuthorizeForProject(projectId, currentUser, project, asPartial: true);
             if (authResult != null) return authResult;
 
             var tasks = project.tasks
@@ -418,9 +430,9 @@ namespace PronaFlow_MVC.Controllers
         /// <returns>ActionResult: Redirect to project details or back to Kanbanboard</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateMinimal(int workspaceId, string name, string status)
+        public ActionResult CreateMinimal(int workspaceId, string name, string status, users currentUser)
         {
-            var wsResult = AuthorizeForWorkspace(workspaceId, out var currentUser);
+            var wsResult = AuthorizeForWorkspace(workspaceId, currentUser);
             if (wsResult != null) return wsResult;
 
             if (string.IsNullOrWhiteSpace(name))
@@ -475,9 +487,9 @@ namespace PronaFlow_MVC.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateNameDescription(int id, string name, string description)
+        public ActionResult UpdateNameDescription(int id, string name, string description, users currentUser, projects project)
         {
-            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            var authResult = AuthorizeForProject(id, currentUser, project);
             if (authResult != null) return authResult;
 
             if (string.IsNullOrWhiteSpace(name))
@@ -503,9 +515,9 @@ namespace PronaFlow_MVC.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateStatus(int id, string status)
+        public ActionResult UpdateStatus(int id, string status, users currentUser, projects project)
         {
-            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            var authResult = AuthorizeForProject(id, currentUser, project);
             if (authResult != null) return authResult;
 
             project.status = NormalizeStatusForDb(status);
@@ -524,9 +536,9 @@ namespace PronaFlow_MVC.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateDeadline(int id, DateTime? startDate, DateTime? endDate)
+        public ActionResult UpdateDeadline(int id, DateTime? startDate, DateTime? endDate, users currentUser, projects project)
         {
-            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            var authResult = AuthorizeForProject(id, currentUser, project);
             if (authResult != null) return authResult;
 
             project.start_date = startDate;
@@ -545,9 +557,9 @@ namespace PronaFlow_MVC.Controllers
         /// <returns>Redirect to Kanbanboard: {workspaceId, openProjectId = id}</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddMember(int id, string memberEmail)
+        public ActionResult AddMember(int id, string memberEmail, users currentUser, projects project)
         {
-            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            var authResult = AuthorizeForProject(id, currentUser, project);
             if (authResult != null) return authResult;
 
             if (string.IsNullOrWhiteSpace(memberEmail))
@@ -587,9 +599,9 @@ namespace PronaFlow_MVC.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RemoveMember(int id, int userId)
+        public ActionResult RemoveMember(int id, int userId, users currentUser, projects project)
         {
-            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            var authResult = AuthorizeForProject(id, currentUser, project);
             if (authResult != null) return authResult;
 
             var pm = db.project_members.SingleOrDefault(m => m.project_id == project.id && m.user_id == userId);
@@ -614,9 +626,9 @@ namespace PronaFlow_MVC.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddTag(int id, int tagId)
+        public ActionResult AddTag(int id, int tagId, users currentUser, projects project)
         {
-            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            var authResult = AuthorizeForProject(id, currentUser, project);
             if (authResult != null) return authResult;
 
             var tag = db.tags.SingleOrDefault(t => t.id == tagId && t.workspace_id == project.workspace_id);
@@ -639,9 +651,9 @@ namespace PronaFlow_MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult RemoveTag(int id, int tagId)
+        public ActionResult RemoveTag(int id, int tagId, users currentUser, projects project)
         {
-            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            var authResult = AuthorizeForProject(id, currentUser, project);
             if (authResult != null) return authResult;
 
             var tag = project.tags.SingleOrDefault(t => t.id == tagId);
@@ -656,9 +668,9 @@ namespace PronaFlow_MVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateTagAndAssign(int id, string name, string colorHex)
+        public ActionResult CreateTagAndAssign(int id, string name, string colorHex, users currentUser, projects project)
         {
-            var authResult = AuthorizeForProject(id, out var currentUser, out var project);
+            var authResult = AuthorizeForProject(id, currentUser, project);
             if (authResult != null) return authResult;
 
             if (string.IsNullOrWhiteSpace(name))

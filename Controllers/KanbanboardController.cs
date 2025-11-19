@@ -186,13 +186,40 @@ namespace PronaFlow_MVC.Controllers
             var projectViewModels = projectsInWorkspace
                                     .Select(MapToKanbanCardViewModel)
                                     .ToList();
-            // Map projects to KanbanProjectCardViewModel
+
+            var email = User?.Identity?.Name;
+            var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
+            var today = DateTime.Now.Date;
+            var next7 = today.AddDays(7);
+            var upcomingTasks = _context.tasks
+                .Include("projects")
+                .Include("task_lists")
+                .Where(t => !t.is_deleted && t.end_date.HasValue && t.end_date.Value >= today && t.end_date.Value <= next7)
+                .Where(t => !(t.status == "done" || t.status == "completed"))
+                .Where(t => projectsInWorkspace.Select(p => p.id).Contains(t.project_id))
+                .Where(t => currentUser != null && t.users1.Any(u => u.id == currentUser.id))
+                .OrderBy(t => t.end_date)
+                .Take(10)
+                .Select(t => new PronaFlow_MVC.Models.ViewModels.TaskItemViewModel
+                {
+                    Id = t.id,
+                    Name = t.name,
+                    Status = t.status,
+                    Priority = t.priority,
+                    DueDate = t.end_date,
+                    ProjectName = t.projects.name,
+                    TaskListName = t.task_lists.name,
+                    WorkspaceName = workspace.name
+                })
+                .ToList();
+
             return new KanbanBoardViewModel
             {
                 CurrentWorkspaceId = (int)workspace.id,
                 WorkspaceName = workspace.name,
                 WorkspaceDescription = workspace.description,
-                Projects = projectViewModels
+                Projects = projectViewModels,
+                UpcomingTasks = upcomingTasks
             };
         }
 

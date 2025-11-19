@@ -33,7 +33,7 @@
             <h3 class="widget__title">Task Overdue</h3>
             <div class="widget__content widget__content--overdue">
                 <div class="inner-widget-content">
-                    You have <span id="total-tasks-overdue">#</span> overdue tasks to catch up on
+                    You have <span id="total-tasks-overdue">@ViewBag.TotalTasksOverdue</span> overdue tasks to catch up on
                 </div>
             </div>
         </div>
@@ -46,7 +46,50 @@
             <h3 class="frame__title frame__title--dashboard">Upcoming task</h3>
             <div class="frame__content hide-scrollbar">
                 <div class="task-list" id="upcoming-tasks">
-                    <!-- JS will render Upcoming Tasks -->
+                    @{ var tasks = ViewBag.UpcomingTasks as IEnumerable<PronaFlow_MVC.Models.ViewModels.TaskItemViewModel>; }
+                    @if (tasks != null)
+                    {
+                        foreach (var t in tasks)
+                        {
+                            <div class="event-item event-item--task">
+                                <div class="event-item__icon-wrapper">
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" />
+                                        <span class="custom-checkbox__checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="event-item__content">
+                                    <div class="event-item__header">
+                                        <span class="event-item__title">@t.Name</span>
+                                    </div>
+                                    <div class="event-item__meta">
+                                        <div class="event-item__meta-group">
+                                            <i data-lucide="folder-open"></i>
+                                            <span>In: @t.ProjectName — @t.WorkspaceName</span>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(t.Priority))
+                                        {
+                                            <div class="event-item__meta-group">
+                                                <i data-lucide="star"></i>
+                                                <span>@t.Priority</span>
+                                            </div>
+                                        }
+                                        @if (t.DueDate.HasValue)
+                                        {
+                                            <div class="event-item__meta-group">
+                                                <i data-lucide="flag"></i>
+                                                <span>Deadline: @t.DueDate.Value.ToString("MMM dd")</span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="inner-widget-content">No upcoming tasks</div>
+                    }
                 </div>
             </div>
         </div>

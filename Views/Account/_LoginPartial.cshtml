@@ -1,7 +1,7 @@
 ﻿@model PronaFlow_MVC.Models.ViewModels.LoginViewModel
 
 <div class="login-card__form-wrapper login-card__form-wrapper--login">
-    @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { role = "form" }))
+    @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { role = "form", @class = "form"}))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true, "", new { @class = "form__error form__error--summary" })
@@ -9,13 +9,13 @@
         <h1 class="form__title">Login</h1>
         <div class="form__input-groups">
             <div class="form__input-group">
-                @Html.LabelFor(m => m.Email)
+                @*@Html.LabelFor(m => m.Email)*@
                 @Html.TextBoxFor(m => m.Email, new { @class = "form__input", placeholder = "Email" })
                 @Html.ValidationMessageFor(m => m.Email, "", new { @class = "form__error" })
                 <i data-lucide="mail" class="form__icon"></i>
             </div>
             <div class="form__input-group">
-                @Html.LabelFor(m => m.Password)
+                @*@Html.LabelFor(m => m.Password)*@
                 @Html.PasswordFor(m => m.Password, new { @class = "form__input", placeholder = "Password" })
                 @Html.ValidationMessageFor(m => m.Password, "", new { @class = "form__error" })
                 <i data-lucide="lock" class="form__icon"></i>
@@ -28,10 +28,8 @@
         </div>
 
         <a href="#" class="form__link">Forgot Password?</a>
-        <button id="signInBtn" type="submit" class="form__submit-btn">Login</button>
+        <button id="signInBtn" type="submit" class="form__submit-btn btn-hover">Login</button>
     }
-    <form action="" class="form" id="loginForm" name="loginForm" novalidate>
-    </form>
 
     <p class="form__text">or login with social platforms</p>
     <div class="form_socials">

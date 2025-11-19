@@ -16,5 +16,10 @@ namespace PronaFlow_MVC.Controllers
         {
             return View();
         }
+
+        public ActionResult AgendaCalendar()
+        {
+            return PartialView("_AgendaCalendar");
+        }
     }
 }
