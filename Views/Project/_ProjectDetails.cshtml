@@ -1,4 +1,8 @@
 ﻿@model PronaFlow_MVC.Models.ViewModels.ProjectDetailsViewModel
+@{
+    Layout = null;
+    var defaultAvatarUrl = "../assets/images/avt-notion_1.png";
+}
 
 <div class="modal-container modal-container--centered modal-component" id="projectDetailModal">
 
@@ -82,47 +86,27 @@
                             <div class="attribute__name">Members</div>
                             <div class="attribute__content">
                                 <ul class="list_attributes">
-                                    <!-- JS will render data for project members -->
-                                    <img src="../assets/images/avt-notion_1.png" alt="Member 1" title="User 1"
-                                         class="project-member__avt">
+                                    @if (Model.Members != null && Model.Members.Any())
+                                    {
+                                        foreach (var member in Model.Members)
+                                        {
+                                            var avatarUrl = string.IsNullOrEmpty(member.AvatarUrl)
+                                                ? defaultAvatarUrl
+                                                : member.AvatarUrl;
 
-                                    <div class="project-member__avt-plus">+2</div>
+                                            <img src="@avatarUrl" alt="User @member.UserId"
+                                                 title="User ID: @member.UserId"
+                                                 class="project-member__avt"
+                                                 style="width:24px;height:24px;border-radius:50%; object-fit:cover;">
+                                        }
+                                    }
+                                    <button class="add-member btn-hover" id="addMemberBtn" popovertarget="addMemberPopover"
+                                            popovertargetaction="toggle">
+                                        <i data-lucide="user-plus"></i>
+                                    </button>
                                 </ul>
-                                <button class="add-member btn-hover" id="addMemberBtn" popovertarget="addMemberPopover"
-                                        popovertargetaction="toggle">
-                                    <i data-lucide="user-plus"></i>
-                                </button>
 
-                                <!-- Add Member Popover (hidden by default, no inline style) -->
-                                <div popover="" id="addMemberPopover" class="popover project-attribute-popover">
-                                    <div class="popover__header">
-                                        <span class="popover__title">Manage Members</span>
-                                    </div>
-                                    <div class="popover__body" style="padding: 10px;">
-                                        <input type="text" class="form-input" placeholder="Search by name or email...">
-                                        <ul class="user-list no-scrollbar"
-                                            style="margin-top: 10px; max-height: 150px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px;">
-                                            <li class="user-list-item"
-                                                style="display: flex; align-items: center; justify-content: space-between;">
-                                                <div style="display: flex; align-items: center; gap: 8px;">
-                                                    <img src="../assets/images/avt-notion_1.png" class="user__avt"
-                                                         style="width: 24px; height: 24px;">
-                                                    <span>Nguyễn Minh Trúc</span>
-                                                </div>
-                                                <button class="btn btn--secondary btn--small">Remove</button>
-                                            </li>
-                                            <li class="user-list-item"
-                                                style="display: flex; align-items: center; justify-content: space-between;">
-                                                <div style="display: flex; align-items: center; gap: 8px;">
-                                                    <img src="../assets/images/avt-notion_4.png" class="user__avt"
-                                                         style="width: 24px; height: 24px;">
-                                                    <span>Lê Thị Bích</span>
-                                                </div>
-                                                <button class="btn btn--primary btn--small">Add</button>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
+                                @Html.Partial("~/Views/Project/_AddMemberPopover.cshtml", Model)
                             </div>
                         </div>
                         <!-- Attribute: Tags -->
@@ -130,54 +114,22 @@
                             <div class="attribute__name">Tags</div>
                             <div class="attribute__content">
                                 <ul class="list_attributes--tags">
-                                    <div class="tag-card" style="background-color: var(--cl-tag-blue);">
-                                        <span class="tag__name">UI/UX</span>
-                                    </div>
-                                    <div class="tag-card" style="background-color: var(--cl-tag-red);">
-                                        <span class="tag__name">Bug</span>
-                                    </div>
+                                    @if (Model.Tags != null && Model.Tags.Any())
+                                    {
+                                        foreach (var tag in Model.Tags)
+                                        {
+                                            <div class="tag-card" style="background-color: @tag.ColorHex;">
+                                                <span class="tag__name">@tag.Name</span>
+                                            </div>
+                                        }
+                                    }
                                 </ul>
                                 <button class="add-member btn-hover" id="addTagBtn" popovertarget="manageTagsPopover"
                                         popovertargetaction="toggle">
                                     <i data-lucide="tags"></i>
                                 </button>
-                                <!-- Popover for managing tags -->
-                                <div popover="" id="manageTagsPopover" class="popover project-attribute-popover">
-                                    <div class="popover__header">
-                                        <span class="popover__title">Manage Tags</span>
-                                    </div>
-                                    <div class="popover__body">
-                                        <input type="text" class="form-input form-input--small"
-                                               placeholder="Find tags...">
 
-                                        <div class="tag-list-in-popover no-scrollbar">
-                                            <label class="tag-list-item">
-                                                <input type="checkbox" checked>
-                                                <span class="tag-card"
-                                                      style="background-color: var(--cl-tag-blue);">UI/UX</span>
-                                            </label>
-                                            <label class="tag-list-item">
-                                                <input type="checkbox" checked>
-                                                <span class="tag-card"
-                                                      style="background-color: var(--cl-tag-red);">Bug</span>
-                                            </label>
-                                            <label class="tag-list-item">
-                                                <input type="checkbox">
-                                                <span class="tag-card"
-                                                      style="background-color: var(--cl-tag-green);">Feature</span>
-                                            </label>
-                                        </div>
-
-                                        <div class="divider"></div>
-
-                                        <div class="add-new-tag-form">
-                                            <input type="text" class="form-input form-input--small"
-                                                   placeholder="New tag name">
-                                            <input type="color" class="new-tag-color-input" value="#80c8ff">
-                                            <button class="btn btn--primary btn--small">Add</button>
-                                        </div>
-                                    </div>
-                                </div>
+                                @Html.Partial("~/Views/Project/_ManagProjectTagsPopover.cshtml", Model)
                             </div>
 
                         </div>

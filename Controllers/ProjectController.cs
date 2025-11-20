@@ -14,11 +14,6 @@ namespace PronaFlow_MVC.Controllers
 {
     public class ProjectController : BaseController
     {
-        /// <summary>
-        /// _context is the database context for PronaFlow__contextContext. This context is used to interact with the database.
-        /// </summary>
-        
-
         //=========================================================================================
         //===================================== HELPER METHODS ====================================
         //=========================================================================================
@@ -243,12 +238,10 @@ namespace PronaFlow_MVC.Controllers
         /// Get project details partial view.
         /// </summary>
         /// <param name="id">Project ID to get details for</param>
-        /// <param name="currentUser"></param>
-        /// <param name="project"></param>
         /// <param name="asPartial"></param>
         /// <returns>ActionResult: Partial view with project details</returns
         [HttpGet]
-        public ActionResult DetailsPartial(int id, users currentUser, bool asPartial = true)
+        public ActionResult DetailsPartial(int id, bool asPartial = true)
         {
             var (error, project) = GetAuthorizedProject(id);
             if (error != null) return error;
@@ -266,7 +259,7 @@ namespace PronaFlow_MVC.Controllers
 
 
         /// <summary>
-        /// Taoj Project
+        /// Create projetc by Kanban-col Actions.
         /// </summary>
         /// <param name="workspaceId"></param>
         /// <returns></returns>
@@ -291,6 +284,65 @@ namespace PronaFlow_MVC.Controllers
             ViewBag.WorkspaceName = _context.workspaces.Where(w => w.id == currentWorkspaceId).Select(w => w.name).FirstOrDefault();
             return View();
         }
+
+        /// <summary>
+        /// Create a new project with minimal information.
+        /// </summary>
+        /// <param name="workspaceId">Workspace ID to create project in</param>
+        /// <param name="name">Project name</param>
+        /// <param name="status">Project status</param>
+        /// <returns>ActionResult: Redirect to project details or back to Kanbanboard</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateMinimal(int workspaceId, string name, string status)
+        {
+            var (wsError, workspace) = GetAuthorizedWorkspace(workspaceId);
+            if (wsError != null) return wsError;
+
+            // Validate input
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                SetErrorToast(ErrorList.ProjectNameRequired);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Index", "Kanbanboard", new { workspaceId });
+            }
+
+            var now = DateTime.Now;
+            var project = new projects
+            {
+                workspace_id = workspaceId,
+                name = name,
+                description = null,
+                cover_image_url = null,
+                status = NormalizeStatusFor_context(status),
+                project_type = "personal",
+                start_date = null,
+                end_date = null,
+                is_archived = false,
+                is_deleted = false,
+                created_at = now,
+                updated_at = now
+            };
+
+            _context.projects.Add(project);
+            _context.SaveChanges();
+
+            _context.project_members.Add(new project_members
+            {
+                project_id = project.id,
+                user_id = CurrentUser.id,
+                role = RoleMember[0]
+            });
+            _context.SaveChanges();
+
+            SetSuccessToast(SuccessList.ProjectCreated);
+
+            return RedirectToAction("Index", "Kanbanboard", new { workspaceId, openProjectId = project.id });
+        }
+
 
         /// <summary>
         /// 
@@ -371,63 +423,7 @@ namespace PronaFlow_MVC.Controllers
             return PartialView("~/Views/Project/_TaskList.cshtml", tasks);
         }
 
-        /// <summary>
-        /// Create a new project with minimal information.
-        /// </summary>
-        /// <param name="workspaceId">Workspace ID to create project in</param>
-        /// <param name="name">Project name</param>
-        /// <param name="status">Project status</param>
-        /// <returns>ActionResult: Redirect to project details or back to Kanbanboard</returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateMinimal(int workspaceId, string name, string status)
-        {
-            var (wsError, workspace) = GetAuthorizedWorkspace(workspaceId);
-            if (wsError != null) return wsError;
-
-            // Validate input
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                SetErrorToast(ErrorList.ProjectNameRequired);
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return RedirectToAction("Index", "Kanbanboard", new { workspaceId });
-            }
-
-            var now = DateTime.Now;
-            var project = new projects
-            {
-                workspace_id = workspaceId,
-                name = name,
-                description = null,
-                cover_image_url = null,
-                status = NormalizeStatusFor_context(status),
-                project_type = "personal",
-                start_date = null,
-                end_date = null,
-                is_archived = false,
-                is_deleted = false,
-                created_at = now,
-                updated_at = now
-            };
-
-            _context.projects.Add(project);
-            _context.SaveChanges();
-
-            _context.project_members.Add(new project_members
-            {
-                project_id = project.id,
-                user_id = CurrentUser.id,
-                role = RoleMember[0]
-            });
-            _context.SaveChanges();
-
-            SetSuccessToast(SuccessList.ProjectCreated);
-
-            return RedirectToAction("Index", "Kanbanboard", new { workspaceId, openProjectId = project.id });
-        }
+        
 
         /// <summary>
         /// Update Name and Description of Project | POST /UpdateNameDescription
@@ -581,6 +577,7 @@ namespace PronaFlow_MVC.Controllers
             var tag = _context.tags.SingleOrDefault(t => t.id == tagId && t.workspace_id == project.workspace_id);
             if (tag == null)
             {
+                
                 TempData["Error"] = "Tag không hợp lệ.";
             }
 

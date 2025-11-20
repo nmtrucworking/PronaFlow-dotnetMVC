@@ -310,6 +310,7 @@
       <DependentUpon>PronaFlowDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Views\Project\_AddMemberPopover.cshtml" />
     <Content Include="wwwroot\js\main.js" />
   </ItemGroup>
   <ItemGroup>
@@ -353,6 +354,7 @@
     <Content Include="Views\Project\Details.cshtml" />
     <Content Include="Views\Project\Create.cshtml" />
     <Content Include="Views\Calendar\_AgendaCalendar.cshtml" />
+    <Content Include="Views\Project\_ManageProjectTagsPopover.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

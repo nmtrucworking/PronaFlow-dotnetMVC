@@ -1,0 +1,37 @@
+﻿<!-- Popover for managing tags -->
+<div popover="" id="manageTagsPopover" class="popover project-attribute-popover">
+    <div class="popover__header">
+        <span class="popover__title">Manage Tags</span>
+    </div>
+    <div class="popover__body">
+        <input type="text" class="form-input form-input--small"
+               placeholder="Find tags...">
+
+        <div class="tag-list-in-popover no-scrollbar">
+            <label class="tag-list-item">
+                <input type="checkbox" checked>
+                <span class="tag-card"
+                      style="background-color: var(--cl-tag-blue);">UI/UX</span>
+            </label>
+            <label class="tag-list-item">
+                <input type="checkbox" checked>
+                <span class="tag-card"
+                      style="background-color: var(--cl-tag-red);">Bug</span>
+            </label>
+            <label class="tag-list-item">
+                <input type="checkbox">
+                <span class="tag-card"
+                      style="background-color: var(--cl-tag-green);">Feature</span>
+            </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="add-new-tag-form">
+            <input type="text" class="form-input form-input--small"
+                   placeholder="New tag name">
+            <input type="color" class="new-tag-color-input" value="#80c8ff">
+            <button class="btn btn--primary btn--small">Add</button>
+        </div>
+    </div>
+</div>

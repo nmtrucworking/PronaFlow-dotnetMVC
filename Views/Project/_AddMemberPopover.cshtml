@@ -1,0 +1,30 @@
+﻿<!-- Add Member Popover (hidden by default, no inline style) -->
+<div popover="" id="addMemberPopover" class="popover project-attribute-popover">
+    <div class="popover__header">
+        <span class="popover__title">Manage Members</span>
+    </div>
+    <div class="popover__body" style="padding: 10px;">
+        <input type="text" class="form-input" placeholder="Search by name or email...">
+        <ul class="user-list no-scrollbar"
+            style="margin-top: 10px; max-height: 150px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px;">
+            <li class="user-list-item"
+                style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <img src="../assets/images/avt-notion_1.png" class="user__avt"
+                         style="width: 24px; height: 24px;">
+                    <span>Nguyễn Minh Trúc</span>
+                </div>
+                <button class="btn btn--secondary btn--small">Remove</button>
+            </li>
+            <li class="user-list-item"
+                style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <img src="../assets/images/avt-notion_4.png" class="user__avt"
+                         style="width: 24px; height: 24px;">
+                    <span>Lê Thị Bích</span>
+                </div>
+                <button class="btn btn--primary btn--small">Add</button>
+            </li>
+        </ul>
+    </div>
+</div>
