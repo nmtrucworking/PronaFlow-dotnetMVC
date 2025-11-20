@@ -18,12 +18,8 @@ namespace PronaFlow_MVC.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var email = User?.Identity?.Name;
-            var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
-            if (currentUser == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
+            var (authError, currentUser) = GetAuthenticatedUserOrError();
+            //if (authError != null) return (authError, null);
 
             var workspaceIds = _context.workspaces.Where(w => w.owner_id == currentUser.id).Select(w => w.id);
             var totalProjects = _context.projects.Count(p => !p.is_deleted && workspaceIds.Contains(p.workspace_id));
@@ -59,6 +55,7 @@ namespace PronaFlow_MVC.Controllers
             ViewBag.TotalTasks = inProgressCount;
             ViewBag.TotalTasksOverdue = overdueCount;
             ViewBag.UpcomingTasks = upcomingTasks;
+            ViewBag.CurrentUserName = CurrentUser.full_name;
             ViewBag.Title = "Dashboard | PronaFlow";
 
             return View();

@@ -320,7 +320,7 @@ namespace PronaFlow_MVC.Controllers
                 description = null,
                 cover_image_url = null,
                 status = NormalizeStatusFor_context(status),
-                project_type = "personal",
+                project_type = ProjectType[0],
                 start_date = null,
                 end_date = null,
                 is_archived = false,

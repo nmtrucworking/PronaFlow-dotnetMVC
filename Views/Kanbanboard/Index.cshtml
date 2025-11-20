@@ -67,13 +67,31 @@
 
 </main>
 
-
-
-@section scripts {
-    <script src="~/wwwroot/js/KanbanPageRefactored.js"></script>
-}
+<a href="@Url.Action("Index", "Kanbanboard", new { workspaceId = Model.CurrentWorkspaceId })"
+   class="shared-backdrop @(ViewBag.OpenProjectId != null ? "is-visible" : "")"
+   id="globalBackdrop">
+</a>
 
 @if (ViewBag.OpenProjectId != null)
 {
     @Html.Action("DetailsPartial", "Project", new { id = (int)ViewBag.OpenProjectId, asPartial = true })
 }
+
+
+@section scripts {
+    <script src="~/wwwroot/js/KanbanPageRefactored.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const projectModal = document.getElementById('projectDetailModal');
+
+            if (projectModal) {
+                projectModal.style.display = 'flex';
+
+                setTimeout(() => {
+                    projectModal.classList.add('is-visible');
+                }, 10);
+            }
+        });
+    </script>
+}
+

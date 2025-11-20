@@ -6,7 +6,7 @@
 
 <main id="main" class="main dashboard no-scrollbar">
     <div id="greeting-widget-frame" class="greeting-widget">
-        <img src="./assets/images/hello.gif" alt="Hello Icon">
+        <img src="~/wwwroot/images/hello.gif" alt="Hello Icon">
         <span id="greeting-widget"></span>
     </div>
 
@@ -95,3 +95,13 @@
         </div>
     </div>
 </main>
+
+<script>
+import { renderGreetingWidget } from "../../wwwroot/js/ui"
+
+    document.addEventListener('DOMContentLoaded', function ()
+    {
+        const userName = '@ViewBag.CurrentUserName';
+        renderGreetingWidget(userName);
+    }
+</script>

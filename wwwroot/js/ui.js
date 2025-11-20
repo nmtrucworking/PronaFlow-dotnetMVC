@@ -294,13 +294,12 @@ export function enableInlineEditing(container) {
 /**
  * Renders the greeting widget based on the time of day and user's name.
  */
-export function renderGreetingWidget() {
+export function renderGreetingWidget(userName) {
     const greetingWidget = document.getElementById('greeting-widget');
     if (!greetingWidget) return;
 
     const hour = new Date().getHours();
-    const user = store.getState().user;
-    const userName = user?.fullName || 'Guest';
+    const userName = null? userName || 'Guest';
 
     let greetingText = (hour < 12) ? "Good morning" : (hour < 18) ? "Good afternoon" : "Good night";
     greetingWidget.textContent = `${greetingText}, ${userName}`;
