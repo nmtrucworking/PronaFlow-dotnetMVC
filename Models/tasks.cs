@@ -44,7 +44,6 @@ namespace PronaFlow_MVC.Models
         public virtual projects projects { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<subtasks> subtasks { get; set; }
-        public virtual task_lists task_lists { get; set; }
         public virtual users users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<users> users1 { get; set; }
@@ -52,5 +51,6 @@ namespace PronaFlow_MVC.Models
         public virtual ICollection<tasks> tasks1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tasks> tasks2 { get; set; }
+        public virtual task_lists task_lists { get; set; }
     }
 }

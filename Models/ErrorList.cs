@@ -84,6 +84,7 @@ namespace PronaFlow_MVC.Models
         {
             public const string NotFound = "Công việc không tồn tại.";
             public const string AssigneeNotFound = "Người được giao việc không tồn tại trong dự án.";
+            public const string NameRequired = "Task name is required.";
         }
     }
 }

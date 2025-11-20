@@ -340,7 +340,7 @@ namespace PronaFlow_MVC.Controllers
             });
             _context.SaveChanges();
 
-            SetSuccessToast(SuccessList.ProjectCreated);
+            SetSuccessToast(SuccessList.Project.Created);
 
             return RedirectToAction("Index", "Kanbanboard", new { workspaceId, openProjectId = project.id });
         }
@@ -453,7 +453,7 @@ namespace PronaFlow_MVC.Controllers
             _context.SaveChanges();
 
             LogConsole("UpdateNameDescription", $"Updated Project {id}");
-            SetSuccessToast(SuccessList.ProjectUpdated);
+            SetSuccessToast(SuccessList.Project.Updated);
             
             return RedirectToKanban(project);
         }

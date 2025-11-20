@@ -24,6 +24,7 @@ namespace PronaFlow_MVC.Models
         public long workspace_id { get; set; }
         public string name { get; set; }
         public string color_hex { get; set; }
+        public Nullable<bool> is_deleted { get; set; }
     
         public virtual workspaces workspaces { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

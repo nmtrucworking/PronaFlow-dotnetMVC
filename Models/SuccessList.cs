@@ -5,6 +5,10 @@
     /// </summary>
     public static class SuccessList
     {
+        public static string baseMessage (string objectName, string action) {
+            return $"{objectName} has been {action} successfully"; 
+        }
+
         // --- Dynamic Methods (Nếu cần tham số) ---
         public static string WelcomeUser(string userName)
         {
@@ -43,6 +47,7 @@
             public const string Updated = "Cập nhật dự án thành công.";
             public const string Deleted = "Dự án đã được xóa.";
             public const string MemberAdded = "Đã thêm thành viên mới vào dự án.";
+            public const string Archived = "Project has been archived successfully.";
         }
 
         public static class Workspace
@@ -55,8 +60,9 @@
             public const string Created = "New Task has been created successfully.";
             public const string Deleted = "Task has been deleted successfully.";
             public const string Renamed = "Task has been renamed successfully.";
+            public const string Updated = "Task has been updated successfully.";
             public static string StatusUpdated (string lastStatus, string newStatus) {
-                return $"Task status has been updated from '{lastStatus}' to '{newStatus}' successfully."
+                return $"Task status has been updated from '{lastStatus}' to '{newStatus}' successfully.";
             }
             public static string AssignedToUser (string userName)
             {

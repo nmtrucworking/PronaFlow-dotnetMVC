@@ -118,6 +118,7 @@
           <Property Name="name" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="is_completed" Type="bit" Nullable="false" />
           <Property Name="position" Type="int" Nullable="false" />
+          <Property Name="is_deleted" Type="bit" />
         </EntityType>
         <EntityType Name="tags">
           <Key>
@@ -127,6 +128,7 @@
           <Property Name="workspace_id" Type="bigint" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="color_hex" Type="nvarchar" MaxLength="7" Nullable="false" />
+          <Property Name="is_deleted" Type="bit" />
         </EntityType>
         <EntityType Name="task_assignees">
           <Key>
@@ -152,6 +154,8 @@
           <Property Name="project_id" Type="bigint" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="position" Type="int" Nullable="false" />
+          <Property Name="is_deleted" Type="bit" />
+          <Property Name="created_at" Type="datetime" />
         </EntityType>
         <EntityType Name="tasks">
           <Key>
@@ -371,20 +375,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_subtasks_tasks">
-          <End Role="tasks" Type="Self.tasks" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="subtasks" Type="Self.subtasks" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tasks">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="subtasks">
-              <PropertyRef Name="task_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="fk_tags_workspaces">
           <End Role="workspaces" Type="Self.workspaces" Multiplicity="1" />
           <End Role="tags" Type="Self.tags" Multiplicity="*" />
@@ -448,18 +438,6 @@
             </Principal>
             <Dependent Role="task_dependencies">
               <PropertyRef Name="blocking_task_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_task_lists_projects">
-          <End Role="projects" Type="Self.projects" Multiplicity="1" />
-          <End Role="task_lists" Type="Self.task_lists" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="projects">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="task_lists">
-              <PropertyRef Name="project_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -634,10 +612,6 @@
             <End Role="workspaces" EntitySet="workspaces" />
             <End Role="projects" EntitySet="projects" />
           </AssociationSet>
-          <AssociationSet Name="fk_subtasks_tasks" Association="Self.fk_subtasks_tasks">
-            <End Role="tasks" EntitySet="tasks" />
-            <End Role="subtasks" EntitySet="subtasks" />
-          </AssociationSet>
           <AssociationSet Name="fk_tags_workspaces" Association="Self.fk_tags_workspaces">
             <End Role="workspaces" EntitySet="workspaces" />
             <End Role="tags" EntitySet="tags" />
@@ -657,10 +631,6 @@
           <AssociationSet Name="fk_task_dependencies_tasks_blocking" Association="Self.fk_task_dependencies_tasks_blocking">
             <End Role="tasks" EntitySet="tasks" />
             <End Role="task_dependencies" EntitySet="task_dependencies" />
-          </AssociationSet>
-          <AssociationSet Name="fk_task_lists_projects" Association="Self.fk_task_lists_projects">
-            <End Role="projects" EntitySet="projects" />
-            <End Role="task_lists" EntitySet="task_lists" />
           </AssociationSet>
           <AssociationSet Name="fk_tasks_projects" Association="Self.fk_tasks_projects">
             <End Role="projects" EntitySet="projects" />
@@ -795,7 +765,6 @@
           <NavigationProperty Name="invitations" Relationship="Self.fk_invitations_projects" FromRole="projects" ToRole="invitations" />
           <NavigationProperty Name="project_members" Relationship="Self.fk_project_members_projects" FromRole="projects" ToRole="project_members" />
           <NavigationProperty Name="workspaces" Relationship="Self.fk_projects_workspaces" FromRole="projects" ToRole="workspaces" />
-          <NavigationProperty Name="task_lists" Relationship="Self.fk_task_lists_projects" FromRole="projects" ToRole="task_lists" />
           <NavigationProperty Name="tasks" Relationship="Self.fk_tasks_projects" FromRole="projects" ToRole="tasks" />
           <NavigationProperty Name="tags" Relationship="Self.project_tags" FromRole="projects" ToRole="tags" />
         </EntityType>
@@ -809,6 +778,7 @@
           <Property Name="is_completed" Type="Boolean" Nullable="false" />
           <Property Name="position" Type="Int32" Nullable="false" />
           <NavigationProperty Name="tasks" Relationship="Self.fk_subtasks_tasks" FromRole="subtasks" ToRole="tasks" />
+          <Property Name="is_deleted" Type="Boolean" />
         </EntityType>
         <EntityType Name="tags">
           <Key>
@@ -820,17 +790,7 @@
           <Property Name="color_hex" Type="String" MaxLength="7" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="workspaces" Relationship="Self.fk_tags_workspaces" FromRole="tags" ToRole="workspaces" />
           <NavigationProperty Name="projects" Relationship="Self.project_tags" FromRole="tags" ToRole="projects" />
-        </EntityType>
-        <EntityType Name="task_lists">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="project_id" Type="Int64" Nullable="false" />
-          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="position" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="projects" Relationship="Self.fk_task_lists_projects" FromRole="task_lists" ToRole="projects" />
-          <NavigationProperty Name="tasks" Relationship="Self.fk_tasks_task_lists" FromRole="task_lists" ToRole="tasks" />
+          <Property Name="is_deleted" Type="Boolean" />
         </EntityType>
         <EntityType Name="tasks">
           <Key>
@@ -855,11 +815,11 @@
           <Property Name="updated_at" Type="DateTime" Nullable="false" Precision="7" />
           <NavigationProperty Name="projects" Relationship="Self.fk_tasks_projects" FromRole="tasks" ToRole="projects" />
           <NavigationProperty Name="subtasks" Relationship="Self.fk_subtasks_tasks" FromRole="tasks" ToRole="subtasks" />
-          <NavigationProperty Name="task_lists" Relationship="Self.fk_tasks_task_lists" FromRole="tasks" ToRole="task_lists" />
           <NavigationProperty Name="users" Relationship="Self.fk_tasks_users_creator" FromRole="tasks" ToRole="users" />
           <NavigationProperty Name="users1" Relationship="Self.task_assignees" FromRole="tasks" ToRole="users" />
           <NavigationProperty Name="tasks1" Relationship="Self.task_dependencies" FromRole="tasks" ToRole="tasks1" />
           <NavigationProperty Name="tasks2" Relationship="Self.task_dependencies" FromRole="tasks1" ToRole="tasks" />
+          <NavigationProperty Name="task_lists" Relationship="Models.fk_tasks_task_lists" FromRole="tasks" ToRole="task_lists" />
         </EntityType>
         <EntityType Name="user_preferences">
           <Key>
@@ -1043,18 +1003,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="fk_task_lists_projects">
-          <End Role="projects" Type="Self.projects" Multiplicity="1" />
-          <End Role="task_lists" Type="Self.task_lists" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="projects">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="task_lists">
-              <PropertyRef Name="project_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="fk_tasks_projects">
           <End Role="projects" Type="Self.projects" Multiplicity="1" />
           <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
@@ -1090,18 +1038,6 @@
             </Principal>
             <Dependent Role="tags">
               <PropertyRef Name="workspace_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_tasks_task_lists">
-          <End Role="task_lists" Type="Self.task_lists" Multiplicity="1" />
-          <End Role="tasks" Type="Self.tasks" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="task_lists">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="tasks">
-              <PropertyRef Name="task_list_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1166,7 +1102,6 @@
           <EntitySet Name="projects" EntityType="Self.projects" />
           <EntitySet Name="subtasks" EntityType="Self.subtasks" />
           <EntitySet Name="tags" EntityType="Self.tags" />
-          <EntitySet Name="task_lists" EntityType="Self.task_lists" />
           <EntitySet Name="tasks" EntityType="Self.tasks" />
           <EntitySet Name="user_preferences" EntityType="Self.user_preferences" />
           <EntitySet Name="users" EntityType="Self.users" />
@@ -1211,10 +1146,6 @@
             <End Role="workspaces" EntitySet="workspaces" />
             <End Role="projects" EntitySet="projects" />
           </AssociationSet>
-          <AssociationSet Name="fk_task_lists_projects" Association="Self.fk_task_lists_projects">
-            <End Role="projects" EntitySet="projects" />
-            <End Role="task_lists" EntitySet="task_lists" />
-          </AssociationSet>
           <AssociationSet Name="fk_tasks_projects" Association="Self.fk_tasks_projects">
             <End Role="projects" EntitySet="projects" />
             <End Role="tasks" EntitySet="tasks" />
@@ -1226,10 +1157,6 @@
           <AssociationSet Name="fk_tags_workspaces" Association="Self.fk_tags_workspaces">
             <End Role="workspaces" EntitySet="workspaces" />
             <End Role="tags" EntitySet="tags" />
-          </AssociationSet>
-          <AssociationSet Name="fk_tasks_task_lists" Association="Self.fk_tasks_task_lists">
-            <End Role="task_lists" EntitySet="task_lists" />
-            <End Role="tasks" EntitySet="tasks" />
           </AssociationSet>
           <AssociationSet Name="fk_tasks_users_creator" Association="Self.fk_tasks_users_creator">
             <End Role="users" EntitySet="users" />
@@ -1277,7 +1204,7 @@
             <Parameter Name="UserID" Mode="In" Type="Int64" />
           </FunctionImport>
           <FunctionImport Name="sp_GetUserDashboardMetrics" ReturnType="Collection(Models.sp_GetUserDashboardMetrics_Result)">
-            <Parameter Name="UserID" Mode="In" Type="Int64" />
+          <Parameter Name="UserID" Mode="In" Type="Int64" />
           </FunctionImport>
           <FunctionImport Name="sp_GetUserTasks">
             <Parameter Name="UserID" Mode="In" Type="Int64" />
@@ -1295,8 +1222,13 @@
             <Parameter Name="Content" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_SoftDeleteUser">
-            <Parameter Name="UserID" Mode="In" Type="Int64" />
+          <Parameter Name="UserID" Mode="In" Type="Int64" />
           </FunctionImport>
+          <EntitySet Name="task_lists" EntityType="Models.task_lists" />
+          <AssociationSet Name="fk_tasks_task_lists" Association="Models.fk_tasks_task_lists">
+            <End Role="task_lists" EntitySet="task_lists" />
+            <End Role="tasks" EntitySet="tasks" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_GetProjectDetails_Result">
           <Property Type="Int64" Name="id" Nullable="false" />
@@ -1325,6 +1257,30 @@
           <Property Type="Int32" Name="InProgressTasks" Nullable="true" />
           <Property Type="Int32" Name="OverdueTasks" Nullable="true" />
         </ComplexType>
+        <EntityType Name="task_lists">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="project_id" Type="Int64" Nullable="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="position" Type="Int32" Nullable="false" />
+          <Property Name="is_deleted" Type="Boolean" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="tasks" Relationship="Models.fk_tasks_task_lists" FromRole="task_lists" ToRole="tasks" />
+        </EntityType>
+        <Association Name="fk_tasks_task_lists">
+          <End Type="Models.task_lists" Role="task_lists" Multiplicity="1" />
+          <End Type="Models.tasks" Role="tasks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="task_lists">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tasks">
+              <PropertyRef Name="task_list_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1436,6 +1392,7 @@
           <EntitySetMapping Name="subtasks">
             <EntityTypeMapping TypeName="Models.subtasks">
               <MappingFragment StoreEntitySet="subtasks">
+                <ScalarProperty Name="is_deleted" ColumnName="is_deleted" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="task_id" ColumnName="task_id" />
                 <ScalarProperty Name="name" ColumnName="name" />
@@ -1447,20 +1404,11 @@
           <EntitySetMapping Name="tags">
             <EntityTypeMapping TypeName="Models.tags">
               <MappingFragment StoreEntitySet="tags">
+                <ScalarProperty Name="is_deleted" ColumnName="is_deleted" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="workspace_id" ColumnName="workspace_id" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="color_hex" ColumnName="color_hex" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="task_lists">
-            <EntityTypeMapping TypeName="Models.task_lists">
-              <MappingFragment StoreEntitySet="task_lists">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="project_id" ColumnName="project_id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="position" ColumnName="position" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1596,6 +1544,18 @@
           <FunctionImportMapping FunctionImportName="sp_GetUserTasks" FunctionName="Models.Store.sp_GetUserTasks" />
           <FunctionImportMapping FunctionImportName="sp_LogActivity" FunctionName="Models.Store.sp_LogActivity" />
           <FunctionImportMapping FunctionImportName="sp_SoftDeleteUser" FunctionName="Models.Store.sp_SoftDeleteUser" />
+          <EntitySetMapping Name="task_lists">
+            <EntityTypeMapping TypeName="Models.task_lists">
+              <MappingFragment StoreEntitySet="task_lists">
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="is_deleted" ColumnName="is_deleted" />
+                <ScalarProperty Name="position" ColumnName="position" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="project_id" ColumnName="project_id" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -1610,7 +1570,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />

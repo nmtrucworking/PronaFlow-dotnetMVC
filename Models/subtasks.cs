@@ -19,6 +19,7 @@ namespace PronaFlow_MVC.Models
         public string name { get; set; }
         public bool is_completed { get; set; }
         public int position { get; set; }
+        public Nullable<bool> is_deleted { get; set; }
     
         public virtual tasks tasks { get; set; }
     }

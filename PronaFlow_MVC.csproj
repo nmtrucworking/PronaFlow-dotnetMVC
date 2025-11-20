@@ -344,7 +344,6 @@
     <Content Include="Views\Kanbanboard\_ProjectCard.cshtml" />
     <Content Include="Views\Kanbanboard\_KanbanColumn.cshtml" />
     <Content Include="Views\Project\_ProjectDetails.cshtml" />
-    <Content Include="Views\Task\_TaskDetails.cshtml" />
     <Content Include="Views\Task\_TaskCard.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
@@ -357,6 +356,7 @@
     <Content Include="Views\Calendar\_AgendaCalendar.cshtml" />
     <Content Include="Views\Project\_ManageProjectTagsPopover.cshtml" />
     <Content Include="Views\Project\_ProjectTaskCard.cshtml" />
+    <Content Include="Views\Task\_TaskDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

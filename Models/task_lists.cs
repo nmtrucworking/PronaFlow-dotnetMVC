@@ -24,8 +24,9 @@ namespace PronaFlow_MVC.Models
         public long project_id { get; set; }
         public string name { get; set; }
         public int position { get; set; }
+        public Nullable<bool> is_deleted { get; set; }
+        public Nullable<System.DateTime> created_at { get; set; }
     
-        public virtual projects projects { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tasks> tasks { get; set; }
     }

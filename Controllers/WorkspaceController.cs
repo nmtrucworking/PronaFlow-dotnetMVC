@@ -44,7 +44,7 @@ namespace PronaFlow_MVC.Controllers
                                     .SingleOrDefault(w => w.id == currentWorkspaceId && w.owner_id == currentUser.id);
             if (workspace == null)
             {
-                return HttpNotFound(ErrorList.WorkspaceNotOwned(currentWorkspaceId));
+                return HttpNotFound(ErrorList.Workspace.NotOwnedWithId(currentWorkspaceId));
             }
 
             var viewModel = new WorkspaceDetailViewModel

@@ -37,11 +37,11 @@ namespace PronaFlow_MVC.Models
         public virtual DbSet<projects> projects { get; set; }
         public virtual DbSet<subtasks> subtasks { get; set; }
         public virtual DbSet<tags> tags { get; set; }
-        public virtual DbSet<task_lists> task_lists { get; set; }
         public virtual DbSet<tasks> tasks { get; set; }
         public virtual DbSet<user_preferences> user_preferences { get; set; }
         public virtual DbSet<users> users { get; set; }
         public virtual DbSet<workspaces> workspaces { get; set; }
+        public virtual DbSet<task_lists> task_lists { get; set; }
     
         public virtual ObjectResult<sp_GetProjectDetails_Result> sp_GetProjectDetails(Nullable<long> projectID, Nullable<long> userID)
         {
