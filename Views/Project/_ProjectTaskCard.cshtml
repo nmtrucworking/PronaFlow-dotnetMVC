@@ -1,45 +1,84 @@
+@model PronaFlow_MVC.Models.ViewModels.TaskItemViewModel
+
+@{
+    var isDone = Model.Status == "done";
+    var statusClass = isDone ? "is-completed" : "";
+    var textStyle = isDone ? "text-decoration: line-through; opacity: 0.6;" : "";
+}
+
 <div class="task-item">
     <!-- Checkbox -->
-    <label class="custom-checkbox">
-        <input type="checkbox"><span class="custom-checkbox__checkmark"></span>
-    </label>
-    <!-- inner -->
-    <div class="project__task-card" data-task-id="task_001">
-        <input type="text" class="task__name" value="Design wireframe for Dashboard">
-        <div class="task-card__action-btns">
-            <button class="task-card__opt-icon btn-hover" id="openTaskDetailBtn">
-                <i data-lucide="external-link" class="icon-md"></i>
-            </button>
-            <button class="task-card__opt-icon btn-hover js-task-actions-btn"
-                    id="taskActionsBtn" popovertarget="taskActionsPopover"
-                    popovertargetaction="toggle">
-                <i data-lucide="ellipsis-vertical" class="icon-md"></i>
-            </button>
+    @using (Html.BeginForm("ToggleStatus", "Task", FormMethod.Post, new { @class = "task-checkbox-form", style = "display:flex; align-items:center;" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("id", Model.Id)
+        @Html.Hidden("currentStatus", Model.Status)
 
-            <!-- Task actions popover (hidden by default) -->
-            <div popover class="popover popover--task-actions" id="taskActionsPopover">
-                <ul class="popover-action-list"
-                    style="list-style: none; padding: 5px; margin: 0;">
-                    <li>
-                        <button class="popover-item">
-                            <i data-lucide="copy"></i>
-                            Copy
+        <label class="custom-checkbox">
+            <input type="checkbox" onchange="this.form.submit()" @(isDone ? "checked" : "")>
+            <span class="custom-checkbox__checkmark"></span>
+        </label>
+    }
+    <!-- inner -->
+<div class="project__task-card" data-task-id="task_001">
+    <input type="text" class="task__name" value="Design wireframe for Dashboard">
+    @using (Html.BeginForm("Rename", "Task", FormMethod.Post, new { @class = "task-name-form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("id", Model.Id)
+        <input type="text" name="name" class="task__name" value="@Model.Name" style="@textStyle" 
+               onblur="this.form.submit()" 
+               title="Edit name and click outside to save"/>
+    }
+
+    <div class="task-card__action-btns">
+        <a href="@Url.Action("Details", "Task", new { id = Model.Id })" class="task-card__opt-icon btn-hover" title="Open Details">
+            <i data-lucide="external-link" class="icon-md"></i>
+        </a>
+
+        <button class="task-card__opt-icon btn-hover js-task-actions-btn"
+                id="taskActionsBtn-@Model.Id" 
+                popovertarget="taskActionsPopover-@Model.Id"
+                popovertargetaction="toggle"
+                type="button">
+            <i data-lucide="ellipsis-vertical" class="icon-md"></i>
+        </button>
+
+        <!-- Task actions popover (hidden by default) -->
+        <div popover class="popover popover--task-actions" id="taskActionsPopover-@Model.Id">
+            <ul class="popover-action-list"
+                style="list-style: none; padding: 5px; margin: 0;">
+                <li>
+                    @using (Html.BeginForm("Duplicate", "Task", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("id", Model.Id)
+                        <button type="submit" class="popover-item" style="width:100%; text-align:left;">
+                            <i data-lucide="copy"></i> Copy
                         </button>
-                    </li>
-                    <li>
-                        <button class="popover-item">
-                            <i data-lucide="move"></i>
-                            Move
-                        </button>
-                    </li>
-                    <div class="divider"></div>
-                    <li>
-                        <button class="popover-item btn--danger">
+                    }
+                </li>
+                <li>
+                    <button class="popover-item">
+                        <i data-lucide="move"></i>
+                        Move
+                    </button>
+                </li>
+                <div class="divider"></div>
+                <li>
+                    @using (Html.BeginForm("Delete", "Task", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("id", Model.Id)
+                        <input type="hidden" name="returnUrl" value="@Request.Url.PathAndQuery" />
+
+                        <button type="submit" class="popover-item btn--danger" style="width:100%; text-align:left;">
                             <i data-lucide="trash-2"></i> Delete
                         </button>
-                    </li>
-                </ul>
-            </div>
+                    }
+                </li>
+            </ul>
         </div>
     </div>
+</div>
 </div>

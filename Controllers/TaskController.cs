@@ -7,9 +7,24 @@ using System.Web.Mvc;
 
 namespace PronaFlow_MVC.Controllers
 {
-    public class TaskController : Controller
+    public class TaskController : BaseController
     {
-        private readonly PronaFlow_DBContext _db = new PronaFlow_DBContext();
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ToggleStatus(long id, string currentStatus)
+        {
+            // Logic: Nếu đang done -> not-started, ngược lại -> done
+            var newStatus = (currentStatus == "done") ? "not-started" : "done";
+
+            var task = _context.tasks.Find(id);
+            if (task != null)
+            {
+                task.status = newStatus;
+                _context.SaveChanges();
+            }
+            // Trả về lại view Project Details hoặc redirect
+            return Redirect(Request.UrlReferrer.ToString());
+        }
 
         // GET: Task
         [HttpGet]
@@ -17,20 +32,20 @@ namespace PronaFlow_MVC.Controllers
         {
             long currentWorkspaceId = workspaceId.HasValue
                 ? (long)workspaceId.Value
-                : (_db.workspaces.FirstOrDefault()?.id ?? 0);
+                : (_context.workspaces.FirstOrDefault()?.id ?? 0);
 
             if (currentWorkspaceId == 0)
             {
                 return HttpNotFound(ErrorList.NoWorkspaceSelectedOrExists);
             }
 
-            var workspace = _db.workspaces.SingleOrDefault(w => w.id == currentWorkspaceId);
+            var workspace = _context.workspaces.SingleOrDefault(w => w.id == currentWorkspaceId);
             if (workspace == null)
             {
                 return HttpNotFound(ErrorList.WorkspaceWithIdNotFound(currentWorkspaceId));
             }
 
-            var tasksQuery = _db.tasks
+            var tasksQuery = _context.tasks
                 .Where(t => !t.is_deleted && t.projects.workspace_id == currentWorkspaceId);
 
             var taskItems = tasksQuery.Select(t => new PronaFlow_MVC.Models.ViewModels.TaskItemViewModel
@@ -59,7 +74,7 @@ namespace PronaFlow_MVC.Controllers
         [HttpGet]
         public ActionResult GetAll(long projectId, string search = null, string status = null, string sortBy = "creation-date", string sortDir = "desc")
         {
-            var query = _db.tasks.Where(t => !t.is_deleted && t.project_id == projectId);
+            var query = _context.tasks.Where(t => !t.is_deleted && t.project_id == projectId);
 
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -117,7 +132,7 @@ namespace PronaFlow_MVC.Controllers
         [HttpGet]
         public ActionResult GetById(long id)
         {
-            var t = _db.tasks.FirstOrDefault(x => x.id == id && !x.is_deleted);
+            var t = _context.tasks.FirstOrDefault(x => x.id == id && !x.is_deleted);
             if (t == null)
             {
                 return Json(new { success = false, message = "Task not found." }, JsonRequestBehavior.AllowGet);
@@ -146,7 +161,7 @@ namespace PronaFlow_MVC.Controllers
         [HttpPost]
         public ActionResult Create(long taskListId, string name, string description = null, string priority = "normal", string status = "not-started", DateTime? startDate = null, DateTime? endDate = null)
         {
-            var taskList = _db.task_lists.FirstOrDefault(tl => tl.id == taskListId);
+            var taskList = _context.task_lists.FirstOrDefault(tl => tl.id == taskListId);
             if (taskList == null)
             {
                 return Json(new { success = false, message = "Task list not found." });
@@ -157,7 +172,7 @@ namespace PronaFlow_MVC.Controllers
                 return Json(new { success = false, message = "Task name is required." });
             }
 
-            var creator = _db.users.FirstOrDefault(); // TODO: thay bằng user đang đăng nhập khi có auth
+            var creator = _context.users.FirstOrDefault(); // TODO: thay bằng user đang đăng nhập khi có auth
             var now = DateTime.Now;
 
             var newTask = new tasks
@@ -180,8 +195,8 @@ namespace PronaFlow_MVC.Controllers
                 creator_id = creator?.id ?? 0
             };
 
-            _db.tasks.Add(newTask);
-            _db.SaveChanges();
+            _context.tasks.Add(newTask);
+            _context.SaveChanges();
 
             return Json(new { success = true, data = new { id = newTask.id, name = newTask.name } });
         }
@@ -189,7 +204,7 @@ namespace PronaFlow_MVC.Controllers
         [HttpPost]
         public ActionResult Update(long id, string name = null, string description = null, string priority = null, string status = null, DateTime? startDate = null, DateTime? endDate = null, long? taskListId = null)
         {
-            var t = _db.tasks.FirstOrDefault(x => x.id == id && !x.is_deleted);
+            var t = _context.tasks.FirstOrDefault(x => x.id == id && !x.is_deleted);
             if (t == null)
             {
                 return Json(new { success = false, message = "Task not found." });
@@ -205,7 +220,7 @@ namespace PronaFlow_MVC.Controllers
 
             if (taskListId.HasValue)
             {
-                var tl = _db.task_lists.FirstOrDefault(x => x.id == taskListId.Value);
+                var tl = _context.task_lists.FirstOrDefault(x => x.id == taskListId.Value);
                 if (tl == null)
                 {
                     return Json(new { success = false, message = "Target task list not found." });
@@ -215,45 +230,48 @@ namespace PronaFlow_MVC.Controllers
             }
 
             t.updated_at = DateTime.Now;
-            _db.SaveChanges();
+            _context.SaveChanges();
 
             return Json(new { success = true });
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(long id)
         {
-            var t = _db.tasks.FirstOrDefault(x => x.id == id && !x.is_deleted);
-            if (t == null)
+            var task = _context.tasks.FirstOrDefault(x => x.id == id && !x.is_deleted);
+            if (task == null)
             {
-                return Json(new { success = false, message = "Task not found." });
+                return Json(new { success = false, message = ErrorList.Task.NotFound });
             }
 
-            t.is_deleted = true;
-            t.deleted_at = DateTime.Now;
-            t.updated_at = DateTime.Now;
-            _db.SaveChanges();
+            task.is_deleted = true;
+            task.deleted_at = DateTime.Now;
+            task.updated_at = DateTime.Now;
+            _context.SaveChanges();
 
-            return Json(new { success = true });
+            SetSuccessToast(SuccessList.Task.Deleted);
+
+            return Redirect(Request.UrlReferrer.ToString());
         }
 
         public ActionResult GetDetails(int id)
         {
-            var task = _db.tasks.Find(id);
+            var task = _context.tasks.Find(id);
             return View();
         }
 
         public ActionResult GetTasksPartial(int workspaceId)
         {
             var email = User?.Identity?.Name;
-            var currentUser = _db.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
+            var currentUser = _context.users.FirstOrDefault(u => u.email == email && !u.is_deleted);
 
             if (currentUser == null) return Content("");
 
             var today = DateTime.Now.Date;
             var next7 = today.AddDays(7);
 
-            var tasks = _db.tasks
+            var tasks = _context.tasks
                 .Where(t => !t.is_deleted
                     && t.projects.workspace_id == workspaceId
                     && t.users1.Any(u => u.id == currentUser.id) // Giả định users1 là navigation property cho assignees
@@ -274,6 +292,28 @@ namespace PronaFlow_MVC.Controllers
                 .ToList();
 
             return PartialView("_TaskListPartial", tasks);
+        }
+
+        /// <summary>
+        /// Rename task
+        /// </summary>
+        /// <param name="id">taskId</param>
+        /// <param name="name">taskName</param>
+        /// <returns>Save new name and Redirect</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Rename(long id, string name)
+        {
+            var task = _context.tasks.Find(id);
+            if (task != null && !string.IsNullOrWhiteSpace(name))
+            {
+                task.name = name;
+                _context.SaveChanges();
+            }
+
+            SetSuccessToast(SuccessList.Task.Renamed);
+
+            return Redirect(Request.UrlReferrer.ToString());
         }
     }
 }
