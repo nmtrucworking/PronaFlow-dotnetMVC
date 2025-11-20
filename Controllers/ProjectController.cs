@@ -109,8 +109,9 @@ namespace PronaFlow_MVC.Controllers
             }
 
             // 3. Kiểm tra quyền sở hữu Workspace
+            var isMember = _context.project_members.Any(pm => pm.project_id == projectId && pm.user_id == currentUser.id);
             var ownsWorkspace = _context.workspaces.Any(w => w.id == project.workspace_id && w.owner_id == currentUser.id);
-            if (!ownsWorkspace)
+            if (!ownsWorkspace && !isMember)
             {
                 return (new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden, "Không có quyền truy cập."), null);
             }
@@ -203,7 +204,6 @@ namespace PronaFlow_MVC.Controllers
 
             var projects = _context.projects
                 .Where(p => !p.is_deleted && p.workspace_id == currentWorkspaceId)
-                .ToList()
                 .Select(p => new KanbanProjectCardViewModel
                 {
                     Id = (int)p.id,
@@ -305,44 +305,59 @@ namespace PronaFlow_MVC.Controllers
             if (string.IsNullOrWhiteSpace(name))
             {
                 SetErrorToast(ErrorList.ProjectNameRequired);
+                return RedirectToAction("Index", "Kanbanboard", new { workspaceId });
             }
 
             if (!ModelState.IsValid)
             {
                 return RedirectToAction("Index", "Kanbanboard", new { workspaceId });
             }
-
-            var now = DateTime.Now;
-            var project = new projects
+            using (var transaction = _context.Database.BeginTransaction())
             {
-                workspace_id = workspaceId,
-                name = name,
-                description = null,
-                cover_image_url = null,
-                status = NormalizeStatusFor_context(status),
-                project_type = ProjectType[0],
-                start_date = null,
-                end_date = null,
-                is_archived = false,
-                is_deleted = false,
-                created_at = now,
-                updated_at = now
-            };
+                try
+                {
+                    // 1. Tạo Project
+                    var now = DateTime.Now;
+                    var project = new projects
+                    {
+                        workspace_id = workspaceId,
+                        name = name,
+                        description = null,
+                        cover_image_url = null,
+                        status = NormalizeStatusFor_context(status),
+                        project_type = ProjectType[0],
+                        start_date = null,
+                        end_date = null,
+                        is_archived = false,
+                        is_deleted = false,
+                        created_at = now,
+                        updated_at = now
+                    };
 
-            _context.projects.Add(project);
-            _context.SaveChanges();
+                    _context.projects.Add(project);
+                    _context.SaveChanges(); // Cần save để lấy project.id
 
-            _context.project_members.Add(new project_members
-            {
-                project_id = project.id,
-                user_id = CurrentUser.id,
-                role = RoleMember[0]
-            });
-            _context.SaveChanges();
+                    // 2. Add Admin vào Project
+                    _context.project_members.Add(new project_members
+                    {
+                        project_id = project.id,
+                        user_id = CurrentUser.id,
+                        role = RoleMember[0]
+                    });
+                    _context.SaveChanges();
 
-            SetSuccessToast(SuccessList.Project.Created);
+                    transaction.Commit(); // Xác nhận transaction
 
-            return RedirectToAction("Index", "Kanbanboard", new { workspaceId, openProjectId = project.id });
+                    SetSuccessToast(SuccessList.Project.Created);
+                    return RedirectToAction("Index", "Kanbanboard", new { workspaceId, openProjectId = project.id });
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback(); // Hoàn tác nếu có lỗi
+                    SetErrorToast("Lỗi tạo dự án: " + ex.Message);
+                    return RedirectToAction("Index", "Kanbanboard", new { workspaceId });
+                }
+            }
         }
 
 
@@ -515,14 +530,15 @@ namespace PronaFlow_MVC.Controllers
 
             if (string.IsNullOrWhiteSpace(memberEmail))
             {
-
                 SetToastMessage("error", "Member Email is required.");
+                return RedirectToKanban(project);
             }
 
             var user = _context.users.SingleOrDefault(u => u.email == memberEmail && !u.is_deleted);
             if (user == null)
             {
                 SetToastMessage("error", "Not found any user with this email.");
+                return RedirectToKanban(project);
             }
 
             var exists = _context.project_members.Any(pm => pm.project_id == project.id && pm.user_id == user.id);
@@ -580,8 +596,8 @@ namespace PronaFlow_MVC.Controllers
             var tag = _context.tags.SingleOrDefault(t => t.id == tagId && t.workspace_id == project.workspace_id);
             if (tag == null)
             {
-                
-                TempData["Error"] = "Tag không hợp lệ.";
+                SetErrorToast("Tag không hợp lệ.");
+                return RedirectToKanban(project);
             }
 
             if (!project.tags.Any(t => t.id == tag.id))
