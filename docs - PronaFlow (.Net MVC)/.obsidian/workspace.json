@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md.md",
+                "file": "PronaFlow by using ASP.NET MVC/Cơ chế ErrorList và SuccessList.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README.md"
+              "title": "Cơ chế ErrorList và SuccessList"
             }
           }
         ]
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 341.5
+    "width": 341.5,
+    "collapsed": true
   },
   "right": {
     "id": "7ed4e8f5e29b036a",
@@ -171,6 +172,11 @@
   },
   "active": "54e1dbbbeac8b84d",
   "lastOpenFiles": [
+    "Pasted image 20251120121700.png",
+    "Pasted image 20251120121602.png",
+    "Pasted image 20251120121050.png",
+    "README.md.md",
+    "PronaFlow by using ASP.NET MVC/Cơ chế ErrorList và SuccessList.md",
     "PronaFlow by using ASP.NET MVC/Plan.md",
     "PronaFlow by using ASP.NET MVC/Cấu hình Xác thực người dùng.md",
     "Database/Overview Database - PronaFlow.md",
@@ -201,10 +207,7 @@
     "Database/User Flow/UserFlow - Projects.md",
     "Database/database diagram.png",
     "Database/UserFlow - PronaFlow.md",
-    "README.md.md",
     "Database/User Flow/UserFlow - Attachments.md",
-    "Admin/Describe Admin Pages.md",
-    "Admin/Code Organization.md",
     "Admin",
     "Database/data/data2.sql",
     "Database/data/admin account.sql",

@@ -4,7 +4,14 @@
         <span class="popover__title">Manage Members</span>
     </div>
     <div class="popover__body" style="padding: 10px;">
-        <input type="text" class="form-input" placeholder="Search by name or email...">
+        @using (Html.BeginForm("AddMember", "Project", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.Id" />
+            <input type="email" name="memberEmail" class="form-input" placeholder="Enter email..." required />
+            <button type="submit" class="btn btn--primary btn--small" style="margin-top:8px;">Invite</button>
+        }
+
         <ul class="user-list no-scrollbar"
             style="margin-top: 10px; max-height: 150px; overflow-y: auto; display: flex; flex-direction: column; gap: 5px;">
             <li class="user-list-item"

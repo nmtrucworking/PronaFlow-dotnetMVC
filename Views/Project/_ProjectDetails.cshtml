@@ -120,6 +120,13 @@
                                         {
                                             <div class="tag-card" style="background-color: @tag.ColorHex;">
                                                 <span class="tag__name">@tag.Name</span>
+                                                @using (Html.BeginForm("RemoveTag", "Project", FormMethod.Post, new { style = "display:inline; margin-left:4px;" }))
+                                                {
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@Model.Id" />
+                                                    <input type="hidden" name="tagId" value="@tag.Id" />
+                                                    <button type="submit" style="background:none;border:none;cursor:pointer;color:white;">&times;</button>
+                                                }
                                             </div>
                                         }
                                     }
@@ -142,6 +149,7 @@
                                     <span>-</span>
                                     <span class="end-date due-date">@((Model.EndDate?.ToShortDateString()) ?? "-")</span>
                                 </div>
+                                <button class="btn-icon-small" popovertarget="project-deadline-popover"><i data-lucide="calendar"></i></button>
                             </div>
                         </div>
                         <!-- Popover: Set Project Deadline -->
@@ -185,11 +193,19 @@
                             <div class="left-col"><i data-lucide="text"></i></div>
                             <div class="project-modal-section__inner-title">Description</div>
                         </div>
-                        <textarea class="project__description" id="project_description"
-                                  placeholder="Add a detailed description for your project...">The goal is to improve user experience on the Dashboard page, optimize workflows, and update the design system for consistency.</textarea>
+                        @using (Html.BeginForm("UpdateNameDescription", "Project", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("id", Model.Id)
+                            @Html.Hidden("name", Model.Name) <textarea class="project__description" name="description" rows="4" style="width:100%;">@Model.Description</textarea>
+                            <button type="submit" class="btn btn--secondary btn--small">Update Desc</button>
+                        }
                     </div>
 
                     <div id="project-tasklists">
+                        
+
+
                         <!-- Section: Task list (EXAMPLE 1: EMPTY LIST) -->
                         <div class="project-modal-section">
                             <div class="project-modal-section__title task-list-title">
@@ -203,13 +219,38 @@
                                 <button class="btn-delete-section btn-hover"><i data-lucide="trash-2"></i></button>
                             </div>
                             <!-- Empty state -->
-                            <div class="task-list task-list--empty">
-                                <div class="empty-state-compact">
-                                    <i data-lucide="check-square"></i>
-                                    <span>No tasks yet.</span>
-                                    <span>Add a new task below!</span>
+
+                            @if (Model.Tasks != null && Model.Tasks.Any())
+                            {
+                                // Group task theo Task List Name
+                                var groupedTasks = Model.Tasks.GroupBy(t => t.TaskListName);
+                                foreach (var group in groupedTasks)
+                                {
+                                    <div class="project-modal-section">
+                                        <div class="project-modal-section__title task-list-title">
+                                            <div class="left-col"><i data-lucide="square-check-big"></i> @group.Key</div>
+                                        </div>
+                                        <div class="task-list">
+                                            @foreach (var task in group)
+                                            {
+                                                // Sử dụng lại Partial _TaskCard có sẵn
+                                                @Html.Partial("~/Views/Task/_TaskCard.cshtml", task)
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="task-list task-list--empty">
+                                    <div class="empty-state-compact">
+                                        <i data-lucide="check-square"></i>
+                                        <span>No tasks yet.</span>
+                                        <span>Add a new task below!</span>
+                                    </div>
                                 </div>
-                            </div>
+                            }
+
                             <!-- END Empty state -->
                             <div class="add-new-task-input" style="margin-left: 35px; margin-top: 10px;">
                                 <input type="text" class="add-new-task" placeholder="+ Add new task">

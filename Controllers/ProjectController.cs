@@ -153,6 +153,8 @@ namespace PronaFlow_MVC.Controllers
                 })
                 .ToList() ?? new List<TaskItemViewModel>();
 
+
+
             return new ProjectDetailsViewModel
             {
                 Id = (int)project.id,
@@ -513,6 +515,7 @@ namespace PronaFlow_MVC.Controllers
 
             if (string.IsNullOrWhiteSpace(memberEmail))
             {
+
                 SetToastMessage("error", "Member Email is required.");
             }
 

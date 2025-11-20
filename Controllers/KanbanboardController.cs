@@ -36,7 +36,7 @@ namespace PronaFlow_MVC.Controllers
             if (workspace.owner_id != currentUser.id)
             {
                 // Nếu muốn cho phép thành viên truy cập, cần sửa logic ở đây để check bảng workspace_members
-                return (new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden, ErrorList.WorkspaceNotOwned(workspaceId)), null);
+                //return (new HttpStatusCodeResul(System.Net.HttpStatusCode.Forbidden, ErrorList.Workspace.NotOwnedWithId(workspaceId), null));
             }
 
             return (null, workspace);

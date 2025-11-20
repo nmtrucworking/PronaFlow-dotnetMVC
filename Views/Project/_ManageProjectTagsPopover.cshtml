@@ -8,30 +8,37 @@
                placeholder="Find tags...">
 
         <div class="tag-list-in-popover no-scrollbar">
-            <label class="tag-list-item">
-                <input type="checkbox" checked>
-                <span class="tag-card"
-                      style="background-color: var(--cl-tag-blue);">UI/UX</span>
-            </label>
-            <label class="tag-list-item">
-                <input type="checkbox" checked>
-                <span class="tag-card"
-                      style="background-color: var(--cl-tag-red);">Bug</span>
-            </label>
-            <label class="tag-list-item">
-                <input type="checkbox">
-                <span class="tag-card"
-                      style="background-color: var(--cl-tag-green);">Feature</span>
-            </label>
+            @if (Model.AvailableTags != null)
+            {
+                foreach (var t in Model.AvailableTags)
+                {
+                    using (Html.BeginForm("AddTag", "Project", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <input type="hidden" name="tagId" value="@t.Id" />
+                        <button type="submit" class="tag-list-item-btn" style="width:100%; text-align:left; background:none; border:none; padding:5px; cursor:pointer;">
+                            <span class="tag-card" style="background-color: @t.ColorHex;">@t.Name</span>
+                        </button>
+                    }
+                }
+            }
+
         </div>
 
         <div class="divider"></div>
 
         <div class="add-new-tag-form">
-            <input type="text" class="form-input form-input--small"
-                   placeholder="New tag name">
-            <input type="color" class="new-tag-color-input" value="#80c8ff">
-            <button class="btn btn--primary btn--small">Add</button>
+            @using (Html.BeginForm("CreateTagAndAssign", "Project", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+                <input type="text" name="name" class="form-input form-input--small" placeholder="New tag name" required>
+                <input type="color" name="colorHex" class="new-tag-color-input" value="#80c8ff">
+                <button type="submit" class="btn btn--primary btn--small">Create & Add</button>
+            }
         </div>
+
+        
     </div>
 </div>

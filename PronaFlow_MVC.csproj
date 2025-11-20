@@ -301,6 +301,7 @@
     <Compile Include="Models\ViewModels\ListOfWorkspaces.cs" />
     <Compile Include="Models\ViewModels\LoginViewModel.cs" />
     <Compile Include="Models\ViewModels\MyTasksViewModel.cs" />
+    <Compile Include="Models\ViewModels\ProjectActivityViewModel.cs" />
     <Compile Include="Models\ViewModels\ProjectDetailsViewModel.cs" />
     <Compile Include="Models\ViewModels\RegisterViewModel.cs" />
     <Compile Include="Models\ViewModels\SettingsViewModel.cs" />
@@ -355,6 +356,7 @@
     <Content Include="Views\Project\Create.cshtml" />
     <Content Include="Views\Calendar\_AgendaCalendar.cshtml" />
     <Content Include="Views\Project\_ManageProjectTagsPopover.cshtml" />
+    <Content Include="Views\Project\_ProjectTaskCard.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

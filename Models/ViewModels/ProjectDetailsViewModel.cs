@@ -17,5 +17,7 @@ namespace PronaFlow_MVC.Models.ViewModels
         public List<ProjectTagViewModel> Tags { get; set; }
         public List<ProjectMemberViewModel> Members { get; set; }
         public List<TaskItemViewModel> Tasks { get; set; }
+        public List<ProjectActivityViewModel> Activities { get; set; }
+        public List<ProjectTagViewModel> AvailableTags { get; set; }
     }
 }
