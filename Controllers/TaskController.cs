@@ -86,6 +86,9 @@ namespace PronaFlow_MVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateMinimal (long projectId, string name)
         {
+            var (authError, currentUser) = GetAuthenticatedUserOrError();
+            if (authError != null) return authError;
+
             if (string.IsNullOrWhiteSpace(name))
             {
                 SetErrorToast(ErrorList.Task.NameRequired);
@@ -99,10 +102,16 @@ namespace PronaFlow_MVC.Controllers
 
             if (taskList == null)
             {
+                var maxPosition = _context.task_lists
+                .Where(tl => tl.project_id == projectId)
+                .Select(tl => (int?)tl.position)
+                .Max() ?? 0;
+
                 taskList = new task_lists
                 {
                     project_id = projectId,
                     name = "To Do",
+                    position = maxPosition + 1,
                     is_deleted = false,
                     created_at = DateTime.Now
                 };
@@ -114,7 +123,7 @@ namespace PronaFlow_MVC.Controllers
             {
                 project_id = projectId,
                 task_list_id = taskList.id,
-                creator_id = CurrentUser.id, // Lấy từ BaseController
+                creator_id = currentUser.id,
                 name = name.Trim(),
                 status = "not-started",
                 priority = "normal",

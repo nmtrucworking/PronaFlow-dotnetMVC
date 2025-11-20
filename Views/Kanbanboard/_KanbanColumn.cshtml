@@ -37,11 +37,11 @@
             @using (Html.BeginForm("CreateMinimal", "Project", FormMethod.Post, new { @class = "popover-form" }))
             {
                 @Html.AntiForgeryToken()
-                @Html.Hidden("workspaceId", (int)ViewBag.CurrentWorkspaceId)
-                @Html.Hidden("initialStatus", uiStatus)
+                @Html.Hidden("workspaceId", (int)(ViewBag.WorkspaceId ?? ViewBag.CurrentWorkspaceId))
+                @Html.Hidden("status", uiStatus)
 
                 <div class="form-group">
-                    <input type="text" name="projectName" class="form-input" placeholder="Project name..." required autocomplete="off" autofocus />
+                    <input type="text" name="name" class="form-input" placeholder="Project name..." required autocomplete="off" autofocus />
                 </div>
                 <div class="form-actions-right">
                     <button type="submit" class="btn btn--primary btn--sm">Create</button>
