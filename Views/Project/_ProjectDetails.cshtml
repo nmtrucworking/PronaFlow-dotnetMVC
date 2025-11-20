@@ -243,9 +243,18 @@
                                 </div>
                             }
 
-                            <div class="add-new-task-input" style="margin-left: 35px; margin-top: 10px;">
-                                <input type="text" class="add-new-task" placeholder="+ Add new task">
-                            </div>
+                        <div class="add-new-task-input" style="margin-left: 35px; margin-top: 10px;">
+                            <form action="@Url.Action("CreateMinimal", "Task")" method="post" class="list-row" style="gap: 10px;">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="projectId" value="@Model.Id" />
+
+                                <input type="text" name="name" class="add-new-task" placeholder="What needs to be done?" required autocomplete="off" style="flex-grow: 1;" />
+
+                                <button type="submit" class="btn btn--primary">
+                                    <i data-lucide="plus"></i> Add Task
+                                </button>
+                            </form>
+                        </div>
                         </div>
                     </div>
 

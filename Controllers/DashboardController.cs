@@ -19,7 +19,7 @@ namespace PronaFlow_MVC.Controllers
         public ActionResult Index()
         {
             var (authError, currentUser) = GetAuthenticatedUserOrError();
-            //if (authError != null) return (authError, null);
+            if (authError != null) return authError;
 
             var workspaceIds = _context.workspaces.Where(w => w.owner_id == currentUser.id).Select(w => w.id);
             var totalProjects = _context.projects.Count(p => !p.is_deleted && workspaceIds.Contains(p.workspace_id));

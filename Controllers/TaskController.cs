@@ -23,7 +23,6 @@ namespace PronaFlow_MVC.Controllers
                 task.status = newStatus;
                 _context.SaveChanges();
             }
-            
             SetSuccessToast(SuccessList.Task.StatusUpdated(currentStatus, newStatus));
 
             return Redirect(Request.UrlReferrer.ToString());
@@ -412,9 +411,23 @@ namespace PronaFlow_MVC.Controllers
             return Json(new { success = true, data }, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Create Task
+        /// </summary>
+        /// <param name="taskListId"></param>
+        /// <param name="name"></param>
+        /// <param name="description"></param>
+        /// <param name="priority"></param>
+        /// <param name="status"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult Create(long taskListId, string name, string description = null, string priority = "normal", string status = "not-started", DateTime? startDate = null, DateTime? endDate = null)
         {
+            var (authError, currentUser) = GetAuthenticatedUserOrErrorJson();
+            if (authError != null) return authError;
+
             var taskList = _context.task_lists.FirstOrDefault(tl => tl.id == taskListId);
             if (taskList == null)
             {
@@ -446,11 +459,13 @@ namespace PronaFlow_MVC.Controllers
                 updated_at = now,
                 task_list_id = taskListId,
                 project_id = taskList.project_id,
-                creator_id = creator?.id ?? 0
+                creator_id = currentUser.id
             };
 
             _context.tasks.Add(newTask);
             _context.SaveChanges();
+
+            SetSuccessToast(SuccessList.Task.Created);
 
             return Json(new { success = true, data = new { id = newTask.id, name = newTask.name } });
         }
