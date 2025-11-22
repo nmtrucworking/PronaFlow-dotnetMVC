@@ -21,6 +21,7 @@ namespace PronaFlow_MVC.Models
             this.project_members = new HashSet<project_members>();
             this.tasks = new HashSet<tasks>();
             this.tags = new HashSet<tags>();
+            this.task_lists = new HashSet<task_lists>();
         }
     
         public long id { get; set; }
@@ -47,5 +48,7 @@ namespace PronaFlow_MVC.Models
         public virtual ICollection<tasks> tasks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tags> tags { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<task_lists> task_lists { get; set; }
     }
 }

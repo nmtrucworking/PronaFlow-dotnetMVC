@@ -27,6 +27,7 @@ namespace PronaFlow_MVC.Models
         public string target_type { get; set; }
         public string content { get; set; }
         public System.DateTime created_at { get; set; }
+        public bool is_deleted { get; set; }
     
         public virtual users users { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

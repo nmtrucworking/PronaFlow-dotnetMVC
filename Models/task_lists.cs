@@ -29,5 +29,6 @@ namespace PronaFlow_MVC.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tasks> tasks { get; set; }
+        public virtual projects projects { get; set; }
     }
 }
